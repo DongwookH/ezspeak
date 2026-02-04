@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - 이지스피크 영어회화</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* 로그인 화면 */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a3a5c 0%, #2563eb 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            color: #1a3a5c;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-box button:hover {
+            background: #1a3a5c;
+        }
+
+        .login-error {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        /* 관리자 대시보드 */
+        .admin-container {
+            display: none;
+        }
+
+        .admin-header {
+            background: #1a3a5c;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h1 {
+            font-size: 20px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .admin-content {
+            padding: 30px 40px;
+        }
+
+        /* 탭 메뉴 */
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .tab-btn:hover:not(.active) {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* 탭 콘텐츠 */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 상담 목록 테이블 */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        .refresh-btn {
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .refresh-btn:hover {
+            background: #059669;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1a3a5c;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* 홈페이지 수정 폼 */
+        .edit-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .edit-section h3 {
+            color: #1a3a5c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="url"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* 이미지 업로드 영역 */
+        .image-upload-area {
+            border: 2px dashed #d0d0d0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .image-upload-area:hover {
+            border-color: #2563eb;
+            background: #f0f7ff;
+        }
+
+        .image-upload-area.dragover {
+            border-color: #2563eb;
+            background: #e8f0fe;
+        }
+
+        .image-upload-area input[type="file"] {
+            display: none;
+        }
+
+        .image-upload-area p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .image-upload-area .upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .image-preview-item .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-preview-item .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .current-images {
+            margin-top: 15px;
+        }
+
+        .current-images h4 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .save-btn {
+            padding: 12px 30px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .save-btn:hover {
+            background: #1a3a5c;
+        }
+
+        .save-message {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .save-message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .info-box p {
+            color: #1a3a5c;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .admin-content {
+                padding: 20px;
+            }
+
+            .tab-menu {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+
+            .image-preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 로그인 화면 -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <h1>🔐 관리자 로그인</h1>
+            <p class="login-error" id="loginError">아이디 또는 비밀번호가 올바르지 않습니다.</p>
+            <input type="text" id="adminId" placeholder="아이디" autocomplete="off">
+            <input type="password" id="adminPw" placeholder="비밀번호">
+            <button onclick="login()">로그인</button>
+        </div>
+    </div>
+
+    <!-- 관리자 대시보드 -->
+    <div class="admin-container" id="adminContainer">
+        <header class="admin-header">
+            <h1>📊 이지스피크 영어회화 관리자</h1>
+            <button class="logout-btn" onclick="logout()">로그아웃</button>
+        </header>
+
+        <div class="admin-content">
+            <!-- 탭 메뉴 -->
+            <div class="tab-menu">
+                <button class="tab-btn active" onclick="showTab('consultations')">📋 상담 신청 목록</button>
+                <button class="tab-btn" onclick="showTab('edit')">✏️ 홈페이지 수정</button>
+                <button class="tab-btn" onclick="showTab('images')">🖼️ 이미지 관리</button>
+            </div>
+
+            <!-- 상담 목록 탭 -->
+            <div class="tab-content active" id="consultations">
+                <div class="table-container">
+                    <button class="refresh-btn" onclick="loadConsultations()">🔄 새로고침</button>
+                    <div id="consultationList">
+                        <p class="loading">상담 목록을 불러오는 중...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 홈페이지 수정 탭 -->
+            <div class="tab-content" id="edit">
+                <div class="edit-section">
+                    <h3>🏠 히어로 섹션</h3>
+                    <div class="form-group">
+                        <label>메인 타이틀</label>
+                        <input type="text" id="heroTitle" value="아쉬운 영어에서 아, 쉬운 영어로">
+                    </div>
+                    <div class="form-group">
+                        <label>서브 타이틀</label>
+                        <textarea id="heroSubtitle">체계적인 커리큘럼과 원어민 강사진이 함께하는 맞춤형 영어 교육</textarea>
+                    </div>
+                </div>
+
+                <div class="edit-section">
+                    <h3>📞 연락처 정보</h3>
+                    <div class="form-group">
+                        <label>전화번호</label>
+                        <input type="text" id="contactPhone" value="010-7698-5675">
+                    </div>
+                    <div class="form-group">
+                        <label>카카오톡 채널 링크</label>
+                        <input type="url" id="kakaoLink" value="http://pf.kakao.com/_NmPfn/chat">
+                    </div>
+                </div>
+
+                <button class="save-btn" onclick="saveChanges()">💾 변경사항 저장</button>
+                <div class="save-message" id="saveMessage">✅ 저장되었습니다!</div>
+
+                <div class="info-box">
+                    <p>💡 <strong>안내:</strong> 저장된 내용은 브라우저에 임시 저장됩니다. 실제 홈페이지에 반영하려면 HTML 파일을 직접 수정하거나 개발자에게 요청해주세요.</p>
+                </div>
+            </div>
+
+            <!-- 이미지 관리 탭 -->
+            <div class="tab-content" id="images">
+                <div class="edit-section">
+                    <h3>🖼️ 로고 이미지</h3>
+                    <div class="image-upload-area" onclick="document.getElementById('logoUpload').click()" id="logoDropZone">
+                        <input type="file" id="logoUpload" accept="image/*" onchange="previewImage(this, 'logoPreview')">
+                        <div class="upload-icon">📤</div>
+                        <p>클릭하거나 이미지를 드래그하세요</p>
+                        <p style="font-size: 12px; color: #999;">권장: 가로형 PNG 파일</p>
+                    </div>
+                    <div id="logoPreview" class="image-preview-grid"></div>
+                    <div class="current-images">
+                        <h4>현재 로고:</h4>
+                        <img src="logo.png" alt="현재 로고" style="max-height: 60px; border-radius: 5px;">
+                    </div>
+                </div>
+
+                <div class="edit-section">
+                    <h3>⭐ 수강생 후기 이미지</h3>
+                    <div class="image-upload-area" onclick="document.getElementById('reviewUpload').click()" id="reviewDropZone">
+                        <input type="file" id="reviewUpload" accept="image/*" multiple onchange="previewImages(this, 'reviewPreview')">
+                        <div class="upload-icon">📤</div>
+                        <p>클릭하거나 이미지를 드래그하세요</p>
+                        <p style="font-size: 12px; color: #999;">여러 장 선택 가능</p>
+                    </div>
+                    <div id="reviewPreview" class="image-preview-grid"></div>
+                    <div class="current-images">
+                        <h4>현재 후기 이미지 (4장):</h4>
+                        <div class="image-preview-grid">
+                            <div class="image-preview-item">
+                                <img src="KakaoTalk_Photo_2025-05-29-15-29-12.jpeg" alt="후기1">
+                            </div>
+                            <div class="image-preview-item">
+                                <img src="KakaoTalk_Photo_2025-05-29-15-29-28.jpeg" alt="후기2">
+                            </div>
+                            <div class="image-preview-item">
+                                <img src="KakaoTalk_Photo_2025-05-29-15-29-51.jpeg" alt="후기3">
+                            </div>
+                            <div class="image-preview-item">
+                                <img src="카톡 후기.JPG" alt="후기4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-section">
+                    <h3>🏫 학원 소개 이미지</h3>
+                    <div class="image-upload-area" onclick="document.getElementById('aboutUpload').click()" id="aboutDropZone">
+                        <input type="file" id="aboutUpload" accept="image/*" multiple onchange="previewImages(this, 'aboutPreview')">
+                        <div class="upload-icon">📤</div>
+                        <p>클릭하거나 이미지를 드래그하세요</p>
+                        <p style="font-size: 12px; color: #999;">여러 장 선택 가능 (슬라이더용)</p>
+                    </div>
+                    <div id="aboutPreview" class="image-preview-grid"></div>
+                </div>
+
+                <button class="save-btn" onclick="saveImages()">💾 이미지 변경사항 저장</button>
+                <div class="save-message" id="imageSaveMessage">✅ 이미지가 저장되었습니다!</div>
+
+                <div class="info-box">
+                    <p>💡 <strong>안내:</strong> 이미지 업로드 후, 실제 서버에 반영하려면 파일을 홈페이지 폴더에 직접 복사해야 합니다.<br>
+                    파일 경로: <code>/Users/mac/클로드코드/</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 관리자 계정 설정
+        const ADMIN_ID = 'admin';
+        const ADMIN_PW = 'ezspeak1234';
+
+        // Google Apps Script URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5nP_Q7hM6oWC8KEw6NWQ4Yao4uTdFIDNMjcXRZPuV0dc_r7FRvKdlTSEE4CVdXXHl/exec';
+
+        // 로그인 체크
+        function checkLogin() {
+            const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+            if (isLoggedIn === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+                loadConsultations();
+            }
+        }
+
+        // 로그인
+        function login() {
+            const id = document.getElementById('adminId').value;
+            const pw = document.getElementById('adminPw').value;
+
+            if (id === ADMIN_ID && pw === ADMIN_PW) {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+                loadConsultations();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // 로그아웃
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            document.getElementById('adminContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('adminId').value = '';
+            document.getElementById('adminPw').value = '';
+        }
+
+        // 엔터키로 로그인
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
+                login();
+            }
+        });
+
+        // 탭 전환
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // 상담 목록 불러오기
+        async function loadConsultations() {
+            const container = document.getElementById('consultationList');
+            container.innerHTML = '<p class="loading">상담 목록을 불러오는 중...</p>';
+
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getAll');
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    let html = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>제출일시</th>
+                                    <th>이름</th>
+                                    <th>연락처</th>
+                                    <th>성별</th>
+                                    <th>영어실력</th>
+                                    <th>학습이유</th>
+                                    <th>유입경로</th>
+                                    <th>연락수단</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    data.forEach(row => {
+                        html += `
+                            <tr>
+                                <td>${row[0] || '-'}</td>
+                                <td>${row[1] || '-'}</td>
+                                <td>${row[2] || '-'}</td>
+                                <td>${row[3] || '-'}</td>
+                                <td>${row[5] || '-'}</td>
+                                <td>${row[6] || '-'}</td>
+                                <td>${row[7] || '-'}</td>
+                                <td>${row[8] || '-'}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += '</tbody></table>';
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p class="loading">등록된 상담 신청이 없습니다.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                container.innerHTML = `
+                    <p class="loading">
+                        상담 목록을 불러올 수 없습니다.<br><br>
+                        <strong>💡 Google 스프레드시트에서 직접 확인하세요:</strong><br>
+                        스프레드시트를 열어 상담 신청 내역을 확인할 수 있습니다.
+                    </p>
+                `;
+            }
+        }
+
+        // 단일 이미지 미리보기
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <div class="image-preview-item">
+                            <img src="${e.target.result}" alt="미리보기">
+                            <button class="delete-btn" onclick="clearPreview('${previewId}', '${input.id}')">×</button>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // 다중 이미지 미리보기
+        function previewImages(input, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+
+            if (input.files) {
+                Array.from(input.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const div = document.createElement('div');
+                        div.className = 'image-preview-item';
+                        div.innerHTML = `
+                            <img src="${e.target.result}" alt="미리보기 ${index + 1}">
+                            <button class="delete-btn" onclick="this.parentElement.remove()">×</button>
+                        `;
+                        preview.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        // 미리보기 삭제
+        function clearPreview(previewId, inputId) {
+            document.getElementById(previewId).innerHTML = '';
+            document.getElementById(inputId).value = '';
+        }
+
+        // 드래그 앤 드롭 설정
+        ['logoDropZone', 'reviewDropZone', 'aboutDropZone'].forEach(zoneId => {
+            const zone = document.getElementById(zoneId);
+            if (!zone) return;
+
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+
+                const input = zone.querySelector('input[type="file"]');
+                const previewId = input.id.replace('Upload', 'Preview');
+
+                if (e.dataTransfer.files.length > 0) {
+                    input.files = e.dataTransfer.files;
+                    if (input.multiple) {
+                        previewImages(input, previewId);
+                    } else {
+                        previewImage(input, previewId);
+                    }
+                }
+            });
+        });
+
+        // 변경사항 저장
+        function saveChanges() {
+            const data = {
+                heroTitle: document.getElementById('heroTitle').value,
+                heroSubtitle: document.getElementById('heroSubtitle').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                kakaoLink: document.getElementById('kakaoLink').value
+            };
+
+            localStorage.setItem('adminSettings', JSON.stringify(data));
+
+            const message = document.getElementById('saveMessage');
+            message.classList.add('success');
+            setTimeout(() => {
+                message.classList.remove('success');
+            }, 3000);
+        }
+
+        // 이미지 저장 (로컬)
+        function saveImages() {
+            const message = document.getElementById('imageSaveMessage');
+            message.classList.add('success');
+
+            // 실제로 이미지를 저장하려면 서버가 필요
+            alert('이미지가 선택되었습니다!\n\n실제 반영을 위해서는:\n1. 선택한 이미지를 다운로드\n2. 홈페이지 폴더에 복사\n3. 파일명을 기존 파일명과 동일하게 변경\n\n또는 개발자에게 요청해주세요.');
+
+            setTimeout(() => {
+                message.classList.remove('success');
+            }, 3000);
+        }
+
+        // 저장된 설정 불러오기
+        function loadSettings() {
+            const saved = localStorage.getItem('adminSettings');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.heroTitle) document.getElementById('heroTitle').value = data.heroTitle;
+                if (data.heroSubtitle) document.getElementById('heroSubtitle').value = data.heroSubtitle;
+                if (data.contactPhone) document.getElementById('contactPhone').value = data.contactPhone;
+                if (data.kakaoLink) document.getElementById('kakaoLink').value = data.kakaoLink;
+            }
+        }
+
+        // 페이지 로드 시 실행
+        checkLogin();
+        loadSettings();
+    </script>
+</body>
+</html>
