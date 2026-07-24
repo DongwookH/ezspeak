@@ -284,18 +284,21 @@ ul { list-style: none; }
 /* ---- MOBILE 하단 고정 상담바 (한국 학원 사이트 실용 요소) ---------------- */
 .mobile-cta-bar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 95;
-  display: none; grid-template-columns: repeat(3, 1fr);
-  background: #fff; border-top: 1px solid var(--line);
+  display: none; grid-template-columns: 1fr 1fr; gap: 10px;
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(255,255,255,.96);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
   box-shadow: 0 -4px 16px rgba(20,50,90,.08);
 }
 .mobile-cta-bar a {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-  padding: 9px 4px 10px; font-size: 12px; font-weight: 700; color: var(--ink-2);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 10px; border-radius: var(--r-md);
+  font-size: 15px; font-weight: 800; letter-spacing: -.01em;
 }
-.mobile-cta-bar a + a { border-left: 1px solid var(--line); }
-.mobile-cta-bar a svg { width: 20px; height: 20px; }
+.mobile-cta-bar a svg { width: 18px; height: 18px; }
 .mobile-cta-bar a.mc-kakao { background: var(--kakao); color: var(--kakao-ink); }
-.mobile-cta-bar a.mc-test { color: var(--orange-deep); }
+.mobile-cta-bar a.mc-test { background: var(--blue); color: #fff; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -582,7 +585,7 @@ ul { list-style: none; }
 
   /* 하단 고정 상담바 노출 + 본문 하단 여백 확보 */
   .mobile-cta-bar { display: grid; }
-  body { padding-bottom: 60px; }
+  body { padding-bottom: 78px; }
 }
 
 @media (max-width: 380px) {
