@@ -53,7 +53,7 @@ BUSINESS_PHONE = "010-2311-6543"
 BUSINESS_EMAIL = "ft9990@naver.com"
 
 # 캐시버스팅 버전 (index.html 과 동일하게 유지)
-ASSET_VER = "20260724b"
+ASSET_VER = "20260724c"
 
 # 출력 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -301,7 +301,9 @@ def cta_copy(ctx):
 def head_common(home_prefix="../"):
     """스타일시트만 로드. (본문 전 영역 Pretendard — style.css @import 로 공급.
     지역 페이지에는 별도 웹폰트를 싣지 않아 로딩을 가볍게 유지한다.)"""
-    return f"""    <link rel="stylesheet" href="{home_prefix}style.css?v={ASSET_VER}">"""
+    return f"""    <link rel="icon" type="image/png" href="{home_prefix}favicon.png">
+    <link rel="apple-touch-icon" href="{home_prefix}apple-touch-icon.png">
+    <link rel="stylesheet" href="{home_prefix}style.css?v={ASSET_VER}">"""
 
 
 def header_html(home_prefix="../"):
@@ -309,7 +311,7 @@ def header_html(home_prefix="../"):
     return f"""    <header class="header">
         <div class="container">
             <div class="logo">
-                <a href="{home_prefix}index.html" aria-label="이지스피크 홈"><img src="{home_prefix}logo.png" alt="이지스피크 EZspeak 로고"></a>
+                <a href="{home_prefix}index.html" aria-label="이지스피크 홈"><img src="{home_prefix}logo.png" alt="이지스피크 EZspeak 로고"><span class="logo-word">이지스피크</span></a>
             </div>
             <nav class="nav" aria-label="주요 메뉴">
                 <ul>

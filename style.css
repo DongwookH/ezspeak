@@ -321,7 +321,9 @@ ul { list-style: none; }
 }
 .header.scrolled { border-bottom-color: var(--line); }
 .header .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.logo img { height: 30px; width: auto; }
+.logo a { display: inline-flex; align-items: center; gap: 9px; }
+.logo img { height: 32px; width: auto; }
+.logo-word { font-weight: 800; font-size: 17px; letter-spacing: -.02em; color: var(--ink); }
 
 .nav ul { display: flex; align-items: center; gap: 2px; }
 .nav a {
@@ -433,7 +435,10 @@ ul { list-style: none; }
 .programs-table tbody tr:hover td { background: var(--paper-2); }
 .programs-note { margin-top: 14px; font-size: 14px; color: var(--ink-3); }
 
-/* ---- FEATURES (운영 방식 · 밝은 면) -------------------------------------- */
+/* ---- FEATURES (운영 방식 · 옅은 블루틴트 면으로 리듬) --------------------- */
+.features { background: var(--paper-2); border-block: 1px solid var(--line-2); }
+.features .timeline { border-top-color: var(--line); }
+.features .timeline__step { border-bottom-color: var(--line); }
 .features-grid { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(24px, 5vw, 56px); align-items: start; }
 .features .section-head { margin-bottom: 8px; }
 
@@ -539,7 +544,36 @@ ul { list-style: none; }
   .hero p { max-width: none; }
   .hero-actions { flex-direction: column; align-items: stretch; }
   .hero-actions .btn { width: 100%; }
+  /* 모바일 버튼 위계: 3번째(커리큘럼 보기)는 조용한 텍스트 링크로 */
+  .hero-actions .btn--outline {
+    border-color: transparent; background: transparent;
+    color: var(--ink-3); font-weight: 600; font-size: 15px;
+    text-decoration: underline; text-underline-offset: 4px;
+    padding: 10px;
+  }
   .hero-stats { gap: 12px 24px; margin-top: 28px; }
+
+  /* 커리큘럼 표 → 카드형 (우측 잘림/가로 스크롤 제거) */
+  .table-wrap { overflow-x: visible; border: none; border-radius: 0; background: transparent; }
+  .programs-table { min-width: 0; display: block; }
+  .programs-table thead { display: none; }
+  .programs-table tbody { display: grid; gap: 10px; }
+  .programs-table tbody tr {
+    display: block; background: #fff;
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 14px 16px;
+  }
+  .programs-table tbody th,
+  .programs-table tbody td { display: block; padding: 0; border: none !important; white-space: normal; }
+  .programs-table tbody th { font-size: 15.5px; margin-bottom: 4px; }
+  .programs-table tbody td { font-size: 14px; }
+  .programs-table tbody td.target {
+    margin-top: 8px; display: inline-block;
+    font-size: 12.5px; font-weight: 700; color: var(--blue-deep);
+    background: var(--blue-tint); padding: 3px 9px; border-radius: var(--r-pill);
+  }
+  .programs-table tbody tr:hover th,
+  .programs-table tbody tr:hover td { background: transparent; }
 
   .review-slide { flex-basis: 100%; }
   .slider-prev { left: 0; } .slider-next { right: 0; }
