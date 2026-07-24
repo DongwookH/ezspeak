@@ -37,19 +37,10 @@
     onScroll();
   }
 
-  /* ---- Smooth in-page scrolling ------------------------------------------ */
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener('click', function (e) {
-      const id = this.getAttribute('href');
-      if (id === '#' || id.length < 2) return;
-      const target = document.querySelector(id);
-      if (!target) return;
-      e.preventDefault();
-      const headerH = header ? header.offsetHeight : 0;
-      const top = target.getBoundingClientRect().top + window.pageYOffset - headerH;
-      window.scrollTo({ top, behavior: 'smooth' });
-    });
-  });
+  /* ---- In-page anchor scrolling -------------------------------------------
+     네이티브 앵커 동작 사용(즉시 점프). 고정 헤더 오프셋은 CSS의
+     scroll-padding-top 이 처리한다. JS preventDefault + smooth scrollTo 방식은
+     일부 렌더러에서 클릭이 무반응이 되는 문제가 있어 제거 */
 
   /* ---- Scroll reveal ------------------------------------------------------ */
   const revealEls = document.querySelectorAll('.reveal');

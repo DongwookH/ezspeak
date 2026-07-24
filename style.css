@@ -79,7 +79,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); -webkit-text-size-adjust: 100%; }
+/* scroll-behavior: smooth 미사용 — 일부 임베디드 렌더러에서 앵커 이동이
+   완료되지 않아 클릭이 무반응처럼 보이는 문제가 있어 즉시 점프를 사용 */
+html { scroll-padding-top: var(--header-h); -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: var(--font-body);
