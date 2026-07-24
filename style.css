@@ -175,6 +175,13 @@ ul { list-style: none; }
   padding: 8px 14px; border-radius: var(--r-sm);
 }
 
+/* ---- 지역별 영어회화 바로가기 (메인 내부링크) ---------------------------- */
+.region-links-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.region-links-pills a.pill { text-decoration: none; transition: border-color .16s, color .16s, background-color .16s; }
+.region-links-pills a.pill:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint); }
+.region-links-pills a.pill--hub { font-weight: 700; color: var(--blue-deep); border-color: var(--blue-tint); background: var(--blue-tint); }
+.region-links-pills a.pill--hub:hover { color: #fff; background: var(--blue); border-color: var(--blue); }
+
 /* ---- CARD (지역 body_blocks 등에서 재사용) ------------------------------- */
 .card-grid {
   display: grid;

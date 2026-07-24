@@ -35,7 +35,13 @@ import re
 import json
 import html
 import hashlib
+import datetime
 from urllib.parse import quote
+
+# 빌드(생성) 일자 — 신선도 신호(sitemap lastmod / JSON-LD dateModified / 가시 최종 업데이트)에 사용
+BUILD_DATE = datetime.date.today()
+BUILD_DATE_ISO = BUILD_DATE.isoformat()          # 예: 2026-07-24
+BUILD_DATE_DOT = BUILD_DATE.strftime("%Y.%m.%d")  # 예: 2026.07.24
 
 # ---------------------------------------------------------------------------
 # 설정 (사용자가 나중에 바꿀 수 있는 값)
@@ -53,7 +59,7 @@ BUSINESS_PHONE = "010-2311-6543"
 BUSINESS_EMAIL = "ft9990@naver.com"
 
 # 캐시버스팅 버전 (index.html 과 동일하게 유지)
-ASSET_VER = "20260724d"
+ASSET_VER = "20260725"
 
 # 출력 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -436,6 +442,8 @@ REGION_INLINE_CSS = """    <style>
         .rg-cta h2 { font-family: var(--font-body); font-weight: 800; color: #fff;
             font-size: clamp(24px, 4.6vw, 38px); line-height: 1.18; letter-spacing: -.02em; word-break: keep-all; }
         .rg-cta p { margin: 14px auto 24px; max-width: 52ch; color: rgba(255,255,255,.82); word-break: keep-all; }
+
+        .rg-updated { text-align: center; font-size: 12.5px; color: var(--ink-3); margin: 0; padding: 8px 0 26px; }
     </style>"""
 
 
@@ -481,6 +489,8 @@ def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs):
             "name": title,
             "description": desc,
             "inLanguage": "ko",
+            "datePublished": BUILD_DATE_ISO,
+            "dateModified": BUILD_DATE_ISO,
             "about": {"@id": business_id},
             "isPartOf": {"@id": website_id},
         },
@@ -761,6 +771,8 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
         </section>
     </main>
 
+    <div class="container"><p class="rg-updated">최종 업데이트: {BUILD_DATE_DOT}</p></div>
+
 {footer_html("../")}
 {PAGE_SCRIPT}
 </body>
@@ -789,6 +801,81 @@ def render_hub_page(sido_list, sido_counts, total):
                     </div>
                 </a>""")
     cards_html = "\n".join(cards)
+
+    # ---- 허브 JSON-LD (CollectionPage + ItemList + BreadcrumbList + EducationalOrganization) ----
+    business_id = BASE_URL + "/#business"
+    website_id = BASE_URL + "/#website"
+    item_els = []
+    for i, name in enumerate(sido_list, start=1):
+        item_els.append({
+            "@type": "ListItem",
+            "position": i,
+            "name": name + " 영어회화",
+            "url": BASE_URL + "/" + quote(REGION_DIRNAME) + "/" + quote(page_filename(name)),
+        })
+    hub_graph = [
+        {
+            "@type": "EducationalOrganization",
+            "@id": business_id,
+            "name": BUSINESS_NAME,
+            "url": BASE_URL + "/",
+            "telephone": BUSINESS_PHONE,
+            "email": BUSINESS_EMAIL,
+            "image": BASE_URL + "/logo.png",
+            "areaServed": {"@type": "Country", "name": "대한민국"},
+            "knowsLanguage": ["ko", "en"],
+        },
+        {
+            "@type": "WebSite",
+            "@id": website_id,
+            "url": BASE_URL + "/",
+            "name": BUSINESS_NAME,
+            "inLanguage": "ko",
+        },
+        {
+            "@type": "CollectionPage",
+            "@id": canonical + "#webpage",
+            "url": canonical,
+            "name": "전국 지역별 영어회화",
+            "description": desc,
+            "inLanguage": "ko",
+            "datePublished": BUILD_DATE_ISO,
+            "dateModified": BUILD_DATE_ISO,
+            "isPartOf": {"@id": website_id},
+            "about": {"@id": business_id},
+            "mainEntity": {
+                "@type": "ItemList",
+                "numberOfItems": len(sido_list),
+                "itemListElement": item_els,
+            },
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": canonical + "#breadcrumb",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "홈", "item": BASE_URL + "/"},
+                {"@type": "ListItem", "position": 2, "name": "전국 지역별 영어회화", "item": canonical},
+            ],
+        },
+    ]
+    hub_jsonld = json.dumps({"@context": "https://schema.org", "@graph": hub_graph},
+                            ensure_ascii=False, indent=2)
+
+    # ---- 허브 소개 프로즈 (순텍스트 1,500자 이상 — 지역별 영어회화 서비스 소개/이용법/시·도 안내) ----
+    sido_names_line = " · ".join(sido_list)
+    hub_intro_html = f"""
+        <section class="section" style="padding-bottom:0;">
+            <div class="container">
+                <div class="rg-prose" style="max-width:78ch;">
+                    <p>이지스피크(EZspeak)는 시험을 위한 영어가 아니라 실제로 입이 트이는 영어, 곧 &lsquo;말이 되는 영어&rsquo;를 목표로 하는 실전 영어회화 전문 학원입니다. 이 페이지는 전국 {total}개 지역, {len(sido_list)}개 시·도에 걸친 이지스피크 지역별 영어회화 안내를 한곳에 모은 허브입니다. 우리 동네 이름으로 개설된 페이지에서 1:1 원어민 회화 수업, 한국인 플래너의 밀착 학습 관리, 무료 레벨테스트 등 이지스피크가 제공하는 학습 방식을 지역 맥락에 맞춰 확인하실 수 있습니다. 영어회화 학원을 처음 알아보는 분이라면, 먼저 내가 사는 지역 페이지를 열어 어떤 수업이 진행되는지, 어떤 절차로 시작하는지부터 살펴보시길 권합니다.</p>
+                    <p>지역별 영어회화 페이지는 단순히 지역명만 바꾼 안내가 아니라, 해당 지역 학습자가 가장 궁금해하는 정보를 중심으로 구성했습니다. 각 페이지에는 이지스피크의 3단계 운영 방식, 즉 검증된 원어민 강사와의 1:1 회화 수업, 수업 외 시간까지 챙기는 한국인 플래너의 예·복습 관리, 그리고 레벨테스트 결과에 맞춘 단계별 커리큘럼과 복습 콘텐츠가 정리되어 있습니다. 여기에 수강 안내와 함께 수강료·수업 방식·수업 횟수·대상 연령을 다루는 자주 묻는 질문까지 담아, 상담 전에 궁금증을 미리 해소할 수 있도록 했습니다. 초등학생부터 성인 직장인까지, 그리고 알파벳이 낯선 왕초보부터 실무에서 바로 쓰는 비즈니스 회화까지 각자의 상황에 맞는 시작점을 찾을 수 있습니다.</p>
+                    <p>우리 동네 페이지를 찾는 방법은 간단합니다. 위쪽 검색창에 시·도명(예: 서울, 경기, 부산)을 입력하면 해당 시·도 카드가 바로 필터링됩니다. 시·도 페이지로 들어가면 그 안의 시·군·구, 다시 그 아래의 읍·면·동으로 단계별로 좁혀 이동할 수 있어, 내가 생활하고 일하는 동네와 가장 가까운 영어회화 안내까지 확인할 수 있습니다. 반대로 세부 지역 페이지에서는 상위 지역과 인근 지역으로도 자유롭게 이동할 수 있어, 직장 근처와 집 근처처럼 두 곳의 정보를 함께 비교해 보기에도 좋습니다. 대중교통으로 오가기 편한 지역을 기준으로 살펴보면 꾸준히 다니기에 더 수월합니다.</p>
+                    <p>이지스피크는 일상영어회화, 비즈니스영어회화, 여행영어, 시사토론, 중등교과, 키즈영어, 문법·어휘, 시험 대비(오픽·토익스피킹)까지 모두 8개 과정을 운영합니다. 일상 대화가 목표라면 매일 쓰는 표현 중심의 일상영어회화가, 업무에 당장 필요하다면 회의·이메일·프레젠테이션을 다루는 비즈니스영어회화가 적합합니다. 유아와 초등 자녀에게는 놀이로 익히며 자신감을 붙이는 키즈영어, 중학생에게는 내신과 실용 영어를 함께 잡는 중등교과 과정을 마련했습니다. 어떤 과정이 나에게 맞을지는 무료 레벨테스트로 현재 실력을 정확히 진단한 뒤, 담당 플래너가 목표와 일정에 맞춰 함께 정해 드립니다.</p>
+                    <p>시작은 부담 없는 무료 레벨테스트 한 번이면 충분합니다. 카카오톡 채널이나 이메일({BUSINESS_EMAIL})로 문의를 남기시면 담당 플래너가 현재 실력을 진단하고, 목표에 맞는 커리큘럼과 수업 횟수(주 1~5회)를 안내해 드립니다. 수업은 정해진 교재를 읽는 방식이 아니라 실제 상황을 가정한 대화와 롤플레이, 질의응답 중심으로 진행되어, 배운 표현을 바로 말로 꺼내 쓰는 연습을 반복합니다. 직장인을 위한 시간대 운영과 연령별 맞춤 케어까지 갖춰, 바쁜 일정 속에서도 꾸준히 이어갈 수 있도록 돕습니다.</p>
+                    <p>현재 안내 중인 시·도는 다음과 같습니다: {sido_names_line}. 아래 카드에서 원하는 지역을 선택해 우리 동네 영어회화 페이지로 이동해 보세요.</p>
+                </div>
+            </div>
+        </section>"""
 
     doc = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -819,6 +906,10 @@ def render_hub_page(sido_list, sido_counts, total):
         a.hub-card .card__title {{ font-family: var(--font-body); }}
         .hub-empty {{ display: none; color: var(--ink-3); margin-top: 26px; }}
     </style>
+
+    <script type="application/ld+json">
+{hub_jsonld}
+    </script>
 </head>
 <body>
 {header_html("../")}
@@ -843,9 +934,14 @@ def render_hub_page(sido_list, sido_counts, total):
                 </div>
             </div>
         </section>
+{hub_intro_html}
 
-        <section class="section" style="padding-top:0;">
+        <section class="section" style="padding-top:clamp(28px,5vw,52px);">
             <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">시·도 선택</span>
+                    <h2 class="section-title">시·도별 영어회화 바로가기</h2>
+                </div>
                 <div class="card-grid hub-grid" id="sidoGrid">
 {cards_html}
                 </div>
@@ -853,6 +949,8 @@ def render_hub_page(sido_list, sido_counts, total):
             </div>
         </section>
     </main>
+
+    <div class="container"><p class="rg-updated">최종 업데이트: {BUILD_DATE_DOT}</p></div>
 
 {footer_html("../")}
     <script>
@@ -905,15 +1003,51 @@ def render_sitemap(keywords):
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
-        lines.append("  <url><loc>%s</loc></url>" % esc(u))
+        lines.append("  <url><loc>%s</loc><lastmod>%s</lastmod></url>" % (esc(u), BUILD_DATE_ISO))
     lines.append("</urlset>")
     return "\n".join(lines) + "\n"
 
 
+def render_llms():
+    """AnswerDotAI llms.txt (H1 + 요약 blockquote + 링크 섹션). BASE_URL 로 링크 전파."""
+    hub = BASE_URL + "/" + quote(REGION_DIRNAME) + "/index.html"
+    seoul = BASE_URL + "/" + quote(REGION_DIRNAME) + "/" + quote("서울특별시" + PAGE_SUFFIX)
+    busan = BASE_URL + "/" + quote(REGION_DIRNAME) + "/" + quote("부산광역시" + PAGE_SUFFIX)
+    return f"""# 이지스피크 영어회화 (EZspeak)
+
+> 1:1 원어민 수업과 한국인 플래너의 밀착 학습 관리로 실전 영어회화를 완성하는
+> 한국의 영어회화 전문 학원. 유아부터 성인까지 레벨별 speaking 중심 커리큘럼과
+> 무료 레벨테스트를 제공하며, 전국 16개 시·도 지역 페이지로 안내합니다.
+
+이지스피크는 시험용 영어가 아니라 "말이 되는 영어"를 목표로 합니다.
+초급부터 고급까지 8개 과정(일상·비즈니스·여행·시사토론·중등교과·키즈·문법어휘·시험대비)을
+운영하고, 수업 외 시간에도 담당 플래너가 예·복습과 학습 스케줄을 관리합니다.
+상담·문의는 카카오톡 채널 또는 이메일({BUSINESS_EMAIL})로 받습니다.
+
+## 핵심 페이지
+- [이지스피크 홈]({BASE_URL}/): 학원 소개·커리큘럼·운영 방식·상담 신청
+- [전국 지역별 영어회화 허브]({hub}): 16개 시·도별 영어회화 안내
+- [서울특별시 영어회화]({seoul}): 서울 지역 대표 페이지
+- [부산광역시 영어회화]({busan}): 부산 지역 대표 페이지
+
+## 자주 묻는 질문
+- 수강료: 목표·현재 실력에 따라 달라져 무료 레벨테스트 후 맞춤 상담에서 안내
+- 수업 방식: 1:1 원어민 화상/대면, 롤플레이·질의응답 중심
+- 수업 횟수: 주 1~5회 목표에 맞춰 구성
+- 대상: 유아·초등·중등·성인 전 연령, 직장인 시간대 운영
+
+## Optional
+- [운영 정보] 대표 {BUSINESS_OWNER} · 전화 {BUSINESS_PHONE} · 이메일 {BUSINESS_EMAIL}
+- 최종 업데이트: {BUILD_DATE_DOT}
+"""
+
+
 def render_robots():
-    return ("User-agent: *\n"
-            "Allow: /\n\n"
-            "Sitemap: %s/sitemap.xml\n" % BASE_URL)
+    # 전체 크롤러 허용 + 네이버(Yeti)·주요 AI봇 명시 허용. Sitemap 은 BASE_URL 로 전파.
+    bots = ["*", "Yeti", "GPTBot", "OAI-SearchBot", "ChatGPT-User",
+            "ClaudeBot", "PerplexityBot", "Google-Extended"]
+    blocks = "\n\n".join("User-agent: %s\nAllow: /" % b for b in bots)
+    return "%s\n\nSitemap: %s/sitemap.xml\n" % (blocks, BASE_URL)
 
 
 # ---------------------------------------------------------------------------
@@ -1044,13 +1178,16 @@ def main():
     with open(sitemap_path, "w", encoding="utf-8") as f:
         f.write(render_sitemap(all_pages))
 
-    # robots (없을 때만)
+    # robots (항상 덮어쓰기 — BASE_URL / AI봇 정책 변경이 항상 전파되도록)
     robots_path = os.path.join(ROOT_DIR, "robots.txt")
-    robots_created = False
-    if not os.path.exists(robots_path):
-        with open(robots_path, "w", encoding="utf-8") as f:
-            f.write(render_robots())
-        robots_created = True
+    with open(robots_path, "w", encoding="utf-8") as f:
+        f.write(render_robots())
+    robots_created = True
+
+    # llms.txt (항상 덮어쓰기)
+    llms_path = os.path.join(ROOT_DIR, "llms.txt")
+    with open(llms_path, "w", encoding="utf-8") as f:
+        f.write(render_llms())
 
     print("=" * 60)
     print(" 이지스피크 지역 SEO 페이지 생성 완료")
@@ -1063,7 +1200,8 @@ def main():
     print(" 총 지역 페이지     : %d 개  ->  %s/" % (page_count, REGION_DIRNAME))
     print(" 허브 페이지        : %s/index.html (시·도 %d개)" % (REGION_DIRNAME, len(sido_nodes)))
     print(" sitemap.xml        : 총 %d URL" % (page_count + 2))
-    print(" robots.txt         : %s" % ("새로 생성" if robots_created else "기존 유지"))
+    print(" robots.txt         : 덮어쓰기 생성")
+    print(" llms.txt           : 덮어쓰기 생성")
     print(" -- QA --")
     print(" 최소 가시 텍스트   : %d자 (%s)" % (min_len, min_len_kw))
     print(" 1200자 미만 페이지 : %d 개" % short_pages)

@@ -25,7 +25,107 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- Font: 전 영역 Pretendard (style.css 에서 @import) -->
-    <link rel="stylesheet" href="style.css?v=20260724d">
+    <link rel="stylesheet" href="style.css?v=20260725">
+
+    <!-- 구조화 데이터 (JSON-LD) -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://ezspeak.vercel.app/#business",
+      "name": "이지스피크 영어회화",
+      "alternateName": "EZspeak",
+      "url": "https://ezspeak.vercel.app/",
+      "telephone": "010-2311-6543",
+      "email": "ft9990@naver.com",
+      "image": "https://ezspeak.vercel.app/logo.png",
+      "logo": "https://ezspeak.vercel.app/logo.png",
+      "description": "1:1 원어민 수업과 한국인 플래너의 밀착 학습 관리로 실전 영어회화를 완성하는 영어회화 전문 학원.",
+      "areaServed": { "@type": "Country", "name": "대한민국" },
+      "knowsLanguage": ["ko", "en"],
+      "founder": { "@type": "Person", "name": "황동욱" },
+      "sameAs": ["http://pf.kakao.com/_NmPfn"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://ezspeak.vercel.app/#website",
+      "url": "https://ezspeak.vercel.app/",
+      "name": "이지스피크 영어회화",
+      "inLanguage": "ko",
+      "publisher": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://ezspeak.vercel.app/#webpage",
+      "url": "https://ezspeak.vercel.app/",
+      "name": "이지스피크 영어회화 - EZspeak | 아쉬운 영어에서 아, 쉬운 영어로",
+      "description": "1:1 원어민 수업과 한국인 플래너 밀착 케어, 레벨별 speaking 중심 커리큘럼으로 완성하는 실전 영어회화.",
+      "inLanguage": "ko",
+      "datePublished": "2026-07-24",
+      "dateModified": "2026-07-24",
+      "isPartOf": { "@id": "https://ezspeak.vercel.app/#website" },
+      "about": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "일상영어회화",
+      "description": "일상 대화부터 자연스러운 표현까지, 매일 쓰는 실전 영어. 성인 전 레벨 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "비즈니스영어회화",
+      "description": "회의·프레젠테이션·이메일까지 업무에 바로 쓰는 영어. 직장인 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "여행영어",
+      "description": "공항·호텔·레스토랑 등 여행지에서 꼭 필요한 표현. 여행 준비자 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "시사토론",
+      "description": "뉴스·사회 이슈·TED로 배우는 고급 영어 토론. 중·고급자 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "중등교과",
+      "description": "내신 완벽 대비와 함께 실용 영어 능력까지 향상. 중학생 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "키즈영어",
+      "description": "놀이로 익히며 영어에 재미와 자신감을 붙이는 수업. 유아·초등 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "문법·어휘",
+      "description": "탄탄한 기초부터 고급 표현까지 체계적인 문법·어휘. 전 레벨 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "Course",
+      "name": "시험 대비",
+      "description": "오픽·토익스피킹 완벽 대비, 목표 점수 달성 프로젝트. 자격증 준비자 대상.",
+      "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://ezspeak.vercel.app/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://ezspeak.vercel.app/" }
+      ]
+    }
+  ]
+}
+    </script>
 </head>
 <body>
     <!-- 헤더 -->
@@ -349,6 +449,30 @@
         </div>
     </section>
 
+    <!-- 지역별 영어회화 바로가기 -->
+    <section class="region-links section" aria-label="지역별 영어회화 바로가기">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">지역별 영어회화</span>
+                <h2 class="section-title">우리 동네 영어회화 찾기</h2>
+                <p class="section-sub">전국 16개 시·도별 이지스피크 영어회화 안내입니다. 우리 지역을 선택해 가까운 영어회화 정보를 확인하세요.</p>
+            </div>
+            <div class="region-links-pills reveal">
+                <a class="pill" href="지역/서울특별시-영어회화.html">서울특별시 영어회화</a>
+                <a class="pill" href="지역/경기도-영어회화.html">경기도 영어회화</a>
+                <a class="pill" href="지역/인천광역시-영어회화.html">인천광역시 영어회화</a>
+                <a class="pill" href="지역/부산광역시-영어회화.html">부산광역시 영어회화</a>
+                <a class="pill" href="지역/대구광역시-영어회화.html">대구광역시 영어회화</a>
+                <a class="pill" href="지역/대전광역시-영어회화.html">대전광역시 영어회화</a>
+                <a class="pill" href="지역/광주광역시-영어회화.html">광주광역시 영어회화</a>
+                <a class="pill" href="지역/울산광역시-영어회화.html">울산광역시 영어회화</a>
+                <a class="pill" href="지역/경상남도-영어회화.html">경상남도 영어회화</a>
+                <a class="pill" href="지역/충청남도-영어회화.html">충청남도 영어회화</a>
+                <a class="pill pill--hub" href="지역/index.html">전국 지역별 영어회화 전체 보기 →</a>
+            </div>
+        </div>
+    </section>
+
     <!-- 푸터 -->
     <footer class="site-footer">
         <div class="container">
@@ -370,6 +494,6 @@
         </a>
     </nav>
 
-    <script src="script.js?v=20260724a"></script>
+    <script src="script.js?v=20260725"></script>
 </body>
 </html>
