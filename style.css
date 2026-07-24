@@ -599,3 +599,61 @@ ul { list-style: none; }
   .container { padding-inline: 15px; }
   .hero .hero-content { padding-inline: 15px; }
 }
+
+/* ---- 학습 흐름 / 레벨테스트 / 학습관리 / 수강절차 / FAQ (콘텐츠 심화) ------ */
+
+/* 학습 흐름 5단계 — 공용 .timeline 재사용, 단독 배치라 폭 제한 */
+.flow .timeline { max-width: 760px; margin-inline: auto; }
+
+/* 레벨테스트 안내 */
+.leveltest { background: var(--paper-2); border-block: 1px solid var(--line); }
+.leveltest .card-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+.leveltest .card__body { padding: 20px 20px 22px; }
+.lv-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+.lv-fact {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-weight: 700; font-size: 14px; color: var(--blue-deep);
+  background: #fff; border: 1px solid var(--line); padding: 9px 15px; border-radius: var(--r-pill);
+}
+.lv-cta { margin-top: 26px; text-align: center; }
+
+/* 학습 관리 시스템 */
+.care-intro { max-width: 720px; margin-inline: auto; text-align: center; color: var(--ink-2); margin-bottom: clamp(22px, 4vw, 34px); word-break: keep-all; font-size: 15.5px; line-height: 1.75; }
+.care-daily { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.care-daily .d-item { background: var(--blue-tint); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 18px 20px; }
+.care-daily .d-t { font-weight: 800; font-size: 16px; color: var(--blue-deep); margin-bottom: 6px; }
+.care-daily .d-d { font-size: 14px; color: var(--ink-2); line-height: 1.6; word-break: keep-all; }
+.care-daily-head { max-width: 760px; margin: clamp(24px, 4vw, 36px) auto 0; text-align: center; font-weight: 800; font-size: 18px; color: var(--ink); }
+
+/* 수강 절차 */
+.procedure { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.p-step { background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px 18px; }
+.p-num { width: 32px; height: 32px; display: grid; place-items: center; font-weight: 800; font-size: 14px; color: #fff; background: var(--blue); border-radius: var(--r-sm); margin-bottom: 12px; }
+.p-title { font-weight: 800; font-size: 16px; color: var(--ink); margin-bottom: 6px; word-break: keep-all; }
+.p-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; word-break: keep-all; }
+
+/* FAQ */
+.faq { background: var(--paper-2); border-top: 1px solid var(--line); }
+.faq-list { max-width: 760px; margin-inline: auto; display: grid; gap: 10px; }
+.faq-list details { background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.faq-list summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 18px 20px; font-weight: 700; font-size: 16px; color: var(--ink); word-break: keep-all;
+}
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary::after {
+  content: ""; flex: 0 0 auto; width: 10px; height: 10px;
+  border-right: 2.4px solid var(--ink-3); border-bottom: 2.4px solid var(--ink-3);
+  transform: rotate(45deg); transition: transform .2s; margin-right: 3px;
+}
+.faq-list details[open] summary::after { transform: rotate(-135deg); }
+.faq-a { padding: 0 20px 20px; color: var(--ink-2); font-size: 15px; line-height: 1.75; word-break: keep-all; }
+
+@media (max-width: 720px) {
+  .procedure { grid-template-columns: 1fr 1fr; }
+  .care-daily { grid-template-columns: 1fr; }
+}
+@media (max-width: 460px) {
+  .procedure { grid-template-columns: 1fr; }
+}

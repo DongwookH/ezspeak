@@ -25,7 +25,7 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- Font: 전 영역 Pretendard (style.css 에서 @import) -->
-    <link rel="stylesheet" href="style.css?v=20260725">
+    <link rel="stylesheet" href="style.css?v=20260725a">
 
     <!-- 구조화 데이터 (JSON-LD) -->
     <script type="application/ld+json">
@@ -115,6 +115,52 @@
       "name": "시험 대비",
       "description": "오픽·토익스피킹 완벽 대비, 목표 점수 달성 프로젝트. 자격증 준비자 대상.",
       "provider": { "@id": "https://ezspeak.vercel.app/#business" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://ezspeak.vercel.app/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "영어 왕초보도 시작할 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "네, 영어를 처음 배우거나 오래 손을 놓았던 분도 괜찮습니다. 레벨테스트로 현재 상태를 확인한 뒤, 지금 수준에 맞는 가장 쉬운 지점부터 시작합니다. 기초 표현과 발음부터 천천히 쌓아가기 때문에 왕초보도 부담 없이 따라올 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "레벨테스트는 어떻게 진행되고 시간은 얼마나 걸리나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "별도의 시험이 아니라 자연스러운 대화 속에서 진행됩니다. 말하기·듣기·이해력·문법·발음 다섯 영역을 살펴 현재 실력을 진단하며, 대체로 10분 안팎의 짧은 시간이면 충분합니다. 비용은 무료이고, 온라인으로 편한 곳에서 참여할 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "수업은 어떤 방식으로 진행되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "원어민 강사와 일대일로 진행하는 1:1 회화 수업이 중심입니다. 듣기만 하는 강의가 아니라 직접 말하며 익히는 양방향 수업으로, 온라인으로 참여하기 때문에 PC나 스마트폰만 있으면 어디서든 수업을 받을 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "한국인 플래너는 어떤 관리를 해주나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "담당 플래너가 수업 전 예습 안내부터 수업 후 일일 피드백, 복습 자료 제공, 학습 스케줄 관리까지 함께 챙깁니다. 원어민 수업만으로 놓치기 쉬운 부분을 한국어로 보완해, 혼자 하지 않도록 끝까지 곁에서 돕습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "어떤 연령대가 수강할 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "유아부터 초·중등 학생, 성인까지 전 연령이 수강할 수 있습니다. 키즈영어, 중등교과, 일상·비즈니스 회화 등 연령과 목적에 맞는 과정을 나누어 두었기 때문에, 각자의 수준과 목표에 맞춰 시작하면 됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "수강료는 어떻게 안내되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "수강료는 수업 횟수와 과정, 목표에 따라 달라지기 때문에 상담 과정에서 개별적으로 안내해 드립니다. 무료 레벨테스트와 상담을 먼저 진행한 뒤, 커리큘럼과 함께 예상 비용을 투명하게 알려드립니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "지방에 살아도 수강할 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "네, 수업이 온라인으로 진행되기 때문에 지역에 상관없이 전국 어디서나 수강할 수 있습니다. 인터넷과 기기만 있으면 집이나 사무실에서 원어민 1:1 수업과 플래너 관리를 그대로 받을 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "어떤 목적의 영어 학습에 맞나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "일상 회화, 여행 영어, 비즈니스 영어, 오픽·토익스피킹 같은 말하기 시험 대비까지 폭넓게 맞출 수 있습니다. 상담 때 배우려는 목적을 함께 이야기하고, 거기에 맞는 과정을 골라 커리큘럼을 구성합니다." }
+        }
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -270,6 +316,154 @@
         </div>
     </section>
 
+    <!-- 학습 흐름 5단계 -->
+    <section class="flow section" aria-label="학습 흐름 5단계">
+        <div class="container">
+            <div class="section-head is-center reveal">
+                <span class="eyebrow">학습 흐름</span>
+                <h2 class="section-title">진단부터 점검까지,<br>이어지는 5단계</h2>
+                <p class="section-sub">한 번의 수업으로 끝나지 않습니다. 시작부터 점검까지 다섯 단계가 맞물려 실력이 차곡차곡 쌓입니다.</p>
+            </div>
+            <div class="timeline reveal">
+                <div class="timeline__step">
+                    <span class="timeline__num">1</span>
+                    <div>
+                        <h3 class="timeline__title">레벨테스트</h3>
+                        <p class="timeline__desc">먼저 지금의 영어 실력을 정확히 확인합니다. 말하기·듣기·이해력·문법·발음을 두루 살펴, 어디까지 되고 어디서 막히는지 짚어냅니다. 학습은 감이 아니라 진단에서 출발합니다.</p>
+                    </div>
+                </div>
+                <div class="timeline__step">
+                    <span class="timeline__num">2</span>
+                    <div>
+                        <h3 class="timeline__title">맞춤 커리큘럼 배정</h3>
+                        <p class="timeline__desc">진단 결과와 배우려는 목적을 함께 놓고, 지금 수준에 딱 맞는 과정을 정합니다. 일상 회화부터 비즈니스·시험 대비까지, 나에게 필요한 코스만 골라 담습니다.</p>
+                    </div>
+                </div>
+                <div class="timeline__step">
+                    <span class="timeline__num">3</span>
+                    <div>
+                        <h3 class="timeline__title">1:1 원어민 수업</h3>
+                        <p class="timeline__desc">원어민 강사와 일대일로 마주 앉아 직접 말하는 시간이 중심입니다. 듣고 끝나는 강의가 아니라, 내 입으로 문장을 만들며 익히는 실전 회화로 진행합니다.</p>
+                    </div>
+                </div>
+                <div class="timeline__step">
+                    <span class="timeline__num">4</span>
+                    <div>
+                        <h3 class="timeline__title">일일 피드백·복습 관리</h3>
+                        <p class="timeline__desc">수업이 끝나면 그날 배운 표현과 고칠 점을 정리해 전달합니다. 한국인 플래너가 복습 방향과 스케줄을 함께 챙겨, 배운 내용이 다음 수업까지 자연스럽게 이어지도록 돕습니다.</p>
+                    </div>
+                </div>
+                <div class="timeline__step">
+                    <span class="timeline__num">5</span>
+                    <div>
+                        <h3 class="timeline__title">정기 레벨 점검</h3>
+                        <p class="timeline__desc">일정 기간마다 다시 실력을 점검해 얼마나 늘었는지 확인합니다. 달라진 수준에 맞춰 다음 목표와 커리큘럼을 새로 조정하며 꾸준히 나아갑니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 레벨테스트 안내 -->
+    <section id="leveltest" class="leveltest section" aria-label="무료 레벨테스트 안내">
+        <div class="container">
+            <div class="section-head is-center reveal">
+                <span class="eyebrow">무료 레벨테스트</span>
+                <h2 class="section-title">내 영어, 지금 어디쯤 와 있을까요?</h2>
+                <p class="section-sub">몸 상태를 체성분 검사로 수치화하듯, 영어도 정확히 재봐야 합니다. 막연한 '중급'이 아니라 영역별로 지금 상태를 눈으로 확인하는 데서 정확한 처방이 나옵니다.</p>
+            </div>
+            <div class="card-grid reveal">
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">말하기 · 유창성</h3>
+                        <p class="card__text">자유로운 대화 속에서 얼마나 막힘없이 말하고, 표현을 얼마나 다양하게 쓰는지 살펴봅니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">듣기 · 이해도</h3>
+                        <p class="card__text">원어민의 자연스러운 속도의 말을 어디까지 정확히 알아듣는지 확인합니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">이해력 · 맥락</h3>
+                        <p class="card__text">단어 뜻을 넘어 대화 전체의 흐름과 숨은 의도까지 잡아내는지 진단합니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">문법 · 정확도</h3>
+                        <p class="card__text">문장을 얼마나 정확하게 구성하고 어법을 자연스럽게 활용하는지 점검합니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">발음 · 억양</h3>
+                        <p class="card__text">소리 하나하나부터 억양과 리듬까지, 상대가 편하게 알아듣는 발음인지 확인합니다.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lv-facts reveal">
+                <span class="lv-fact">비용 무료</span>
+                <span class="lv-fact">약 10분 안팎</span>
+                <span class="lv-fact">전문 강사 진행</span>
+                <span class="lv-fact">온라인 어디서나</span>
+            </div>
+            <div class="lv-cta reveal">
+                <a href="#contact" class="btn btn--solid">무료 레벨테스트 신청하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 학습 관리 시스템 -->
+    <section id="care" class="care section" aria-label="학습 관리 시스템">
+        <div class="container">
+            <div class="section-head is-center reveal">
+                <span class="eyebrow">학습 관리</span>
+                <h2 class="section-title">수업이 끝나도,<br>학습은 계속됩니다</h2>
+            </div>
+            <p class="care-intro reveal">원어민 수업만으로는 놓치기 쉬운 부분이 있습니다. 이지스피크는 담당 한국인 플래너가 수업 전후를 촘촘히 이어 붙여, 혼자 하지 않도록 곁에서 학습을 관리합니다.</p>
+            <div class="card-grid reveal">
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">예습 안내</h3>
+                        <p class="card__text">원어민 수업 전, 그날 다룰 표현과 패턴을 미리 짚어 드립니다. 준비된 상태로 들어가면 실제 대화가 한결 수월해집니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">수업 후 일일 피드백</h3>
+                        <p class="card__text">수업이 끝나면 잘한 점과 고칠 표현을 그날 바로 정리해 전달합니다. 무엇을 복습해야 할지 방향이 분명해집니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">복습 콘텐츠 제공</h3>
+                        <p class="card__text">수준에 맞춘 복습 자료로 배운 내용을 오래 붙잡아 둡니다. 수업에서 익힌 표현이 진짜 내 것이 되도록 반복합니다.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">스케줄 관리</h3>
+                        <p class="card__text">바쁜 일상에도 학습이 끊기지 않도록 담당 플래너가 일정을 함께 관리합니다. 페이스가 흔들릴 땐 곁에서 다시 붙잡아 줍니다.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="care-daily-head reveal">매일 이어가는 학습 콘텐츠</p>
+            <div class="care-daily reveal">
+                <div class="d-item">
+                    <div class="d-t">매일 표현</div>
+                    <p class="d-d">매일 새로운 회화 패턴 하나와 예문을 익히며 표현력을 조금씩 쌓아갑니다. 짧지만 꾸준히 쌓이면 입에서 바로 나오는 문장이 늘어납니다.</p>
+                </div>
+                <div class="d-item">
+                    <div class="d-t">영어 일기</div>
+                    <p class="d-d">짧은 영어 일기에 강사의 피드백이 더해져, 쓰면서 말하기 실력까지 함께 자랍니다. 내 이야기를 영어로 옮기는 연습이 표현의 폭을 넓힙니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 후기 -->
     <section id="reviews" class="reviews section">
         <div class="container">
@@ -306,6 +500,84 @@
             </div>
 
             <div class="reviews-dots"></div>
+        </div>
+    </section>
+
+    <!-- 자주 묻는 질문 -->
+    <section id="faq" class="faq section" aria-label="자주 묻는 질문">
+        <div class="container">
+            <div class="section-head is-center reveal">
+                <span class="eyebrow">자주 묻는 질문</span>
+                <h2 class="section-title">궁금한 점을 모았습니다</h2>
+                <p class="section-sub">상담 전에 많이 물어보시는 내용을 정리했습니다. 더 궁금한 점은 카카오톡이나 상담 신청으로 편하게 물어보세요.</p>
+            </div>
+            <div class="faq-list reveal">
+                <details>
+                    <summary>영어 왕초보도 시작할 수 있나요?</summary>
+                    <div class="faq-a">네, 영어를 처음 배우거나 오래 손을 놓았던 분도 괜찮습니다. 레벨테스트로 현재 상태를 확인한 뒤, 지금 수준에 맞는 가장 쉬운 지점부터 시작합니다. 기초 표현과 발음부터 천천히 쌓아가기 때문에 왕초보도 부담 없이 따라올 수 있습니다.</div>
+                </details>
+                <details>
+                    <summary>레벨테스트는 어떻게 진행되고 시간은 얼마나 걸리나요?</summary>
+                    <div class="faq-a">별도의 시험이 아니라 자연스러운 대화 속에서 진행됩니다. 말하기·듣기·이해력·문법·발음 다섯 영역을 살펴 현재 실력을 진단하며, 대체로 10분 안팎의 짧은 시간이면 충분합니다. 비용은 무료이고, 온라인으로 편한 곳에서 참여할 수 있습니다.</div>
+                </details>
+                <details>
+                    <summary>수업은 어떤 방식으로 진행되나요?</summary>
+                    <div class="faq-a">원어민 강사와 일대일로 진행하는 1:1 회화 수업이 중심입니다. 듣기만 하는 강의가 아니라 직접 말하며 익히는 양방향 수업으로, 온라인으로 참여하기 때문에 PC나 스마트폰만 있으면 어디서든 수업을 받을 수 있습니다.</div>
+                </details>
+                <details>
+                    <summary>한국인 플래너는 어떤 관리를 해주나요?</summary>
+                    <div class="faq-a">담당 플래너가 수업 전 예습 안내부터 수업 후 일일 피드백, 복습 자료 제공, 학습 스케줄 관리까지 함께 챙깁니다. 원어민 수업만으로 놓치기 쉬운 부분을 한국어로 보완해, 혼자 하지 않도록 끝까지 곁에서 돕습니다.</div>
+                </details>
+                <details>
+                    <summary>어떤 연령대가 수강할 수 있나요?</summary>
+                    <div class="faq-a">유아부터 초·중등 학생, 성인까지 전 연령이 수강할 수 있습니다. 키즈영어, 중등교과, 일상·비즈니스 회화 등 연령과 목적에 맞는 과정을 나누어 두었기 때문에, 각자의 수준과 목표에 맞춰 시작하면 됩니다.</div>
+                </details>
+                <details>
+                    <summary>수강료는 어떻게 안내되나요?</summary>
+                    <div class="faq-a">수강료는 수업 횟수와 과정, 목표에 따라 달라지기 때문에 상담 과정에서 개별적으로 안내해 드립니다. 무료 레벨테스트와 상담을 먼저 진행한 뒤, 커리큘럼과 함께 예상 비용을 투명하게 알려드립니다.</div>
+                </details>
+                <details>
+                    <summary>지방에 살아도 수강할 수 있나요?</summary>
+                    <div class="faq-a">네, 수업이 온라인으로 진행되기 때문에 지역에 상관없이 전국 어디서나 수강할 수 있습니다. 인터넷과 기기만 있으면 집이나 사무실에서 원어민 1:1 수업과 플래너 관리를 그대로 받을 수 있습니다.</div>
+                </details>
+                <details>
+                    <summary>어떤 목적의 영어 학습에 맞나요?</summary>
+                    <div class="faq-a">일상 회화, 여행 영어, 비즈니스 영어, 오픽·토익스피킹 같은 말하기 시험 대비까지 폭넓게 맞출 수 있습니다. 상담 때 배우려는 목적을 함께 이야기하고, 거기에 맞는 과정을 골라 커리큘럼을 구성합니다.</div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 수강 절차 -->
+    <section class="procedure-sec section" aria-label="수강 절차">
+        <div class="container">
+            <div class="section-head is-center reveal">
+                <span class="eyebrow">수강 절차</span>
+                <h2 class="section-title">시작은 이렇게 진행됩니다</h2>
+                <p class="section-sub">문의부터 첫 수업까지 네 단계면 충분합니다. 무엇을 언제 하게 되는지 미리 확인하세요.</p>
+            </div>
+            <div class="procedure reveal">
+                <div class="p-step">
+                    <div class="p-num">1</div>
+                    <h3 class="p-title">상담 신청</h3>
+                    <p class="p-text">전화·카카오톡·상담폼 중 편한 방법으로 문의를 남깁니다.</p>
+                </div>
+                <div class="p-step">
+                    <div class="p-num">2</div>
+                    <h3 class="p-title">무료 레벨테스트</h3>
+                    <p class="p-text">현재 실력을 다섯 영역으로 진단합니다. 비용도 부담도 없습니다.</p>
+                </div>
+                <div class="p-step">
+                    <div class="p-num">3</div>
+                    <h3 class="p-title">커리큘럼 제안</h3>
+                    <p class="p-text">진단 결과를 바탕으로 담당 플래너가 맞춤 과정을 안내합니다.</p>
+                </div>
+                <div class="p-step">
+                    <div class="p-num">4</div>
+                    <h3 class="p-title">수업 시작</h3>
+                    <p class="p-text">일정을 정하고 1:1 수업과 학습 관리를 함께 시작합니다.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -477,7 +749,7 @@
     <footer class="site-footer">
         <div class="container">
             <div class="footer-brand">EZspeak</div>
-            <p style="margin-bottom:14px;"><a href="지역/index.html">전국 지역별 영어회화</a></p>
+            <p style="margin-bottom:14px;"><a href="#faq">자주 묻는 질문</a> &nbsp;·&nbsp; <a href="지역/index.html">전국 지역별 영어회화</a></p>
             <p class="footer-meta">대표: 황동욱 &nbsp;|&nbsp; 전화: 010-2311-6543 &nbsp;|&nbsp; 이메일: ft9990@naver.com</p>
         </div>
     </footer>
@@ -494,6 +766,6 @@
         </a>
     </nav>
 
-    <script src="script.js?v=20260725"></script>
+    <script src="script.js?v=20260725a"></script>
 </body>
 </html>
