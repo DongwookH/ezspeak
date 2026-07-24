@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전국 지역별 영어회화 | 시·도별 영어학원 안내 - 이지스피크</title>
+    <meta name="description" content="전국 16개 시·도의 지역별 영어회화·영어학원 정보를 한 곳에서. 이지스피크(EZspeak) 지역 페이지에서 우리 동네 영어회화를 찾아보세요.">
+    <link rel="canonical" href="https://ezspeak.vercel.app/%EC%A7%80%EC%97%AD/index.html">
+
+    <meta property="og:title" content="전국 지역별 영어회화 | 이지스피크 EZspeak">
+    <meta property="og:description" content="전국 16개 시·도의 지역별 영어회화·영어학원 정보를 한 곳에서. 이지스피크(EZspeak) 지역 페이지에서 우리 동네 영어회화를 찾아보세요.">
+    <meta property="og:image" content="https://ezspeak.vercel.app/logo.png">
+    <meta property="og:url" content="https://ezspeak.vercel.app/%EC%A7%80%EC%97%AD/index.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ko_KR">
+
+    <link rel="stylesheet" href="../style.css?v=20260724b">
+    <style>
+        .rg-main { padding-top: var(--header-h); }
+        .rg-crumb { font-size: 13px; color: var(--ink-3); padding: 18px 0 0; }
+        .rg-crumb ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0; margin: 0; }
+        .rg-crumb a { color: var(--ink-2); text-decoration: none; }
+        .rg-crumb a:hover { color: var(--blue); text-decoration: underline; }
+        .rg-crumb li::after { content: "›"; margin-left: 6px; color: var(--line); }
+        .rg-crumb li:last-child::after { content: ""; }
+        .rg-crumb li[aria-current] { color: var(--ink); font-weight: 700; }
+
+        .rg-hero { padding: 26px 0 clamp(36px, 6vw, 64px); }
+        .rg-hero h1 { font-family: var(--font-body); font-weight: 800; line-height: 1.16;
+            letter-spacing: -.03em; font-size: clamp(30px, 7vw, 54px); color: var(--ink); word-break: keep-all; }
+        .rg-hero h1 .easy { color: var(--blue); font-weight: 800; }
+        .rg-lead { margin-top: 18px; max-width: 62ch; font-size: clamp(15px, 2.3vw, 17px);
+            color: var(--ink-2); line-height: 1.78; word-break: keep-all; }
+        .rg-actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .rg-prose p { color: var(--ink-2); line-height: 1.8; word-break: keep-all; margin-top: 13px; max-width: 68ch; }
+
+        .rg-dark { background: var(--blue-deep); color: #fff; border-radius: var(--r-lg);
+            margin-inline: clamp(0px, 2vw, 12px); padding-block: clamp(40px, 6vw, 76px); }
+        .rg-dark .section-title { color: #fff; }
+        .rg-dark .section-sub { color: rgba(255,255,255,.78); }
+        .rg-dark .eyebrow { color: #BFE0FA; }
+        .rg-dark .timeline { border-top-color: rgba(255,255,255,.2); }
+        .rg-dark .timeline__step { border-bottom-color: rgba(255,255,255,.2); }
+        .rg-dark .timeline__num { color: #fff; background: rgba(255,255,255,.16); }
+        .rg-dark .timeline__title { color: #fff; }
+        .rg-dark .timeline__desc { color: rgba(255,255,255,.8); }
+
+        .rg-blocks { margin-top: 28px; }
+        .rg-blocks .card__body { padding: 20px 20px 22px; }
+        .rg-blocks .card__title { font-size: 17px; }
+        .rg-blocks .card__text { color: var(--ink-2); font-size: 14.5px; line-height: 1.7; }
+
+        .rg-faq { margin-top: 22px; display: grid; gap: 10px; }
+        .rg-faq details { background: #fff; border: 1px solid var(--line);
+            border-radius: var(--r-md); overflow: hidden; }
+        .rg-faq summary { list-style: none; cursor: pointer; padding: 17px 20px; font-weight: 700;
+            color: var(--ink); display: flex; gap: 10px; align-items: flex-start; word-break: keep-all; }
+        .rg-faq summary::-webkit-details-marker { display: none; }
+        .rg-faq summary::before { content: "Q"; font-weight: 800; color: var(--blue);
+            flex: 0 0 auto; line-height: 1.3; }
+        .rg-faq summary::after { content: "+"; margin-left: auto; color: var(--ink-3); font-size: 20px; line-height: 1; }
+        .rg-faq details[open] summary::after { content: "–"; }
+        .rg-faq .rg-faq-a { padding: 0 20px 18px 44px; color: var(--ink-2); line-height: 1.78;
+            word-break: keep-all; font-size: 15px; }
+
+        .rg-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+        .rg-pills a.pill { text-decoration: none; transition: border-color .16s, color .16s, background-color .16s; }
+        .rg-pills a.pill:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint); }
+        .rg-more { margin-top: 12px; }
+        .rg-more summary { cursor: pointer; color: var(--blue-deep); font-weight: 700; font-size: 14px; }
+        .rg-more summary::-webkit-details-marker { display: none; }
+
+        .rg-cta { text-align: center; }
+        .rg-cta .rg-cta-inner { background: var(--blue-deep); color: #fff;
+            border-radius: var(--r-lg); padding: clamp(36px, 6vw, 64px) 22px; }
+        .rg-cta h2 { font-family: var(--font-body); font-weight: 800; color: #fff;
+            font-size: clamp(24px, 4.6vw, 38px); line-height: 1.18; letter-spacing: -.02em; word-break: keep-all; }
+        .rg-cta p { margin: 14px auto 24px; max-width: 52ch; color: rgba(255,255,255,.82); word-break: keep-all; }
+    </style>
+    <style>
+        .hub-search { max-width: 520px; margin-top: 26px; }
+        .hub-search input { width: 100%; font-family: var(--font-body); font-size: 16px; color: var(--ink);
+            background: var(--paper-2); border: 1.5px solid var(--line-2); border-radius: var(--r-pill);
+            padding: 15px 22px; box-shadow: var(--sh-1); }
+        .hub-search input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(29,111,194,.14); }
+        .hub-grid { margin-top: 8px; }
+        a.hub-card { text-decoration: none; }
+        a.hub-card .card__title { font-family: var(--font-body); }
+        .hub-empty { display: none; color: var(--ink-3); margin-top: 26px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html" aria-label="이지스피크 홈"><img src="../logo.png" alt="이지스피크 EZspeak 로고"></a>
+            </div>
+            <nav class="nav" aria-label="주요 메뉴">
+                <ul>
+                    <li><a href="../index.html#about">학원소개</a></li>
+                    <li><a href="../index.html#programs">커리큘럼</a></li>
+                    <li><a href="../index.html#features">운영 방식</a></li>
+                    <li><a href="../index.html#reviews">후기</a></li>
+                    <li><a href="../index.html#contact">상담문의</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="메뉴 열기" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="rg-main">
+        <nav class="rg-crumb" aria-label="브레드크럼">
+            <div class="container">
+                <ol>
+                    <li><a href="../index.html">홈</a></li>
+                    <li aria-current="page">전국 지역별 영어회화</li>
+                </ol>
+            </div>
+        </nav>
+
+        <section class="rg-hero">
+            <div class="container">
+                <span class="eyebrow">전국 지역별 영어회화</span>
+                <h1>우리 동네 <span class="easy">영어회화</span></h1>
+                <p class="rg-lead">이지스피크(EZspeak)의 지역별 영어회화·영어학원 안내입니다. 총 7342개 지역, 16개 시·도에서 1:1 원어민 회화 수업과 무료 레벨테스트를 제공합니다. 시·도를 선택해 우리 동네 페이지로 이동하세요.</p>
+                <div class="hub-search">
+                    <input type="text" id="sidoSearch" placeholder="시·도명으로 검색 (예: 서울, 경기, 부산)" autocomplete="off" aria-label="시·도 검색">
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top:0;">
+            <div class="container">
+                <div class="card-grid hub-grid" id="sidoGrid">
+                <a class="card hub-card" href="강원특별자치도-영어회화.html" data-name="강원특별자치도">
+                    <div class="card__body">
+                        <h2 class="card__title">강원특별자치도 영어회화</h2>
+                        <p class="card__text">강원특별자치도 지역 영어회화 학원 정보 · 540곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="경기도-영어회화.html" data-name="경기도">
+                    <div class="card__body">
+                        <h2 class="card__title">경기도 영어회화</h2>
+                        <p class="card__text">경기도 지역 영어회화 학원 정보 · 1235곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="경상남도-영어회화.html" data-name="경상남도">
+                    <div class="card__body">
+                        <h2 class="card__title">경상남도 영어회화</h2>
+                        <p class="card__text">경상남도 지역 영어회화 학원 정보 · 814곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="경상북도-영어회화.html" data-name="경상북도">
+                    <div class="card__body">
+                        <h2 class="card__title">경상북도 영어회화</h2>
+                        <p class="card__text">경상북도 지역 영어회화 학원 정보 · 826곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="대구광역시-영어회화.html" data-name="대구광역시">
+                    <div class="card__body">
+                        <h2 class="card__title">대구광역시 영어회화</h2>
+                        <p class="card__text">대구광역시 지역 영어회화 학원 정보 · 264곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="대전광역시-영어회화.html" data-name="대전광역시">
+                    <div class="card__body">
+                        <h2 class="card__title">대전광역시 영어회화</h2>
+                        <p class="card__text">대전광역시 지역 영어회화 학원 정보 · 226곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="부산광역시-영어회화.html" data-name="부산광역시">
+                    <div class="card__body">
+                        <h2 class="card__title">부산광역시 영어회화</h2>
+                        <p class="card__text">부산광역시 지역 영어회화 학원 정보 · 254곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="서울특별시-영어회화.html" data-name="서울특별시">
+                    <div class="card__body">
+                        <h2 class="card__title">서울특별시 영어회화</h2>
+                        <p class="card__text">서울특별시 지역 영어회화 학원 정보 · 667곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="세종특별자치시-영어회화.html" data-name="세종특별자치시">
+                    <div class="card__body">
+                        <h2 class="card__title">세종특별자치시 영어회화</h2>
+                        <p class="card__text">세종특별자치시 지역 영어회화 학원 정보 · 49곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="울산광역시-영어회화.html" data-name="울산광역시">
+                    <div class="card__body">
+                        <h2 class="card__title">울산광역시 영어회화</h2>
+                        <p class="card__text">울산광역시 지역 영어회화 학원 정보 · 105곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="인천광역시-영어회화.html" data-name="인천광역시">
+                    <div class="card__body">
+                        <h2 class="card__title">인천광역시 영어회화</h2>
+                        <p class="card__text">인천광역시 지역 영어회화 학원 정보 · 201곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="전남광주통합특별시-영어회화.html" data-name="전남광주통합특별시">
+                    <div class="card__body">
+                        <h2 class="card__title">전남광주통합특별시 영어회화</h2>
+                        <p class="card__text">전남광주통합특별시 지역 영어회화 학원 정보 · 802곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="전북특별자치도-영어회화.html" data-name="전북특별자치도">
+                    <div class="card__body">
+                        <h2 class="card__title">전북특별자치도 영어회화</h2>
+                        <p class="card__text">전북특별자치도 지역 영어회화 학원 정보 · 519곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="제주특별자치도-영어회화.html" data-name="제주특별자치도">
+                    <div class="card__body">
+                        <h2 class="card__title">제주특별자치도 영어회화</h2>
+                        <p class="card__text">제주특별자치도 지역 영어회화 학원 정보 · 127곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="충청남도-영어회화.html" data-name="충청남도">
+                    <div class="card__body">
+                        <h2 class="card__title">충청남도 영어회화</h2>
+                        <p class="card__text">충청남도 지역 영어회화 학원 정보 · 401곳</p>
+                    </div>
+                </a>
+                <a class="card hub-card" href="충청북도-영어회화.html" data-name="충청북도">
+                    <div class="card__body">
+                        <h2 class="card__title">충청북도 영어회화</h2>
+                        <p class="card__text">충청북도 지역 영어회화 학원 정보 · 296곳</p>
+                    </div>
+                </a>
+                </div>
+                <p class="hub-empty" id="hubEmpty">검색 결과가 없습니다.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-brand">EZspeak</div>
+            <p style="margin-bottom:14px;"><a href="../%EC%A7%80%EC%97%AD/index.html">전국 지역별 영어회화</a></p>
+            <p class="footer-meta">대표: 황동욱 &nbsp;|&nbsp; 전화: 010-2311-6543 &nbsp;|&nbsp; 이메일: ft9990@naver.com</p>
+        </div>
+    </footer>
+
+    <nav class="mobile-cta-bar" aria-label="빠른 상담">
+        <a href="http://pf.kakao.com/_NmPfn/chat" target="_blank" rel="noopener" class="mc-kakao">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            카톡 상담
+        </a>
+        <a href="../index.html#contact" class="mc-test">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+            레벨테스트
+        </a>
+    </nav>
+    <script>
+        (function () {
+            var btn = document.querySelector('.mobile-menu-btn');
+            var nav = document.querySelector('.nav');
+            if (btn && nav) {
+                btn.addEventListener('click', function () {
+                    var open = nav.classList.toggle('active');
+                    btn.classList.toggle('open', open);
+                    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                });
+            }
+            var header = document.querySelector('.header');
+            if (header) {
+                var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 8); };
+                onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+            }
+            var input = document.getElementById('sidoSearch');
+            var cards = Array.prototype.slice.call(document.querySelectorAll('.hub-card'));
+            var empty = document.getElementById('hubEmpty');
+            if (input) {
+                input.addEventListener('input', function () {
+                    var q = this.value.trim().toLowerCase();
+                    var any = false;
+                    cards.forEach(function (c) {
+                        var match = c.getAttribute('data-name').toLowerCase().indexOf(q) !== -1;
+                        c.style.display = match ? '' : 'none';
+                        if (match) any = true;
+                    });
+                    empty.style.display = any ? 'none' : 'block';
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "generated_from": "sample - 테스트용 (검증 후 삭제 가능)",
+  "keywords": [
+    {"keyword": "신림동", "type": "동", "parents": ["서울특별시 관악구"]},
+    {"keyword": "신림", "type": "축약", "parents": ["서울특별시 관악구"]},
+    {"keyword": "봉천동", "type": "동", "parents": ["서울특별시 관악구"]},
+    {"keyword": "관악구", "type": "구", "parents": ["서울특별시"]},
+    {"keyword": "역삼동", "type": "동", "parents": ["서울특별시 강남구"]},
+    {"keyword": "대치동", "type": "동", "parents": ["서울특별시 강남구"]},
+    {"keyword": "강남구", "type": "구", "parents": ["서울특별시"]},
+    {"keyword": "서면", "type": "축약", "parents": ["부산광역시 부산진구"]},
+    {"keyword": "부산진구", "type": "구", "parents": ["부산광역시"]},
+    {"keyword": "정자동", "type": "동", "parents": ["경기도 성남시 분당구"]}
+  ]
+}
