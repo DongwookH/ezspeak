@@ -23,9 +23,12 @@
 Python 3 표준 라이브러리만 사용.
 
 사용법
-  python3 generate_pages.py                          # data/regions.json
+  python3 generate_og_images.py                      # ① OG 썸네일 먼저 (필수 선행)
+  python3 generate_pages.py                          # ② data/regions.json
   python3 generate_pages.py data/regions.sample.json # 다른 입력(테스트)
 
+⚠️  OG 썸네일은 generate_og_images.py 가 만든다. 이 스크립트는 og/*.png 존재 여부를
+    검사하지 않고 절대 URL 만 심으므로, 먼저 실행하지 않으면 SNS 공유 미리보기가 404 가 된다.
 ⚠️  BASE_URL 은 실제 배포 도메인으로 맞춰서 사용하세요 (아래 설정 참고).
 """
 
@@ -69,6 +72,15 @@ DEFAULT_INPUT = os.path.join(ROOT_DIR, "data", "regions.json")
 POOLS_PATH = os.path.join(ROOT_DIR, "data", "seo_pools.json")
 
 PAGE_SUFFIX = "-영어회화.html"
+
+# OG 썸네일 (generate_og_images.py 산출물)
+#  ⚠️ 이 스크립트는 이미지 존재 여부를 검사하지 않고 URL 만 심는다.
+#     페이지 생성 전에 반드시 `python3 generate_og_images.py` 를 먼저 실행할 것.
+#     (지역 페이지는 og/{키워드}-영어회화.png, 허브는 og/hub.png, 메인은 og/main.png)
+OG_DIRNAME = "og"
+OG_SUFFIX = "-영어회화.png"
+OG_WIDTH = "1200"
+OG_HEIGHT = "630"
 
 # 광역 행정단위 접미사 (시·도 판별용)
 SIDO_SUFFIXES = ("특별시", "광역시", "특별자치시", "특별자치도", "도")
@@ -123,6 +135,24 @@ def region_url_path(keyword):
 
 def canonical_of(keyword):
     return BASE_URL + region_url_path(keyword)
+
+
+def og_image_url(keyword):
+    """지역별 OG 썸네일 절대 URL (한글 파일명 → percent-encoding 필수)."""
+    return BASE_URL + "/" + quote(OG_DIRNAME) + "/" + quote(keyword + OG_SUFFIX)
+
+
+def og_image_tags(url, alt):
+    """og:image 계열 + twitter 카드 태그. 카카오톡 미리보기 안정성을 위해 width/height 명시."""
+    return f"""    <meta property="og:image" content="{esc(url)}">
+    <meta property="og:image:secure_url" content="{esc(url)}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="{OG_WIDTH}">
+    <meta property="og:image:height" content="{OG_HEIGHT}">
+    <meta property="og:image:alt" content="{esc(alt)}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{esc(url)}">
+    <meta name="twitter:image:alt" content="{esc(alt)}">"""
 
 
 _TAG_RE = re.compile(r"<[^>]+>")
@@ -451,7 +481,7 @@ REGION_INLINE_CSS = """    <style>
 # JSON-LD @graph (seo_spec.md 5.3)
 # ---------------------------------------------------------------------------
 
-def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs):
+def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None):
     keyword = ctx["keyword"]
     business_id = BASE_URL + "/#business"
     website_id = BASE_URL + "/#website"
@@ -503,6 +533,19 @@ def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs):
         },
     ]
 
+    if og_image:
+        # 지역별 OG 썸네일을 페이지 대표 이미지로도 노출 (SNS/검색 미리보기 일관성)
+        webpage = graph[2]
+        webpage["primaryImageOfPage"] = {
+            "@type": "ImageObject",
+            "@id": canonical + "#primaryimage",
+            "url": og_image,
+            "contentUrl": og_image,
+            "width": int(OG_WIDTH),
+            "height": int(OG_HEIGHT),
+        }
+        webpage["image"] = {"@id": canonical + "#primaryimage"}
+
     if faqs:
         graph.append({
             "@type": "FAQPage",
@@ -538,7 +581,9 @@ TIMELINE_STEPS = [
 def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     keyword = ctx["keyword"]
     canonical = canonical_of(keyword)
-    og_image = BASE_URL + "/logo.png"
+    # 지역별 고유 OG 썸네일 (generate_og_images.py 로 미리 생성해 두어야 한다)
+    og_image = og_image_url(keyword)
+    og_image_alt = "%s 영어회화 - 이지스피크 온라인 1:1 원어민 수업" % keyword
 
     title = title_for(pools, ctx)
     desc = meta_for(pools, ctx)
@@ -573,7 +618,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     crumb_html_items.append(f'<li aria-current="page">{esc(keyword)}</li>')
     crumb_html = "\n".join("                    " + x for x in crumb_html_items)
 
-    jsonld = build_jsonld(ctx, canonical, title, desc, crumb, faqs)
+    jsonld = build_jsonld(ctx, canonical, title, desc, crumb, faqs, og_image)
 
     # ---- 커리큘럼 타임라인 ----
     steps_html = []
@@ -674,7 +719,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
 
     <meta property="og:title" content="{esc(title)}">
     <meta property="og:description" content="{esc(desc)}">
-    <meta property="og:image" content="{esc(og_image)}">
+{og_image_tags(og_image, og_image_alt)}
     <meta property="og:url" content="{esc(canonical)}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ko_KR">
@@ -847,6 +892,15 @@ def render_hub_page(sido_list, sido_counts, total):
             "dateModified": BUILD_DATE_ISO,
             "isPartOf": {"@id": website_id},
             "about": {"@id": business_id},
+            "primaryImageOfPage": {
+                "@type": "ImageObject",
+                "@id": canonical + "#primaryimage",
+                "url": BASE_URL + "/" + quote(OG_DIRNAME) + "/hub.png",
+                "contentUrl": BASE_URL + "/" + quote(OG_DIRNAME) + "/hub.png",
+                "width": int(OG_WIDTH),
+                "height": int(OG_HEIGHT),
+            },
+            "image": {"@id": canonical + "#primaryimage"},
             "mainEntity": {
                 "@type": "ItemList",
                 "numberOfItems": len(sido_list),
@@ -892,7 +946,7 @@ def render_hub_page(sido_list, sido_counts, total):
 
     <meta property="og:title" content="전국 지역별 영어회화 | 이지스피크 EZspeak">
     <meta property="og:description" content="{esc(desc)}">
-    <meta property="og:image" content="{esc(BASE_URL + '/logo.png')}">
+{og_image_tags(BASE_URL + '/' + quote(OG_DIRNAME) + '/hub.png', '전국 지역별 영어회화 - 이지스피크 온라인 1:1 원어민 수업')}
     <meta property="og:url" content="{esc(canonical)}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ko_KR">
