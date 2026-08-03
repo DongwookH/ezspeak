@@ -4,7 +4,7 @@
 이지스피크(EZspeak) OG 썸네일 생성기
 ====================================
 
-지역 SEO 페이지(지역/{keyword}-영어회화.html)마다 고유한 1200x630 OG 카드를
+지역 SEO 페이지(지역/{keyword}-영어회화.html)마다 고유한 1200x1200 정방형 OG 카드를
 og/{keyword}-영어회화.png 로 생성한다. 메인/허브용 카드(og/main.png, og/hub.png)도 함께 만든다.
 
 ⚠️ 실행 순서
@@ -13,6 +13,11 @@ og/{keyword}-영어회화.png 로 생성한다. 메인/허브용 카드(og/main.
 
     generate_pages.py 는 이미지 존재 여부를 검사하지 않고 URL만 심는다.
     따라서 이 스크립트를 돌리지 않으면 SNS 공유 미리보기가 404가 된다.
+    generate_pages.py 의 OG_WIDTH/OG_HEIGHT 도 이 파일의 W/H 와 같아야 한다(1200/1200).
+
+레이아웃(정방형 세로 스택)
+    상단 블루 바(오렌지 액센트) → 로고 → 이지스피크 / EZspeak → 액센트 룰
+    → 상위 지역명 → 지역명(대형·잉크) + 영어회화(블루) → 값제안 밴드 → 도메인
 
 사용법
     python3 generate_og_images.py                 # 없는 것만 생성(skip-if-exists)
@@ -20,9 +25,10 @@ og/{keyword}-영어회화.png 로 생성한다. 메인/허브용 카드(og/main.
     python3 generate_og_images.py --only 신림동,서울특별시   # 특정 키워드만(디자인 확인용)
     python3 generate_og_images.py --limit 50      # 앞에서 N개만(테스트)
     python3 generate_og_images.py --brand-only    # main.png / hub.png 만
+    python3 generate_og_images.py --audit         # 전수 텍스트 영역 초과 감사(파일 미기록)
 
 의존성: Pillow (11.x 확인), macOS 기본 한글 폰트 AppleSDGothicNeo.ttc
-출력: 팔레트(P, 32색) PNG — 장당 10KB 내외
+출력: 팔레트(P, 24색) PNG — 장당 20KB 이하
 """
 
 import argparse
@@ -45,8 +51,8 @@ OUT_DIR = os.path.join(ROOT_DIR, OUT_DIRNAME)
 LOGO_PATH = os.path.join(ROOT_DIR, "logo.png")
 INPUT_PATH = gp.DEFAULT_INPUT
 
-W, H = 1200, 630
-PALETTE_COLORS = 32          # 팔레트 색 수 (용량/품질 균형)
+W, H = 1200, 1200            # 정방형
+PALETTE_COLORS = 24          # 팔레트 색 수 (용량/품질 균형, 정방형은 픽셀이 1.9배)
 
 FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 FONT_FALLBACKS = [
@@ -67,29 +73,39 @@ ORANGE = (240, 129, 30)       # --orange #F0811E
 LINE = (226, 235, 244)
 WHITE = (255, 255, 255)
 
-# 지역 타입별 미세 변화 (칩 접미사 / 강조색 / 상단바 오렌지 구간 길이)
+# 지역 타입별 미세 변화 (강조색 / 상단바 오렌지 구간 길이). 타입 라벨 칩은 사용하지 않는다.
 TYPE_STYLE = {
-    "시":   {"chip": " · 시",  "accent": BLUE_DEEP, "bar": 260},
-    "군":   {"chip": " · 군",  "accent": BLUE_DEEP, "bar": 230},
-    "구":   {"chip": " · 구",  "accent": BLUE,      "bar": 200},
-    "동":   {"chip": " · 동",  "accent": BLUE,      "bar": 170},
-    "읍":   {"chip": " · 읍",  "accent": BLUE,      "bar": 140},
-    "면":   {"chip": " · 면",  "accent": BLUE,      "bar": 115},
-    "축약": {"chip": "",       "accent": BLUE_DEEP, "bar": 200},
+    "시":   {"accent": BLUE_DEEP, "bar": 300},
+    "군":   {"accent": BLUE_DEEP, "bar": 270},
+    "구":   {"accent": BLUE,      "bar": 240},
+    "동":   {"accent": BLUE,      "bar": 210},
+    "읍":   {"accent": BLUE,      "bar": 180},
+    "면":   {"accent": BLUE,      "bar": 150},
+    "축약": {"accent": BLUE_DEEP, "bar": 240},
 }
-DEFAULT_STYLE = {"chip": "", "accent": BLUE, "bar": 180}
+DEFAULT_STYLE = {"accent": BLUE, "bar": 220}
 
-CHIP_BASE = "온라인 영어회화"
-VALUE_LINE = "온라인 1:1 원어민 수업 · 무료 레벨테스트"
+VALUE_LINE = "집에서 하는 온라인 어학연수"
 FOOTER_LINE = "ezspeak.vercel.app"
 BRAND_NAME = "이지스피크"
 BRAND_SUB = "EZspeak"
 
-# 좌측 텍스트 컬럼
-PAD_L = 76
-COL_W = 700              # 좌측 컬럼 최대 폭 (우측 브랜드 영역 침범 금지)
-DIVIDER_X = 852          # 좌/우 구분선
-RIGHT_CX = 1012          # 우측 브랜드 영역 중심 x
+# 정방형 세로 스택 좌표
+PAD = 80
+CONTENT_W = W - PAD * 2       # 1040 — 모든 텍스트의 최대 폭
+CX = W / 2
+
+BAR_H = 12
+LOGO_W = 236
+LOGO_TOP = 92
+HEAD_GAP = 24                 # 로고 → 브랜드명
+RULE_W, RULE_H = 60, 6
+
+BAND_H = 78                   # 값 제안 밴드 높이
+FOOT_RULE_Y = 1074            # 하단 헤어라인
+FOOT_TEXT_Y = 1100
+
+MID_BOTTOM = 1030             # 본문 그룹이 넘으면 안 되는 하한
 
 # ---------------------------------------------------------------------------
 # 폰트 / 로고
@@ -176,49 +192,83 @@ def line_h(f):
     return a + d
 
 
-def draw_chip(draw, x, y, text, fg, bg=TINT, fsize=25, pad_x=22, h=48):
-    f = font(fsize, W_SEMI)
-    w = text_w(draw, text, f) + pad_x * 2
-    draw.rounded_rectangle([x, y, x + w, y + h], radius=h // 2, fill=bg)
-    _, top, _, bottom = f.getbbox(text)
-    draw.text((x + pad_x, y + (h - (bottom - top)) / 2 - top), text, font=f, fill=fg)
-    return w, h
+def centered(draw, text, f, y, fill):
+    """가운데 정렬 텍스트 아이템."""
+    return {"kind": "text", "text": text, "font": f,
+            "x": CX - text_w(draw, text, f) / 2, "y": y, "fill": fill}
+
+
+def draw_items(draw, items):
+    for it in items:
+        if it["kind"] == "text":
+            draw.text((it["x"], it["y"]), it["text"], font=it["font"], fill=it["fill"])
+        elif it["kind"] == "band":
+            draw.rounded_rectangle(it["rect"], radius=it.get("radius", 18), fill=it["fill"])
+
+
+def item_boxes(draw, items):
+    """감사용: 각 텍스트 아이템의 실제 픽셀 bbox."""
+    boxes = []
+    for it in items:
+        if it["kind"] == "text":
+            boxes.append(draw.textbbox((it["x"], it["y"]), it["text"], font=it["font"]))
+        elif it["kind"] == "band":
+            x0, y0, x1, y1 = it["rect"]
+            boxes.append((x0, y0, x1, y1))
+    return boxes
+
+
+def value_band(draw, y):
+    """값 제안 밴드(가운데 정렬): 배경 + 문구."""
+    fv, _ = fit_font(draw, VALUE_LINE, CONTENT_W - 60, [36, 34, 32, 30, 28], W_SEMI)
+    tw = text_w(draw, VALUE_LINE, fv)
+    bw = min(tw + 64, CONTENT_W)
+    _, vt, _, vb = fv.getbbox(VALUE_LINE)
+    return [
+        {"kind": "band", "rect": [CX - bw / 2, y, CX + bw / 2, y + BAND_H],
+         "radius": BAND_H // 4, "fill": TINT},
+        {"kind": "text", "text": VALUE_LINE, "font": fv,
+         "x": CX - tw / 2, "y": y + (BAND_H - (vb - vt)) / 2 - vt, "fill": BLUE_DEEP},
+    ]
 
 
 def draw_frame(draw, style):
-    """상단 브랜드 바 + 좌/우 구분선 (모든 카드 공통)."""
-    draw.rectangle([0, 0, W, 11], fill=BLUE)
-    draw.rectangle([0, 0, style["bar"], 11], fill=ORANGE)
+    """상단 브랜드 바 + 오렌지 액센트 (모든 카드 공통)."""
+    draw.rectangle([0, 0, W, BAR_H - 1], fill=BLUE)
+    draw.rectangle([0, 0, style["bar"], BAR_H - 1], fill=ORANGE)
 
 
-def draw_brand_column(draw, img, logo_w=230, cx=RIGHT_CX, top=176):
-    """우측 브랜드 배지: 로고 + 이지스피크 + EZspeak."""
+def draw_brand_head(draw, img, accent=BLUE, logo_w=LOGO_W, top=LOGO_TOP):
+    """상단 브랜드 블록: 로고 + 이지스피크 + EZspeak + 액센트 룰. 블록 하단 y 반환."""
     lg = logo_image(logo_w)
-    img.paste(lg, (int(cx - lg.width / 2), int(top)))
-    y = top + lg.height + 26
-    fb = font(36, W_BOLD)
-    draw.text((cx - text_w(draw, BRAND_NAME, fb) / 2, y), BRAND_NAME, font=fb, fill=INK)
-    y += 50
-    fs = font(24, W_MED)
-    draw.text((cx - text_w(draw, BRAND_SUB, fs) / 2, y), BRAND_SUB, font=fs, fill=INK3)
-    y += 42
-    draw.rounded_rectangle([cx - 26, y, cx + 26, y + 5], radius=3, fill=BLUE)
+    img.paste(lg, (int(CX - lg.width / 2), int(top)))
+    y = top + lg.height + HEAD_GAP
+
+    fb = font(42, W_BOLD)
+    draw.text((CX - text_w(draw, BRAND_NAME, fb) / 2, y), BRAND_NAME, font=fb, fill=INK)
+    y += line_h(fb) + 2
+
+    fs = font(26, W_MED)
+    draw.text((CX - text_w(draw, BRAND_SUB, fs) / 2, y), BRAND_SUB, font=fs, fill=INK3)
+    y += line_h(fs) + 22
+
+    draw.rounded_rectangle([CX - RULE_W / 2, y, CX + RULE_W / 2, y + RULE_H],
+                           radius=RULE_H // 2, fill=accent)
+    return y + RULE_H
 
 
-def draw_footer(draw, right_text=None):
-    draw.rectangle([PAD_L, 543, W - PAD_L, 544], fill=LINE)
-    ff = font(23, W_MED)
-    draw.text((PAD_L, 566), FOOTER_LINE, font=ff, fill=INK3)
-    if right_text:
-        draw.text((W - PAD_L - text_w(draw, right_text, ff), 566), right_text,
-                  font=ff, fill=INK3)
+def draw_footer(draw):
+    draw.rectangle([PAD, FOOT_RULE_Y, W - PAD, FOOT_RULE_Y + 1], fill=LINE)
+    ff = font(24, W_MED)
+    draw.text((CX - text_w(draw, FOOTER_LINE, ff) / 2, FOOT_TEXT_Y),
+              FOOTER_LINE, font=ff, fill=INK3)
 
 
 def save_palette(img, path):
     """팔레트 PNG 로 저장해 용량을 최소화.
 
-    FASTOCTREE + dither 없음이 같은 32색에서 MEDIANCUT 대비 약 25% 작다
-    (18.5KB -> 13.6KB, 눈으로 구분되는 열화 없음). 미지원 환경에서는 ADAPTIVE 로 폴백.
+    FASTOCTREE + dither 없음이 같은 색 수에서 MEDIANCUT 대비 약 25% 작다
+    (눈으로 구분되는 열화 없음). 미지원 환경에서는 ADAPTIVE 로 폴백.
     """
     try:
         q = img.quantize(colors=PALETTE_COLORS, method=Image.Quantize.FASTOCTREE,
@@ -232,6 +282,60 @@ def save_palette(img, path):
 # 지역 카드
 # ---------------------------------------------------------------------------
 
+def region_items(draw, keyword, parent, accent, mid_top):
+    """본문(상위 지역명 · 제목 · 값 제안) 아이템을 mid_top~MID_BOTTOM 사이에 세로 중앙 정렬.
+
+    긴 지명은 폰트 자동 축소 → 그래도 넘치면 '지역명 / 영어회화' 2줄로 분리한다.
+    """
+    # 제목: 한 줄로 크게 들어가면 한 줄, 아니면 두 줄
+    one_line = "%s 영어회화" % keyword
+    f1, s1 = fit_font(draw, one_line, CONTENT_W, [104, 98, 92], W_BOLD)
+    two_lines = s1 < 92 or text_w(draw, one_line, f1) > CONTENT_W
+    if two_lines:
+        ft, _ = fit_font(draw, keyword, CONTENT_W,
+                         [136, 124, 112, 100, 92, 84, 76, 68, 60], W_BOLD)
+        fsub, _ = fit_font(draw, "영어회화", CONTENT_W, [76, 70, 64], W_BOLD)
+        title_h = line_h(ft) + line_h(fsub) - 10
+    else:
+        ft, fsub = f1, None
+        title_h = line_h(ft)
+
+    fp = font(32, W_MED)
+
+    blocks = []
+    if parent:
+        blocks += [line_h(fp), 24]
+    blocks += [title_h, 44, BAND_H]
+    total = sum(blocks)
+
+    y = mid_top + max(0, (MID_BOTTOM - mid_top - total) / 2)
+    items = []
+
+    if parent:
+        ptext = ellipsize(draw, parent, fp, CONTENT_W)
+        items.append(centered(draw, ptext, fp, y, INK3))
+        y += line_h(fp) + 24
+
+    if two_lines:
+        kw_text = ellipsize(draw, keyword, ft, CONTENT_W)
+        items.append(centered(draw, kw_text, ft, y, INK))
+        y += line_h(ft) - 10
+        items.append(centered(draw, "영어회화", fsub, y, BLUE))
+        y += line_h(fsub)
+    else:
+        tw = text_w(draw, one_line, ft)
+        x = CX - tw / 2
+        items.append({"kind": "text", "text": keyword, "font": ft,
+                      "x": x, "y": y, "fill": INK})
+        items.append({"kind": "text", "text": "영어회화", "font": ft,
+                      "x": x + text_w(draw, keyword + " ", ft), "y": y, "fill": BLUE})
+        y += line_h(ft)
+
+    y += 44
+    items += value_band(draw, y)
+    return items
+
+
 def render_region_card(keyword, kwtype, parent):
     style = TYPE_STYLE.get(kwtype, DEFAULT_STYLE)
     accent = style["accent"]
@@ -239,118 +343,55 @@ def render_region_card(keyword, kwtype, parent):
     img = Image.new("RGB", (W, H), WHITE)
     draw = ImageDraw.Draw(img)
     draw_frame(draw, style)
-    draw.rectangle([DIVIDER_X, 150, DIVIDER_X + 1, 470], fill=LINE)
-    draw_brand_column(draw, img)
-    draw_footer(draw, "무료 레벨테스트")
+    head_bottom = draw_brand_head(draw, img, accent)
+    draw_footer(draw)
 
-    # ---- 제목: 한 줄로 크게 들어가면 한 줄, 아니면 두 줄 ----
-    one_line = "%s 영어회화" % keyword
-    f1, s1 = fit_font(draw, one_line, COL_W, [96, 92, 88], W_BOLD)
-    two_lines = s1 < 88 or text_w(draw, one_line, f1) > COL_W
-    if two_lines:
-        ft, _ = fit_font(draw, keyword, COL_W, [116, 108, 100, 92, 84, 76, 68, 60], W_BOLD)
-        fsub, _ = fit_font(draw, "영어회화", COL_W, [64, 58, 52], W_BOLD)
-        title_h = line_h(ft) + line_h(fsub) - 6
-    else:
-        ft, fsub = f1, None
-        title_h = line_h(ft)
-
-    # ---- 블록 높이 계산 후 세로 중앙 정렬(클리핑 방지) ----
-    chip_text = CHIP_BASE + style["chip"]
-    fp = font(30, W_MED)
-    fv, _ = fit_font(draw, VALUE_LINE, COL_W - 44, [32, 30, 28, 26, 24], W_SEMI)
-
-    blocks = [48, 30, title_h]                    # 칩, 간격, 제목
-    if parent:
-        blocks += [22, line_h(fp)]                # 간격, 상위 지역
-    blocks += [26, 64]                            # 간격, 값 제안 밴드
-    total = sum(blocks)
-
-    top_bound, bottom_bound = 92, 516
-    y = top_bound + max(0, (bottom_bound - top_bound - total) / 2)
-
-    draw_chip(draw, PAD_L, y, chip_text, accent)
-    y += 48 + 30
-
-    if two_lines:
-        draw.text((PAD_L, y), keyword, font=ft, fill=INK)
-        y += line_h(ft) - 6
-        draw.text((PAD_L, y), "영어회화", font=fsub, fill=BLUE)
-        y += line_h(fsub)
-    else:
-        draw.text((PAD_L, y), keyword, font=ft, fill=INK)
-        off = text_w(draw, keyword + " ", ft)
-        draw.text((PAD_L + off, y), "영어회화", font=ft, fill=BLUE)
-        y += line_h(ft)
-
-    if parent:
-        y += 22
-        draw.rounded_rectangle([PAD_L, y + 8, PAD_L + 6, y + 34], radius=3, fill=accent)
-        ptext = ellipsize(draw, parent, fp, COL_W - 22)
-        draw.text((PAD_L + 22, y), ptext, font=fp, fill=INK3)
-        y += line_h(fp)
-
-    y += 26
-    vw = text_w(draw, VALUE_LINE, fv) + 44
-    draw.rounded_rectangle([PAD_L, y, PAD_L + min(vw, COL_W), y + 64], radius=14, fill=TINT)
-    _, vt, _, vb = fv.getbbox(VALUE_LINE)
-    draw.text((PAD_L + 22, y + (64 - (vb - vt)) / 2 - vt), VALUE_LINE, font=fv, fill=BLUE_DEEP)
-
+    draw_items(draw, region_items(draw, keyword, parent, accent, head_bottom + 40))
     return img
 
 
 # ---------------------------------------------------------------------------
-# 메인 / 허브 카드 (가운데 정렬 변형)
+# 메인 / 허브 카드
 # ---------------------------------------------------------------------------
 
-def render_center_card(title_main, title_accent, subtitle, chip_text, bar=260):
+def render_center_card(title_main, title_accent, subtitle, bar=300):
     img = Image.new("RGB", (W, H), WHITE)
     draw = ImageDraw.Draw(img)
     draw_frame(draw, {"bar": bar})
-    draw_footer(draw, "무료 레벨테스트")
+    head_bottom = draw_brand_head(draw, img, BLUE, logo_w=280, top=104)
+    draw_footer(draw)
 
-    cx = W / 2
-    lg = logo_image(300)
-    img.paste(lg, (int(cx - lg.width / 2), 74))
-    y = 74 + lg.height + 26
-
-    # 칩
-    fc = font(25, W_SEMI)
-    cw = text_w(draw, chip_text, fc) + 44
-    draw.rounded_rectangle([cx - cw / 2, y, cx + cw / 2, y + 48], radius=24, fill=TINT)
-    _, ct, _, cb = fc.getbbox(chip_text)
-    draw.text((cx - text_w(draw, chip_text, fc) / 2, y + (48 - (cb - ct)) / 2 - ct),
-              chip_text, font=fc, fill=BLUE_DEEP)
-    y += 48 + 26
-
-    # 제목 (앞부분 잉크 + 강조 파랑)
     full = (title_main + " " + title_accent).strip()
-    ft, _ = fit_font(draw, full, W - 160, [78, 72, 66, 60, 54], W_BOLD)
+    ft, _ = fit_font(draw, full, CONTENT_W, [92, 84, 78, 72, 66, 60], W_BOLD)
+    fs, _ = fit_font(draw, subtitle, CONTENT_W, [40, 36, 33, 30, 28], W_SEMI)
+
+    total = line_h(ft) + 22 + line_h(fs) + 48 + BAND_H
+    mid_top = head_bottom + 44
+    y = mid_top + max(0, (MID_BOTTOM - mid_top - total) / 2)
+
     tw = text_w(draw, full, ft)
-    x = cx - tw / 2
+    x = CX - tw / 2
     if title_main:
         draw.text((x, y), title_main, font=ft, fill=INK)
         x += text_w(draw, title_main + " ", ft)
     draw.text((x, y), title_accent, font=ft, fill=BLUE)
-    y += line_h(ft) + 6
+    y += line_h(ft) + 22
 
-    # 슬로건
-    fs, _ = fit_font(draw, subtitle, W - 200, [38, 34, 30, 28], W_SEMI)
-    draw.text((cx - text_w(draw, subtitle, fs) / 2, y), subtitle, font=fs, fill=BLUE_DEEP)
+    draw.text((CX - text_w(draw, subtitle, fs) / 2, y), subtitle, font=fs, fill=INK3)
+    y += line_h(fs) + 48
 
+    draw_items(draw, value_band(draw, y))
     return img
 
 
 def render_main_card():
     return render_center_card("이지스피크", "영어회화",
-                              "아쉬운 영어에서 아, 쉬운 영어로",
-                              "온라인 1:1 원어민 수업 · 무료 레벨테스트", bar=260)
+                              "아쉬운 영어에서 아, 쉬운 영어로", bar=300)
 
 
 def render_hub_card():
     return render_center_card("전국 지역별", "영어회화",
-                              "우리 동네 영어회화를 시 · 군 · 구 · 읍 · 면 · 동으로",
-                              "온라인 1:1 원어민 수업 · 무료 레벨테스트", bar=200)
+                              "우리 동네 영어회화를 시 · 군 · 구 · 읍 · 면 · 동으로", bar=240)
 
 
 # ---------------------------------------------------------------------------
@@ -368,16 +409,47 @@ def collect_targets():
     return keywords + synth
 
 
+def audit(targets):
+    """전수 감사: 모든 텍스트/밴드가 안전 영역(좌우 PAD, 상하 헤더·푸터 사이)에 있는지."""
+    probe = Image.new("RGB", (W, H), WHITE)
+    draw = ImageDraw.Draw(probe)
+    head_bottom = draw_brand_head(draw, probe.copy(), BLUE)   # 헤더 높이만 계산
+    mid_top = head_bottom + 40
+
+    bad = 0
+    for i, kw in enumerate(targets, 1):
+        keyword = kw["keyword"]
+        parent = gp.representative_parent(kw)
+        style = TYPE_STYLE.get(kw.get("type", ""), DEFAULT_STYLE)
+        items = region_items(draw, keyword, parent, style["accent"], mid_top)
+        for (x0, y0, x1, y1) in item_boxes(draw, items):
+            if x0 < PAD - 1 or x1 > W - PAD + 1 or y0 < mid_top - 1 or y1 > FOOT_RULE_Y - 12:
+                bad += 1
+                print("  [초과] %s | box=(%.0f,%.0f,%.0f,%.0f)" % (keyword, x0, y0, x1, y1))
+                break
+        if i % 1000 == 0 or i == len(targets):
+            print("  감사 %5d / %d  (초과 %d)" % (i, len(targets), bad), flush=True)
+    print("=" * 60)
+    print(" 텍스트 영역 초과: %d 건 / %d 개" % (bad, len(targets)))
+    print("=" * 60)
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser(description="이지스피크 지역별 OG 썸네일 생성")
     ap.add_argument("--force", action="store_true", help="이미 있어도 다시 생성")
     ap.add_argument("--only", default="", help="쉼표로 구분된 키워드만 생성")
     ap.add_argument("--limit", type=int, default=0, help="앞에서 N개만 생성")
     ap.add_argument("--brand-only", action="store_true", help="main/hub 카드만 생성")
+    ap.add_argument("--audit", action="store_true", help="전수 텍스트 영역 감사만 수행")
     args = ap.parse_args()
 
     if not os.path.exists(LOGO_PATH):
         raise SystemExit("[오류] 로고가 없습니다: %s" % LOGO_PATH)
+
+    if args.audit:
+        raise SystemExit(1 if audit(collect_targets()) else 0)
+
     os.makedirs(OUT_DIR, exist_ok=True)
 
     made = skipped = 0
@@ -422,6 +494,7 @@ def main():
     tot = sum(sizes)
     print("=" * 60)
     print(" 출력 폴더    : %s" % OUT_DIR)
+    print(" 규격         : %dx%d (팔레트 %d색)" % (W, H, PALETTE_COLORS))
     print(" 생성         : %d 장" % made)
     print(" 건너뜀       : %d 장" % skipped)
     print(" 폴더 총 이미지: %d 장" % len(sizes))

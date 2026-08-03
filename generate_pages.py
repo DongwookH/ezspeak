@@ -80,7 +80,7 @@ PAGE_SUFFIX = "-영어회화.html"
 OG_DIRNAME = "og"
 OG_SUFFIX = "-영어회화.png"
 OG_WIDTH = "1200"
-OG_HEIGHT = "630"
+OG_HEIGHT = "1200"     # 정방형 카드 (generate_og_images.py 의 W/H 와 일치해야 한다)
 
 # 광역 행정단위 접미사 (시·도 판별용)
 SIDO_SUFFIXES = ("특별시", "광역시", "특별자치시", "특별자치도", "도")
@@ -583,7 +583,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     canonical = canonical_of(keyword)
     # 지역별 고유 OG 썸네일 (generate_og_images.py 로 미리 생성해 두어야 한다)
     og_image = og_image_url(keyword)
-    og_image_alt = "%s 영어회화 - 이지스피크 온라인 1:1 원어민 수업" % keyword
+    og_image_alt = "%s 영어회화 - 이지스피크, 집에서 하는 온라인 어학연수" % keyword
 
     title = title_for(pools, ctx)
     desc = meta_for(pools, ctx)
@@ -946,7 +946,7 @@ def render_hub_page(sido_list, sido_counts, total):
 
     <meta property="og:title" content="전국 지역별 영어회화 | 이지스피크 EZspeak">
     <meta property="og:description" content="{esc(desc)}">
-{og_image_tags(BASE_URL + '/' + quote(OG_DIRNAME) + '/hub.png', '전국 지역별 영어회화 - 이지스피크 온라인 1:1 원어민 수업')}
+{og_image_tags(BASE_URL + '/' + quote(OG_DIRNAME) + '/hub.png', '전국 지역별 영어회화 - 이지스피크, 집에서 하는 온라인 어학연수')}
     <meta property="og:url" content="{esc(canonical)}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ko_KR">
