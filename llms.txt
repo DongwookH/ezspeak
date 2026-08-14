@@ -16,9 +16,9 @@
 
 ## 핵심 페이지
 - [이지스피크 홈](https://ezspeak.vercel.app/): 학원 소개·커리큘럼·운영 방식·상담 신청
-- [전국 지역별 영어회화 허브](https://ezspeak.vercel.app/%EC%A7%80%EC%97%AD/index.html): 16개 시·도별 영어회화 안내
-- [서울특별시 영어회화](https://ezspeak.vercel.app/%EC%A7%80%EC%97%AD/%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C-%EC%98%81%EC%96%B4%ED%9A%8C%ED%99%94.html): 서울 지역 대표 페이지
-- [부산광역시 영어회화](https://ezspeak.vercel.app/%EC%A7%80%EC%97%AD/%EB%B6%80%EC%82%B0%EA%B4%91%EC%97%AD%EC%8B%9C-%EC%98%81%EC%96%B4%ED%9A%8C%ED%99%94.html): 부산 지역 대표 페이지
+- [전국 지역별 영어회화 허브](https://ezspeak.vercel.app/region): 16개 시·도별 영어회화 안내
+- [서울특별시 영어회화](https://ezspeak.vercel.app/region/seoul-si): 서울 지역 대표 페이지
+- [부산광역시 영어회화](https://ezspeak.vercel.app/region/busan-si): 부산 지역 대표 페이지
 
 ## 자주 묻는 질문
 - 수강료: 목표·현재 실력에 따라 달라져 무료 레벨테스트 후 맞춤 상담에서 안내
@@ -30,4 +30,4 @@
 
 ## Optional
 - [운영 정보] 대표 황동욱 · 전화 010-2311-6543 · 이메일 ft9990@naver.com
-- 최종 업데이트: 2026.08.03
+- 최종 업데이트: 2026.08.14

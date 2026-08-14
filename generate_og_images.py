@@ -4,16 +4,18 @@
 이지스피크(EZspeak) OG 썸네일 생성기
 ====================================
 
-지역 SEO 페이지(지역/{keyword}-영어회화.html)마다 고유한 1200x1200 정방형 OG 카드를
-og/{keyword}-영어회화.png 로 생성한다. 메인/허브용 카드(og/main.png, og/hub.png)도 함께 만든다.
+지역 페이지(/region/{slug})마다 고유한 1200x1200 정방형 OG 카드를
+og/{slug}.png 로 생성한다. 메인/허브용 카드(og/main.png, og/hub.png)도 함께 만든다.
+파일명은 data/slugs.json 의 슬러그를 그대로 쓴다 (페이지가 심는 og:image 경로와 동일).
 
 ⚠️ 실행 순서
-    1) python3 generate_og_images.py     ← 반드시 먼저 (이 스크립트)
-    2) python3 generate_pages.py         ← 페이지가 og/*.png 를 절대경로로 참조한다
+    1) python3 build_slugs.py            ← data/slugs.json (새 키워드가 생겼을 때)
+    2) python3 generate_og_images.py     ← 이 스크립트
+    3) 배포                               ← 페이지는 요청 시점에 og/{slug}.png 를 링크한다
 
-    generate_pages.py 는 이미지 존재 여부를 검사하지 않고 URL만 심는다.
+    api/region.py(site_lib.py) 는 이미지 존재 여부를 검사하지 않고 URL만 심는다.
     따라서 이 스크립트를 돌리지 않으면 SNS 공유 미리보기가 404가 된다.
-    generate_pages.py 의 OG_WIDTH/OG_HEIGHT 도 이 파일의 W/H 와 같아야 한다(1200/1200).
+    site_lib.py 의 OG_WIDTH/OG_HEIGHT 도 이 파일의 W/H 와 같아야 한다(1200/1200).
 
 레이아웃(정방형 세로 스택)
     상단 블루 바(오렌지 액센트) → 로고 → 이지스피크 / EZspeak → 액센트 룰
@@ -37,10 +39,10 @@ import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
-# generate_pages.py 의 대표 상위지역 선택 로직 / 키워드 로딩을 그대로 재사용한다.
+# site_lib.py 의 대표 상위지역 선택 로직 / 키워드 로딩 / 슬러그 맵을 그대로 재사용한다.
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT_DIR)
-import generate_pages as gp  # noqa: E402
+import site_lib as gp  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # 설정
@@ -399,11 +401,17 @@ def render_hub_card():
 # ---------------------------------------------------------------------------
 
 def png_name(keyword):
-    return keyword + "-영어회화.png"
+    """og 파일명 = 슬러그.png (URL 과 1:1). 슬러그 맵에 없으면 즉시 중단한다 —
+    한글 파일명으로 조용히 되돌아가면 페이지의 og:image 와 어긋나 404 가 된다."""
+    slug = gp.slugs().get(keyword)
+    if not slug:
+        raise SystemExit("[오류] data/slugs.json 에 없는 키워드: %r "
+                         "(python3 build_slugs.py 를 먼저 실행하세요)" % keyword)
+    return slug + ".png"
 
 
 def collect_targets():
-    """generate_pages.py 와 동일한 페이지 집합(원본 + 합성 시·도)을 만든다."""
+    """지역 페이지와 동일한 집합(원본 + 합성 시·도)을 만든다."""
     keywords, keyword_set = gp.load_keywords(INPUT_PATH)
     synth = gp.synthesize_sido(keywords, keyword_set)
     return keywords + synth
@@ -503,7 +511,7 @@ def main():
         print(" 평균 용량    : %.1f KB (최소 %.1fKB / 최대 %.1fKB)"
               % (tot / len(sizes) / 1024, min(sizes) / 1024, max(sizes) / 1024))
     print("=" * 60)
-    print(" 다음 단계: python3 generate_pages.py  (페이지에 og/*.png 링크가 심어집니다)")
+    print(" 다음 단계: git push  (배포 후 /region/{slug} 가 og/{slug}.png 를 참조합니다)")
 
 
 if __name__ == "__main__":

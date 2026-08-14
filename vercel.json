@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/*.py": {
+      "includeFiles": "{site_lib.py,data/**}",
+      "excludeFiles": "{og/**,*.jpeg,*.jpg,logo.png}"
+    }
+  },
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+
+    { "source": "/region", "destination": "/api/region" },
+    { "source": "/region/", "destination": "/api/region" },
+    { "source": "/region/:slug", "destination": "/api/region?slug=:slug" },
+    { "source": "/region/:slug/", "destination": "/api/region?slug=:slug" },
+
+    { "source": "/지역", "destination": "/api/legacy" },
+    { "source": "/지역/", "destination": "/api/legacy" },
+    { "source": "/지역/:file", "destination": "/api/legacy?file=:file" },
+
+    { "source": "/%EC%A7%80%EC%97%AD", "destination": "/api/legacy" },
+    { "source": "/%EC%A7%80%EC%97%AD/", "destination": "/api/legacy" },
+    { "source": "/%EC%A7%80%EC%97%AD/:file", "destination": "/api/legacy?file=:file" },
+
+    { "source": "/:dir/:file(.+\\.html)", "destination": "/api/legacy?file=:file" },
+
+    { "source": "/og/:og", "destination": "/api/legacy?og=:og" }
+  ]
+}
