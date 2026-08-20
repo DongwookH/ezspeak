@@ -513,6 +513,17 @@ REGION_INLINE_CSS = """    <style>
         .rg-more summary { cursor: pointer; color: var(--blue-deep); font-weight: 700; font-size: 14px; }
         .rg-more summary::-webkit-details-marker { display: none; }
 
+        .rg-inline-cta { padding: 4px 0 clamp(30px, 4.5vw, 48px); }
+        .rg-inline-cta-inner { background: var(--blue-tint); border: 1px solid var(--line);
+            border-radius: var(--r-lg); padding: 22px clamp(18px, 3vw, 28px);
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+        .rg-inline-cta p { margin: 0; max-width: 56ch; font-size: 15px; color: var(--ink-2);
+            line-height: 1.72; word-break: keep-all; }
+        .rg-inline-cta p strong { display: block; color: var(--ink); font-weight: 700; }
+        .rg-inline-cta-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+        .rg-inline-link { color: var(--blue-deep); font-weight: 700; font-size: 14px;
+            text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+
         .rg-cta { text-align: center; }
         .rg-cta .rg-cta-inner { background: var(--blue-deep); color: #fff;
             border-radius: var(--r-lg); padding: clamp(36px, 6vw, 64px) 22px; }
@@ -837,6 +848,18 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 </div>
                 <div class="rg-blocks card-grid">
 {blocks_html}
+                </div>
+            </div>
+        </section>
+
+        <section class="rg-inline-cta">
+            <div class="container">
+                <div class="rg-inline-cta-inner">
+                    <p><strong>{esc(keyword)} 영어회화, 어디서부터 시작할지 고민되시나요?</strong>무료 레벨테스트로 지금 말하기 수준을 확인하고, 나에게 맞는 과정부터 시작해 보세요. 상담과 테스트 모두 온라인으로 진행되어 방문이 필요 없습니다.</p>
+                    <div class="rg-inline-cta-actions">
+                        <a href="/#contact" class="btn btn--solid">무료 레벨테스트 신청</a>
+                        <a href="/#faq" class="rg-inline-link">자주 묻는 질문 먼저 보기</a>
+                    </div>
                 </div>
             </div>
         </section>
