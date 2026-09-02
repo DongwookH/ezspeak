@@ -10,11 +10,13 @@
     "selection_rule": "각 배열/카테고리는 kw_hash(keyword, salt) % len(list) 로 결정적 선택. salt 값은 풀 이름과 동일하게 사용 권장 (예: titles→'title', faq→'faq0'.. 'faq4', local_intros→'local_intro', body_blocks→'body0'..'body2', meta_descriptions→'meta'). 자세한 내용은 seo_spec.md 4절 참고."
   },
   "titles": [
-    "{keyword} 영어회화 학원 | 이지스피크",
-    "{keyword} 영어회화 | 1:1 원어민 회화 이지스피크",
-    "{keyword} 영어회화 학원 추천 | 이지스피크",
-    "{keyword} 온라인 영어회화 | 원어민 1:1 이지스피크",
-    "{keyword} 영어회화 무료 레벨테스트 | 이지스피크"
+    "{keyword} 영어회화, 원어민만 만나면 입이 안 떨어진다면?",
+    "{keyword} 영어회화학원, 10년을 배워도 말문이 막힌다면?",
+    "{keyword} 영어회화, 학원 오갈 시간이 도저히 안 난다면?",
+    "{keyword} 영어회화학원, 왕초보라 시작이 겁난다면?",
+    "{keyword} 영어회화, 혼자 공부는 늘 작심삼일이라면?",
+    "{keyword} 영어회화학원, 문법은 아는데 말이 안 나온다면?",
+    "{keyword} 영어회화, 내 실력이 어느 정도인지 모른다면?"
   ],
   "meta_descriptions": [
     "{keyword} 영어회화 학원 이지스피크. 100% 온라인 1:1 원어민 수업과 한국인 플래너의 밀착 학습 관리로 실전 회화 실력을 완성합니다. 무료 레벨테스트를 신청해 보세요.",

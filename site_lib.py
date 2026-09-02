@@ -39,7 +39,7 @@ from urllib.parse import quote
 #   ⚠️ 서버리스에서 date.today() 를 쓰면 내용이 그대로인데도 매일 lastmod 가 바뀌어
 #      검색엔진에 거짓 신선도 신호를 보내게 된다. 콘텐츠를 실제로 손볼 때만 이 값을 올린다.
 #      (배포 환경변수 EZ_BUILD_DATE=YYYY-MM-DD 로도 덮어쓸 수 있다.)
-CONTENT_DATE = "2026-08-14"
+CONTENT_DATE = "2026-09-02"
 BUILD_DATE = datetime.date.fromisoformat(os.environ.get("EZ_BUILD_DATE") or CONTENT_DATE)
 BUILD_DATE_ISO = BUILD_DATE.isoformat()          # 예: 2026-08-14
 BUILD_DATE_DOT = BUILD_DATE.strftime("%Y.%m.%d")  # 예: 2026.08.14
