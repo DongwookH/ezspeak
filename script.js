@@ -79,8 +79,7 @@
     });
   }
 
-  /* ---- Consult form -> Google Apps Script --------------------------------- */
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5nP_Q7hM6oWC8KEw6NWQ4Yao4uTdFIDNMjcXRZPuV0dc_r7FRvKdlTSEE4CVdXXHl/exec';
+  /* ---- Consult form -> /api/lead (시트 저장 + 텔레그램 알림) ---------------- */
   const consultForm = document.getElementById('consultForm');
 
   if (consultForm) {
@@ -116,12 +115,13 @@
       }
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch('/api/lead', {
           method: 'POST',
-          mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok || !result.ok) throw new Error(result.error || res.status);
         alert('상담 신청이 완료되었습니다!\n빠른 시일 내에 연락드리겠습니다.');
         this.reset();
       } catch (err) {
