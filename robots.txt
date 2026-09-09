@@ -22,7 +22,19 @@ User-agent: ClaudeBot
 Allow: /
 Disallow: /api/
 
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+
 User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: Perplexity-User
 Allow: /
 Disallow: /api/
 

@@ -8,6 +8,7 @@
   },
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/rss.xml", "destination": "/api/rss" },
 
     { "source": "/region", "destination": "/api/region" },
     { "source": "/region/", "destination": "/api/region" },

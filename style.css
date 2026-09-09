@@ -19,7 +19,6 @@
      --blue / --blue-deep / --blue-bright / --blue-tint   주색(로고 파랑)
      --orange / --orange-deep          포인트 색 (소량)
      --line / --line-2                 헤어라인
-     --kakao / --kakao-ink             카카오 상담
 
    TYPE
      --font-body   Pretendard   (전 영역)
@@ -49,9 +48,6 @@
   /* structure */
   --line:   #E1E8F0;
   --line-2: #ECF1F6;
-  /* kakao */
-  --kakao:     #FAE100;
-  --kakao-ink: #391F1F;
 
   /* type */
   --font-body:  "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
@@ -161,8 +157,6 @@ ul { list-style: none; }
 .btn--ghost { background: #fff; color: var(--blue-deep); border-color: transparent; }
 .btn--ghost:hover { background: var(--blue-tint); }
 
-.btn--kakao { background: var(--kakao); color: var(--kakao-ink); }
-.btn--kakao:hover { background: #F2D800; }
 
 .btn--block { display: flex; width: 100%; }
 
@@ -293,7 +287,7 @@ ul { list-style: none; }
 /* ---- MOBILE 하단 고정 상담바 (한국 학원 사이트 실용 요소) ---------------- */
 .mobile-cta-bar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 95;
-  display: none; grid-template-columns: 1fr 1fr; gap: 10px;
+  display: none; grid-template-columns: 1fr;
   padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
   background: rgba(255,255,255,.96);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
@@ -306,7 +300,6 @@ ul { list-style: none; }
   font-size: 15px; font-weight: 800; letter-spacing: -.01em;
 }
 .mobile-cta-bar a svg { width: 18px; height: 18px; }
-.mobile-cta-bar a.mc-kakao { background: var(--kakao); color: var(--kakao-ink); }
 .mobile-cta-bar a.mc-test { background: var(--blue); color: #fff; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -516,11 +509,6 @@ ul { list-style: none; }
 }
 .contact-callbox .lbl { font-size: 13px; font-weight: 700; color: var(--ink-3); }
 .contact-callbox .tel { display: block; margin-top: 4px; font-weight: 800; font-size: clamp(26px, 5vw, 34px); color: var(--blue-deep); letter-spacing: -.01em; }
-.contact-callbox .kakao-link {
-  margin-top: 14px; display: inline-flex; align-items: center; gap: 8px;
-  font-weight: 800; font-size: 15px; color: var(--kakao-ink);
-  background: var(--kakao); padding: 11px 18px; border-radius: var(--r-md);
-}
 .contact-facts { margin-top: 16px; display: grid; gap: 8px; }
 .contact-fact { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; color: var(--ink-2); }
 .contact-fact .ico { flex: 0 0 auto; width: 34px; height: 34px; border-radius: var(--r-sm); background: var(--blue-tint); display: grid; place-items: center; color: var(--blue-deep); }
@@ -540,17 +528,6 @@ ul { list-style: none; }
 .btn-submit:hover { background: var(--blue-deep); }
 .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
 
-/* ---- KAKAO (말풍선 상담) ------------------------------------------------- */
-.kakao-section { padding: 0 0 clamp(48px, 8vw, 84px); text-align: center; }
-.kakao-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-weight: 800; font-size: 17px; color: var(--kakao-ink);
-  background: var(--kakao); padding: 15px 28px;
-  border-radius: 22px 22px 22px 4px;  /* 말풍선 느낌 */
-  transition: background-color .18s;
-}
-.kakao-btn:hover { background: #F2D800; }
-.kakao-icon { font-size: 20px; }
 
 /* ---- RESPONSIVE ---------------------------------------------------------- */
 @media (max-width: 900px) {

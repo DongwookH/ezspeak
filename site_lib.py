@@ -39,7 +39,7 @@ from urllib.parse import quote
 #   ⚠️ 서버리스에서 date.today() 를 쓰면 내용이 그대로인데도 매일 lastmod 가 바뀌어
 #      검색엔진에 거짓 신선도 신호를 보내게 된다. 콘텐츠를 실제로 손볼 때만 이 값을 올린다.
 #      (배포 환경변수 EZ_BUILD_DATE=YYYY-MM-DD 로도 덮어쓸 수 있다.)
-CONTENT_DATE = "2026-09-02"
+CONTENT_DATE = "2026-09-09"
 BUILD_DATE = datetime.date.fromisoformat(os.environ.get("EZ_BUILD_DATE") or CONTENT_DATE)
 BUILD_DATE_ISO = BUILD_DATE.isoformat()          # 예: 2026-08-14
 BUILD_DATE_DOT = BUILD_DATE.strftime("%Y.%m.%d")  # 예: 2026.08.14
@@ -394,7 +394,7 @@ def header_html():
     return """    <header class="header">
         <div class="container">
             <div class="logo">
-                <a href="/" aria-label="이지스피크 홈"><img src="/logo.png" alt="이지스피크 EZspeak 로고"><span class="logo-word">이지스피크</span></a>
+                <a href="/" aria-label="이지스피크 홈"><img src="/logo.png" width="32" height="32" alt="이지스피크 EZspeak 로고"><span class="logo-word">이지스피크</span></a>
             </div>
             <nav class="nav" aria-label="주요 메뉴">
                 <ul>
@@ -424,10 +424,6 @@ def footer_html():
     </footer>
 
     <nav class="mobile-cta-bar" aria-label="빠른 상담">
-        <a href="http://pf.kakao.com/_NmPfn/chat" target="_blank" rel="noopener" class="mc-kakao">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            카톡 상담
-        </a>
         <a href="/#contact" class="mc-test">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
             레벨테스트
@@ -474,6 +470,20 @@ REGION_INLINE_CSS = """    <style>
         .rg-lead { margin-top: 18px; max-width: 62ch; font-size: clamp(15px, 2.3vw, 17px);
             color: var(--ink-2); line-height: 1.78; word-break: keep-all; }
         .rg-actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; }
+
+        /* 핵심 정보 그리드 — AI 답변엔진이 추출하기 쉬운 라벨-값 구조 */
+        .rg-facts { margin-top: 26px; max-width: 760px; display: grid;
+            grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line);
+            border-radius: var(--r-md); overflow: hidden; background: #fff; }
+        .rg-facts > div { display: flex; gap: 12px; padding: 11px 16px;
+            border-top: 1px solid var(--line); font-size: 14px; line-height: 1.6; }
+        .rg-facts > div:nth-child(-n+2) { border-top: 0; }
+        .rg-facts dt { flex: 0 0 74px; color: var(--ink-2); font-weight: 700; word-break: keep-all; }
+        .rg-facts dd { color: var(--ink); word-break: keep-all; }
+        @media (max-width: 720px) {
+            .rg-facts { grid-template-columns: 1fr; }
+            .rg-facts > div:nth-child(2) { border-top: 1px solid var(--line); }
+        }
 
         .rg-prose p { color: var(--ink-2); line-height: 1.8; word-break: keep-all; margin-top: 13px; max-width: 68ch; }
 
@@ -553,17 +563,23 @@ def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None):
 
     graph = [
         {
+            # 조직 정의는 메인 페이지와 완전히 동일해야 한다 — 같은 @id 를 지역별로
+            # 다르게(areaServed=Place 등) 선언하면 지식그래프에서 엔티티가 분열된다.
             "@type": "EducationalOrganization",
             "@id": business_id,
             "name": BUSINESS_NAME,
+            "alternateName": "EZspeak",
             "url": BASE_URL + "/",
             "telephone": BUSINESS_PHONE,
             "email": BUSINESS_EMAIL,
             "image": BASE_URL + "/logo.png",
-            "description": (f"{ctx['loc']} 학습자를 위한 100% 온라인 1:1 원어민 영어회화. "
-                            f"오프라인 지점·대면 수업 없이 실시간 화상으로만 진행합니다."),
-            "areaServed": {"@type": "Place", "name": ctx["loc"]},
+            "logo": BASE_URL + "/logo.png",
+            "description": ("1:1 원어민 수업과 한국인 플래너의 밀착 학습 관리로 실전 영어회화를 완성하는 "
+                            "100% 온라인 영어회화 전문 학원. 모든 수업이 실시간 화상으로 진행되며 "
+                            "오프라인 지점·대면 수업은 운영하지 않습니다."),
+            "areaServed": {"@type": "Country", "name": "대한민국"},
             "knowsLanguage": ["ko", "en"],
+            "founder": {"@type": "Person", "name": BUSINESS_OWNER},
         },
         {
             "@type": "WebSite",
@@ -805,7 +821,17 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
             <div class="container">
                 <span class="eyebrow">지역별 영어회화</span>
                 <h1>{esc(keyword)} <span class="easy">영어회화</span></h1>
-                <p class="rg-lead">{esc(intro)}</p>
+                <p class="rg-lead">{esc(keyword)} 영어회화는 학원 방문 없이 100% 온라인 1:1 원어민 화상 수업으로 시작할 수 있습니다. 무료 레벨테스트로 현재 말하기 수준을 확인한 뒤, 담당 플래너가 맞는 과정을 안내해 드립니다.</p>
+                <dl class="rg-facts">
+                    <div><dt>수업 방식</dt><dd>100% 온라인 1:1 원어민 화상 수업 (오프라인 지점 없음)</dd></div>
+                    <div><dt>수업 횟수</dt><dd>주 1~5회 중 선택</dd></div>
+                    <div><dt>수강 대상</dt><dd>유아·초등·중등·성인 전 연령</dd></div>
+                    <div><dt>운영 과정</dt><dd>일상영어회화 · 비즈니스 · 여행영어 · 시사토론 · 중등교과 · 키즈영어 · 문법어휘</dd></div>
+                    <div><dt>레벨테스트</dt><dd>무료 · 약 10분 · 온라인 진행</dd></div>
+                    <div><dt>수강료</dt><dd>과정·횟수에 따라 상담 시 개별 안내</dd></div>
+                    <div><dt>수강 지역</dt><dd>{esc(keyword)} 포함 전국 어디서나 (인터넷만 있으면 수강 가능)</dd></div>
+                    <div><dt>상담 방법</dt><dd>홈페이지 상담 폼 · 이메일</dd></div>
+                </dl>
                 <div class="rg-actions">
                     <a href="/#contact" class="btn btn--solid">무료 레벨테스트 신청</a>
                     <a href="/#programs" class="btn btn--outline">커리큘럼 둘러보기</a>
@@ -820,8 +846,8 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                     <h2 class="section-title">{esc(keyword)}에서 영어회화,<br>이렇게 시작하세요</h2>
                 </div>
                 <div class="rg-prose">
-                    <p>{esc(local_intro)}</p>
                     <p>{esc(intro)}</p>
+                    <p>{esc(local_intro)}</p>
                 </div>
             </div>
         </section>
@@ -999,7 +1025,7 @@ def render_hub_page(sido_list, sido_counts, total):
                     <p>지역별 영어회화 페이지는 단순히 지역명만 바꾼 안내가 아니라, 해당 지역 학습자가 가장 궁금해하는 정보를 중심으로 구성했습니다. 각 페이지에는 이지스피크의 3단계 운영 방식, 즉 검증된 원어민 강사와의 1:1 회화 수업, 수업 외 시간까지 챙기는 한국인 플래너의 예·복습 관리, 그리고 레벨테스트 결과에 맞춘 단계별 커리큘럼과 복습 콘텐츠가 정리되어 있습니다. 여기에 수강 안내와 함께 수강료·수업 방식·수업 횟수·대상 연령을 다루는 자주 묻는 질문까지 담아, 상담 전에 궁금증을 미리 해소할 수 있도록 했습니다. 초등학생부터 성인 직장인까지, 그리고 알파벳이 낯선 왕초보부터 실무에서 바로 쓰는 비즈니스 회화까지 각자의 상황에 맞는 시작점을 찾을 수 있습니다.</p>
                     <p>우리 동네 페이지를 찾는 방법은 간단합니다. 위쪽 검색창에 시·도명(예: 서울, 경기, 부산)을 입력하면 해당 시·도 카드가 바로 필터링됩니다. 시·도 페이지로 들어가면 그 안의 시·군·구, 다시 그 아래의 읍·면·동으로 단계별로 좁혀 이동할 수 있어, 내가 생활하고 일하는 동네와 가장 가까운 영어회화 안내까지 확인할 수 있습니다. 반대로 세부 지역 페이지에서는 상위 지역과 인근 지역으로도 자유롭게 이동할 수 있어, 직장이 있는 지역과 사는 지역의 안내를 함께 비교해 보기에도 좋습니다. 수업 자체는 어느 지역 페이지로 들어오시든 동일한 온라인 1:1 방식이므로, 오가는 거리나 교통편을 따질 필요 없이 시간대만 맞추면 됩니다.</p>
                     <p>이지스피크는 일상영어회화, 비즈니스영어회화, 여행영어, 시사토론, 중등교과, 키즈영어, 문법·어휘까지 모두 7개 과정을 운영합니다. 일상 대화가 목표라면 매일 쓰는 표현 중심의 일상영어회화가, 업무에 당장 필요하다면 회의·이메일·프레젠테이션을 다루는 비즈니스영어회화가 적합합니다. 유아와 초등 자녀에게는 놀이로 익히며 자신감을 붙이는 키즈영어, 중학생에게는 내신과 실용 영어를 함께 잡는 중등교과 과정을 마련했습니다. 어떤 과정이 나에게 맞을지는 무료 레벨테스트로 현재 실력을 정확히 진단한 뒤, 담당 플래너가 목표와 일정에 맞춰 함께 정해 드립니다.</p>
-                    <p>시작은 부담 없는 무료 레벨테스트 한 번이면 충분합니다. 카카오톡 채널이나 이메일({BUSINESS_EMAIL})로 문의를 남기시면 담당 플래너가 현재 실력을 진단하고, 목표에 맞는 커리큘럼과 수업 횟수(주 1~5회)를 안내해 드립니다. 상담과 레벨테스트, 첫 수업까지 모두 온라인으로 이어져 어디를 방문하실 필요가 없습니다. 수업은 정해진 교재를 읽는 방식이 아니라 실제 상황을 가정한 대화와 롤플레이, 질의응답 중심으로 진행되어, 배운 표현을 바로 말로 꺼내 쓰는 연습을 반복합니다. 직장인을 위한 시간대 운영과 연령별 맞춤 케어까지 갖춰, 바쁜 일정 속에서도 꾸준히 이어갈 수 있도록 돕습니다.</p>
+                    <p>시작은 부담 없는 무료 레벨테스트 한 번이면 충분합니다. 상담 폼이나 이메일({BUSINESS_EMAIL})로 문의를 남기시면 담당 플래너가 현재 실력을 진단하고, 목표에 맞는 커리큘럼과 수업 횟수(주 1~5회)를 안내해 드립니다. 상담과 레벨테스트, 첫 수업까지 모두 온라인으로 이어져 어디를 방문하실 필요가 없습니다. 수업은 정해진 교재를 읽는 방식이 아니라 실제 상황을 가정한 대화와 롤플레이, 질의응답 중심으로 진행되어, 배운 표현을 바로 말로 꺼내 쓰는 연습을 반복합니다. 직장인을 위한 시간대 운영과 연령별 맞춤 케어까지 갖춰, 바쁜 일정 속에서도 꾸준히 이어갈 수 있도록 돕습니다.</p>
                     <p>현재 안내 중인 시·도는 다음과 같습니다: {sido_names_line}. 아래 카드에서 원하는 지역을 선택해 우리 동네 영어회화 페이지로 이동해 보세요.</p>
                 </div>
             </div>
@@ -1137,6 +1163,47 @@ def render_sitemap(keywords):
     return "\n".join(lines) + "\n"
 
 
+def render_rss(site, limit=50):
+    """네이버 서치어드바이저 제출용 RSS 2.0.
+
+    RSS 는 '최신 콘텐츠 피드'라 전체 7,344개를 담지 않는다 — 메인·허브 + 우선순위
+    상위 지역 페이지(시>구>군>축약, 하위 지역 많은 순)로 limit 개만 담는다.
+    """
+    pub = datetime.date.fromisoformat(CONTENT_DATE).strftime("%a, %d %b %Y 09:00:00 +0900")
+
+    child_count = {}
+    for kw in site.all_pages:
+        for t in rep_tokens(kw):
+            child_count[t] = child_count.get(t, 0) + 1
+    rank = {"시": 0, "구": 1, "군": 2, "축약": 3, "동": 4, "읍": 5, "면": 6}
+    top = sorted(site.all_pages,
+                 key=lambda kw: (rank.get(kw.get("type") or "동", 4),
+                                 -child_count.get(kw["keyword"], 0), kw["keyword"]))
+
+    items = [("이지스피크 영어회화 - 100% 온라인 1:1 원어민 수업", BASE_URL + "/",
+              "1:1 원어민 수업과 한국인 플래너 밀착 케어로 완성하는 실전 영어회화."),
+             ("전국 지역별 영어회화 안내", HUB_CANONICAL,
+              "시·도별 영어회화 페이지 모음. 전국 어디서나 온라인 수강 가능.")]
+    for kw in top[:max(0, limit - len(items))]:
+        ctx = build_ctx(kw)
+        items.append((title_for(site.pools, ctx), canonical_of(kw["keyword"]),
+                      meta_for(site.pools, ctx)))
+
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<rss version="2.0"><channel>',
+             "<title>%s</title>" % esc(BUSINESS_NAME),
+             "<link>%s/</link>" % BASE_URL,
+             "<description>100%% 온라인 1:1 원어민 영어회화 - 전국 지역별 안내</description>",
+             "<language>ko</language>",
+             "<lastBuildDate>%s</lastBuildDate>" % pub]
+    for title, link, desc in items:
+        lines.append("<item><title>%s</title><link>%s</link><guid>%s</guid>"
+                     "<description>%s</description><pubDate>%s</pubDate></item>"
+                     % (esc(title), esc(link), esc(link), esc(desc), pub))
+    lines.append("</channel></rss>")
+    return "\n".join(lines) + "\n"
+
+
 def render_llms():
     """AnswerDotAI llms.txt (H1 + 요약 blockquote + 링크 섹션). BASE_URL 로 링크 전파."""
     hub = HUB_CANONICAL
@@ -1156,7 +1223,7 @@ def render_llms():
 수업·상담·무료 레벨테스트가 모두 온라인으로 이루어지므로 전국 어느 지역에서나
 동일한 방식으로 수강할 수 있고, 방문해야 하는 지점은 따로 없습니다.
 지역별 페이지는 지역 학습자 안내용이며, 해당 지역에 오프라인 교실이 있다는 뜻이
-아닙니다. 상담·문의는 카카오톡 채널 또는 이메일({BUSINESS_EMAIL})로 받습니다.
+아닙니다. 상담·문의는 홈페이지 상담 폼 또는 이메일({BUSINESS_EMAIL})로 받습니다.
 
 ## 핵심 페이지
 - [이지스피크 홈]({BASE_URL}/): 학원 소개·커리큘럼·운영 방식·상담 신청
@@ -1168,7 +1235,7 @@ def render_llms():
 - 수강료: 목표·현재 실력에 따라 달라져 무료 레벨테스트 후 맞춤 상담에서 안내
 - 수업 방식: 1:1 원어민 실시간 화상 수업(100% 온라인), 롤플레이·질의응답 중심
 - 수업 장소: PC·스마트폰과 인터넷만 있으면 집·사무실 어디서나. 오프라인 교실 없음
-- 상담 방식: 전화·카카오톡·화상 상담. 방문 상담 절차 없음
+- 상담 방식: 홈페이지 상담 폼·이메일·화상 상담. 방문 상담 절차 없음
 - 수업 횟수: 주 1~5회 목표에 맞춰 구성
 - 대상: 유아·초등·중등·성인 전 연령, 직장인 시간대 운영
 
@@ -1183,7 +1250,8 @@ def render_robots():
     #   /api/ 는 렌더링 함수의 내부 진입점(리라이트 대상)이므로 색인 대상에서 제외한다.
     #   (/region/... 로의 리라이트는 서버 내부 동작이라 이 규칙의 영향을 받지 않는다.)
     bots = ["*", "Yeti", "GPTBot", "OAI-SearchBot", "ChatGPT-User",
-            "ClaudeBot", "PerplexityBot", "Google-Extended"]
+            "ClaudeBot", "Claude-SearchBot", "Claude-User",
+            "PerplexityBot", "Perplexity-User", "Google-Extended"]
     blocks = "\n\n".join("User-agent: %s\nAllow: /\nDisallow: /api/" % b for b in bots)
     return "%s\n\nSitemap: %s/sitemap.xml\n" % (blocks, BASE_URL)
 
