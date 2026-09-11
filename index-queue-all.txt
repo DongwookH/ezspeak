@@ -1,3 +1,4 @@
+https://ezspeak.vercel.app/region/gwangju-teukbyeolsi
 https://ezspeak.vercel.app/region/dongducheon-si
 https://ezspeak.vercel.app/region/uiwang-si
 https://ezspeak.vercel.app/region/gwacheon-si

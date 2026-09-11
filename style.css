@@ -658,3 +658,24 @@ ul { list-style: none; }
 @media (max-width: 460px) {
   .procedure { grid-template-columns: 1fr; }
 }
+
+/* ---- 핵심 정보 그리드 (메인 #about 상단) --------------------------------- */
+/* 지역 페이지 .rg-facts 와 동일한 톤 — AI 답변엔진이 추출하기 쉬운 라벨-값 구조 */
+.key-facts-title {
+  font-weight: 800; font-size: 17px; color: var(--ink);
+  letter-spacing: -.02em; margin-bottom: 14px;
+}
+.key-facts {
+  margin-bottom: clamp(30px, 5vw, 52px); max-width: 760px; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line);
+  border-radius: var(--r-md); overflow: hidden; background: #fff;
+}
+.key-facts > div { display: flex; gap: 12px; padding: 11px 16px;
+  border-top: 1px solid var(--line); font-size: 14px; line-height: 1.6; }
+.key-facts > div:nth-child(-n+2) { border-top: 0; }
+.key-facts dt { flex: 0 0 74px; color: var(--ink-2); font-weight: 700; word-break: keep-all; }
+.key-facts dd { color: var(--ink); word-break: keep-all; }
+@media (max-width: 720px) {
+  .key-facts { grid-template-columns: 1fr; }
+  .key-facts > div:nth-child(2) { border-top: 1px solid var(--line); }
+}

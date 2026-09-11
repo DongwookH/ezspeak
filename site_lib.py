@@ -228,6 +228,127 @@ def is_sido_token(tok):
     return tok.endswith(SIDO_SUFFIXES)
 
 
+# 시·도 검색수요 가중치 — 동명 지역의 대표 부모를 고를 때 사전순 대신 쓴다.
+# 대략 인구·네이버 검색량 순(서울>경기>부산>인천>대구>대전>광주>울산>경남>경북>
+# 충남>전북>충북>강원>전남>세종>제주). 숫자 자체에 의미는 없고 상대 순서만 쓴다.
+SIDO_WEIGHT = {
+    "서울특별시": 100,
+    "경기도": 92,
+    "부산광역시": 84,
+    "인천광역시": 80,
+    "대구광역시": 76,
+    "대전광역시": 70,
+    "광주특별시": 66,
+    "울산광역시": 62,
+    "경상남도": 58,
+    "경상북도": 54,
+    "충청남도": 50,
+    "전북특별자치도": 46,
+    "충청북도": 42,
+    "강원특별자치도": 38,
+    "세종특별자치시": 24,
+    "제주특별자치도": 20,
+}
+
+# 가중치만으로는 틀리는 유명 지명의 대표 부모를 직접 지정한다(검색량 큰 짧은 키워드가
+# 엉뚱한 지역에 귀속되면 상위노출 손해가 크다). 값은 regions.json 의 parents 문자열과
+# 정확히 일치해야 한다 — validate_overrides() 가 부팅 시 검증한다.
+REPRESENTATIVE_OVERRIDES = {
+    # 실측 오류 3건
+    "광주": "광주특별시",                 # 경기도 광주시가 아니라 광주특별시
+    "신림": "서울특별시 관악구",
+    "중구": "서울특별시",
+    # 가중치가 같은 시·도 안에서 엇갈리는 유명 지명
+    "신정": "서울특별시 양천구",
+    "신정동": "서울특별시 양천구",
+    "궁동": "대전광역시 유성구",           # 충남대 앞 학원가
+    "사직": "부산광역시 동래구",
+    "지산": "대구광역시 수성구",
+    "중동": "경기도 부천시",              # 부천 중동신도시
+    "백석": "경기도 고양시 일산동구",
+    "백석동": "경기도 고양시 일산동구",
+    "화정": "경기도 고양시 덕양구",
+    "화정동": "경기도 고양시 덕양구",
+    "송내": "경기도 부천시",
+    "소사": "경기도 부천시",
+    "소사동": "경기도 부천시",
+    "옥길": "경기도 부천시",
+    "옥길동": "경기도 부천시",
+    "월곶": "경기도 시흥시",
+    "탄현": "경기도 고양시 일산서구",
+    "둔산": "대전광역시 서구",
+    "삼산": "인천광역시 부평구",
+    "상남동": "경상남도 창원시 성산구",
+    "점촌": "경상북도 문경시",
+    "점촌동": "경상북도 문경시",
+    "쌍용": "충청남도 천안시 서북구",
+    "쌍용동": "충청남도 천안시 서북구",
+    # 검색량 큰 지명 — 가중치 결과와 같지만 회귀 방지용으로 못박아 둔다
+    "강남": "서울특별시",
+    "강서": "서울특별시",
+    "서초": "서울특별시",
+    "구로": "서울특별시",
+    "삼성": "서울특별시 강남구",
+    "삼성동": "서울특별시 강남구",
+    "개포": "서울특별시 강남구",
+    "대치": "서울특별시 강남구",
+    "논현": "서울특별시 강남구",
+    "논현동": "서울특별시 강남구",
+    "신사": "서울특별시 강남구",
+    "신사동": "서울특별시 강남구",
+    "반포": "서울특별시 서초구",
+    "목동": "서울특별시 양천구",
+    "대림": "서울특별시 영등포구",
+    "창동": "서울특별시 도봉구",
+    "상봉": "서울특별시 중랑구",
+    "장안동": "서울특별시 동대문구",
+    "공덕": "서울특별시 마포구",
+    "신촌": "서울특별시 서대문구",
+    "판교": "경기도 성남시 분당구",
+    "정자": "경기도 성남시 분당구",
+    "정자동": "경기도 성남시 분당구",
+    "일산": "경기도 고양시 일산서구",
+    "대화": "경기도 고양시 일산서구",
+    "수지": "경기도 용인시",
+    "죽전": "경기도 용인시 수지구",
+    "평촌": "경기도 안양시 동안구",
+    "상동": "경기도 부천시",
+    "계수": "경기도 부천시",
+    "세교": "경기도 오산시",
+    "송도": "인천광역시 연수구",
+    "계산": "인천광역시 계양구",
+    "범어": "대구광역시 수성구",
+    "여수": "광주특별시",
+    "양산": "경상남도",
+    "영천": "경상북도",
+    # 위 축약형과 같은 곳을 가리켜야 하는 긴 형태(신림/신림동 같은 별칭 쌍) 정합용
+    "강서구": "서울특별시",
+    "계산동": "인천광역시 계양구",
+    "계수동": "경기도 부천시",
+    "대림동": "서울특별시 영등포구",
+    "대화동": "경기도 고양시 일산서구",
+    "둔산동": "대전광역시 서구",
+    "범어동": "대구광역시 수성구",
+    "사직동": "부산광역시 동래구",
+    "삼산동": "인천광역시 부평구",
+    "상봉동": "서울특별시 중랑구",
+    "세교동": "경기도 오산시",
+    "송내동": "경기도 부천시",
+    "송도동": "인천광역시 연수구",
+    "신촌동": "서울특별시 서대문구",
+    "일산동": "경기도 고양시 일산서구",
+    "죽전동": "경기도 용인시 수지구",
+    "지산동": "대구광역시 수성구",
+    "평촌동": "경기도 안양시 동안구",
+}
+
+
+def sido_weight(parent_path):
+    """대표 부모 후보 경로의 시·도 검색수요 가중치."""
+    toks = parent_path.split()
+    return SIDO_WEIGHT.get(toks[0], 0)
+
+
 def representative_parent(kw):
     """seo_spec.md 4.4: 여러 parents 중 대표 1개 선택.
     parents 원소는 '경기도 성남시 분당구' 처럼 공백으로 이어진 조상 경로 문자열."""
@@ -236,12 +357,30 @@ def representative_parent(kw):
         return ""
     if len(ps) == 1:
         return ps[0]
+    # (0) 유명 지명 오버라이드 (parents 에 실제로 있는 경로일 때만)
+    ov = REPRESENTATIVE_OVERRIDES.get(kw.get("keyword"))
+    if ov and ov in ps:
+        return ov
+    # 시·도 검색수요 가중치 내림차순 → 상위 경로(토큰 수 최소) → 사전순
+    rank = lambda p: (-sido_weight(p), len(p.split()), p)
     # (a) 단일 토큰 광역 행정명(서울특별시 등)이 있으면 우선
     bare_sido = [p for p in ps if len(p.split()) == 1 and is_sido_token(p)]
     if bare_sido:
-        return sorted(bare_sido, key=lambda p: (len(p), p))[0]
-    # (b) 그 외: 가장 상위(토큰 수 최소) → 사전순
-    return sorted(ps, key=lambda p: (len(p.split()), p))[0]
+        return sorted(bare_sido, key=rank)[0]
+    # (b) 그 외
+    return sorted(ps, key=rank)[0]
+
+
+def validate_overrides(keywords):
+    """오버라이드 값이 regions.json 의 실제 parents 에 있는지 검사. 문제 항목 목록 반환."""
+    by_kw = {k["keyword"]: (k.get("parents") or []) for k in keywords}
+    bad = []
+    for kw, parent in REPRESENTATIVE_OVERRIDES.items():
+        if kw not in by_kw:
+            bad.append((kw, parent, "없는 키워드"))
+        elif parent not in by_kw[kw]:
+            bad.append((kw, parent, "parents 에 없는 경로"))
+    return bad
 
 
 def rep_tokens(kw):
@@ -1083,6 +1222,16 @@ def render_hub_page(sido_list, sido_counts, total):
                 <span class="eyebrow">전국 지역별 영어회화</span>
                 <h1>우리 동네 <span class="easy">영어회화</span></h1>
                 <p class="rg-lead">이지스피크(EZspeak)의 지역별 영어회화·영어학원 안내입니다. 총 {total}개 지역, {len(sido_list)}개 시·도 어디서나 100% 온라인 1:1 원어민 회화 수업과 무료 레벨테스트를 이용할 수 있습니다. 시·도를 선택해 우리 동네 페이지로 이동하세요.</p>
+                <dl class="rg-facts">
+                    <div><dt>수업 방식</dt><dd>100% 온라인 1:1 원어민 화상 수업 (오프라인 지점 없음)</dd></div>
+                    <div><dt>수업 횟수</dt><dd>주 1~5회 중 선택</dd></div>
+                    <div><dt>수강 대상</dt><dd>유아·초등·중등·성인 전 연령</dd></div>
+                    <div><dt>운영 과정</dt><dd>일상영어회화 · 비즈니스 · 여행영어 · 시사토론 · 중등교과 · 키즈영어 · 문법어휘</dd></div>
+                    <div><dt>레벨테스트</dt><dd>무료 · 약 10분 · 온라인 진행</dd></div>
+                    <div><dt>수강료</dt><dd>과정·횟수에 따라 상담 시 개별 안내</dd></div>
+                    <div><dt>수강 지역</dt><dd>전국 {len(sido_list)}개 시·도 {total}개 지역 (인터넷만 있으면 어디서나 수강 가능)</dd></div>
+                    <div><dt>상담 방법</dt><dd>홈페이지 상담 폼 · 이메일</dd></div>
+                </dl>
                 <div class="hub-search">
                     <input type="text" id="sidoSearch" placeholder="시·도명으로 검색 (예: 서울, 경기, 부산)" autocomplete="off" aria-label="시·도 검색">
                 </div>
@@ -1193,7 +1342,7 @@ def render_rss(site, limit=50):
              '<rss version="2.0"><channel>',
              "<title>%s</title>" % esc(BUSINESS_NAME),
              "<link>%s/</link>" % BASE_URL,
-             "<description>100%% 온라인 1:1 원어민 영어회화 - 전국 지역별 안내</description>",
+             "<description>100% 온라인 1:1 원어민 영어회화 - 전국 지역별 안내</description>",
              "<language>ko</language>",
              "<lastBuildDate>%s</lastBuildDate>" % pub]
     for title, link, desc in items:
@@ -1436,4 +1585,45 @@ def legacy_path_to_slug(name):
         if n.endswith(suffix):
             n = n[: -len(suffix)]
             break
-    return slugs().get(n)
+    return slugs().get(RENAMED_KEYWORDS.get(n, n))
+
+
+# 폐지된 지명 -> 현행 지명. 옛 이름으로 들어온 레거시 경로가 허브로 떨어지지 않게 한다.
+RENAMED_KEYWORDS = {
+    "전남광주통합특별시": "광주특별시",   # 공식 약칭 표기로 통일 (2026-09)
+}
+
+
+# 폐지된 /region/{slug} -> 현행 슬러그. 이미 색인/수집요청된 URL 이 404 가 되지 않게 301 한다.
+#   jeonnam-gwangju-si: 통합 이전 명칭으로 만들어졌던 시·도 페이지.
+#   공식 약칭 표기 페이지로 보낸다.
+RETIRED_SLUGS = {
+    "jeonnam-gwangju-si": "gwangju-teukbyeolsi",
+}
+
+
+def retired_slug_target(slug):
+    """폐지 슬러그면 301 목적지 경로, 아니면 None."""
+    new = RETIRED_SLUGS.get((slug or "").strip().strip("/"))
+    return REGION_PREFIX + "/" + new if new else None
+
+
+# ---------------------------------------------------------------------------
+# 자체 점검: python3 site_lib.py
+# ---------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    s = site()
+    bad = validate_overrides(s.all_pages)
+    assert not bad, "오버라이드 불일치: %r" % (bad,)
+    for kw, expect in (("신림", "서울특별시 관악구"), ("광주", "광주특별시"),
+                       ("여수", "광주특별시"), ("광산구", "광주특별시"), ("목포시", "광주특별시"),
+                       ("중구", "서울특별시"), ("판교", "경기도 성남시 분당구")):
+        got = representative_parent(s.by_keyword[kw])
+        assert got == expect, "%s -> %s (기대 %s)" % (kw, got, expect)
+    # parents 1개면 그 값을 그대로 쓴다
+    assert representative_parent({"keyword": "X", "parents": ["강원특별자치도 원주시"]}) == "강원특별자치도 원주시"
+    assert "100%%" not in render_rss(s)
+    assert s.hub_page().count("<dt>") >= 8
+    print("site_lib self-check OK (%d pages, %d overrides)"
+          % (len(s.all_pages), len(REPRESENTATIVE_OVERRIDES)))

@@ -42,6 +42,14 @@ class handler(BaseHTTPRequestHandler):
         if not head_only:
             self.wfile.write(data)
 
+    def _redirect(self, location):
+        self.send_response(301)
+        self.send_header("Location", location)
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.send_header("Content-Length", "0")
+        self.send_header("Cache-Control", CACHE_OK)
+        self.end_headers()
+
     def _handle(self, head_only=False):
         query = parse_qs(urlparse(self.path).query)
         slug = (query.get("slug") or [""])[0].strip().strip("/")
@@ -51,6 +59,12 @@ class handler(BaseHTTPRequestHandler):
         # 슬러그 없음 -> 허브 (/region)
         if not slug:
             self._respond(200, site.hub_page(), CACHE_OK, head_only=head_only)
+            return
+
+        # 폐지된 슬러그 -> 현행 페이지로 301 (404 방지)
+        moved = S.retired_slug_target(slug)
+        if moved:
+            self._redirect(moved)
             return
 
         html = site.region_page_by_slug(slug)

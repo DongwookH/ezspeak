@@ -7,7 +7,6 @@
   "대구": "daegu",
   "인천광역시": "incheon-si",
   "인천": "incheon",
-  "전남광주통합특별시": "jeonnam-gwangju-si",
   "광주": "gwangju",
   "전남": "jeonnam",
   "대전광역시": "daejeon-si",
@@ -7340,5 +7339,6 @@
   "전북특별자치도": "jeonbuk-do",
   "경상북도": "gyeongbuk-do",
   "경상남도": "gyeongnam-do",
-  "제주특별자치도": "jeju-do"
+  "제주특별자치도": "jeju-do",
+  "광주특별시": "gwangju-teukbyeolsi"
 }
