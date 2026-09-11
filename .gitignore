@@ -3,3 +3,5 @@
 .vercel
 aeo-audit-report.json
 _preview_*.html
+__pycache__/
+*.pyc
