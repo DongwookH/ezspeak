@@ -82,7 +82,36 @@
   /* ---- Consult form -> /api/lead (시트 저장 + 텔레그램 알림) ---------------- */
   const consultForm = document.getElementById('consultForm');
 
+  /* 유입 페이지: ?from={slug} → region/{slug}, 없으면 referrer, 없으면 direct */
+  function resolveSourcePage(search, referrer, origin) {
+    const from = new URLSearchParams(search).get('from');
+    if (from && /^[a-z0-9-]{1,80}$/.test(from)) return from === 'region' ? 'region' : 'region/' + from;
+    if (referrer) {
+      try {
+        const u = new URL(referrer);
+        return u.origin === origin ? u.pathname : u.hostname;
+      } catch (_) { /* 잘못된 referrer는 direct로 */ }
+    }
+    return 'direct';
+  }
+
   if (consultForm) {
+    /* 사이트 안에서 이동해도 첫 유입을 유지 (저장소 차단 환경이면 매번 계산) */
+    let sourcePage;
+    try { sourcePage = sessionStorage.getItem('ezs_source_page'); } catch (_) {}
+    if (!sourcePage) {
+      sourcePage = resolveSourcePage(location.search, document.referrer, location.origin);
+      try { sessionStorage.setItem('ezs_source_page', sourcePage); } catch (_) {}
+    }
+    if (consultForm.sourcePage) consultForm.sourcePage.value = sourcePage;
+
+    /* 희망 테스트 날짜: 오늘(로컬 기준) 이후만 */
+    if (consultForm.testDate) {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      consultForm.testDate.min = d.toISOString().slice(0, 10);
+    }
+
     consultForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
@@ -105,6 +134,9 @@
         name: this.name.value,
         phone: this.phone.value,
         request: this.request.value,
+        testDate: this.testDate.value,
+        testTime: this.testTime.value,
+        sourcePage: this.sourcePage.value,
       };
 
       if (!data.name || !data.phone) {

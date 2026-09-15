@@ -419,6 +419,27 @@ ul { list-style: none; }
 .about-panel .k { font-weight: 800; font-size: 26px; color: var(--blue); line-height: 1; letter-spacing: -.02em; }
 .about-panel .v { font-size: 15px; color: var(--ink-2); line-height: 1.55; word-break: keep-all; }
 
+/* 학습자 고민 (차이점 바로 앞 공감 블록) */
+.about-pain { margin-top: clamp(30px, 5vw, 52px); }
+.about-pain-title {
+  font-weight: 800; font-size: clamp(20px, 3vw, 26px); color: var(--ink);
+  letter-spacing: -.02em; line-height: 1.4; margin-bottom: 16px; word-break: keep-all;
+}
+.about-pain ul { list-style: none; display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }
+.about-pain li { background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px; }
+.about-pain b { display: block; font-weight: 700; font-size: 15.5px; color: var(--ink); word-break: keep-all; }
+.about-pain .d { display: block; margin-top: 6px; font-size: 14px; color: var(--ink-2); line-height: 1.65; word-break: keep-all; }
+.about-pain-answer {
+  margin-top: 16px; font-weight: 700; font-size: 16px; line-height: 1.65;
+  color: var(--blue-deep); word-break: keep-all;
+}
+@media (max-width: 900px) { .about-pain ul { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .about-pain ul { grid-template-columns: 1fr; } }
+
+/* 선택 항목 라벨 안내 + 일시 입력 2칸 (모바일 1열일 때도 간격 유지) */
+.opt { font-size: 12px; font-weight: 500; color: var(--ink-3); }
+.field .form-row.two-columns { gap: 10px; }
+
 /* 이지스피크만의 차이점 (about 하단 불릿) */
 .about-diff { margin-top: clamp(30px, 5vw, 52px); }
 .about-diff-title {

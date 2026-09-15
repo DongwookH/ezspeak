@@ -19,7 +19,8 @@ TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "")
 
 FIELDS = [("name", "이름"), ("phone", "연락처"), ("gender", "성별"), ("prevStudy", "학습경험"),
           ("level", "레벨"), ("reason", "목적"), ("source", "유입경로"),
-          ("contactMethod", "연락방법"), ("request", "요청사항")]
+          ("contactMethod", "연락방법"), ("testDate", "희망 테스트 날짜"), ("testTime", "희망 테스트 시간"),
+          ("request", "요청사항"), ("sourcePage", "유입 페이지")]
 
 
 def _post(url, payload, timeout=10):
@@ -74,7 +75,7 @@ class handler(BaseHTTPRequestHandler):
             return self._json(400, {"ok": False, "error": "bad json"})
         if not isinstance(data, dict) or not data.get("name") or not data.get("phone"):
             return self._json(400, {"ok": False, "error": "name/phone required"})
-        data = {k: str(data.get(k, ""))[:500] for k, _ in FIELDS}
+        data = {k: str(data.get(k, ""))[:200 if k == "sourcePage" else 500] for k, _ in FIELDS}
 
         try:
             sheet_status, _ = _post(SCRIPT_URL, data, timeout=20)

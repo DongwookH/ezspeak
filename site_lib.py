@@ -116,13 +116,42 @@ def esc(s):
     return html.escape(s, quote=True)
 
 
+# 병기형 조사 -> (받침 있을 때, 받침 없을 때)
+JOSA_PAIRS = {
+    "은(는)": ("은", "는"), "이(가)": ("이", "가"), "을(를)": ("을", "를"),
+    "과(와)": ("과", "와"), "와(과)": ("과", "와"),
+    "으로(로)": ("으로", "로"), "(으)로": ("으로", "로"),
+    "(이)": ("이", ""),   # 서술격: 신림동이라는 / 금정구라는
+}
+# 긴 패턴 우선 ('이(가)' 가 '(이)' 보다 먼저). 앞 글자 1개를 함께 잡는다.
+_JOSA_RE = re.compile(
+    r"(.?)(" + "|".join(re.escape(k) for k in sorted(JOSA_PAIRS, key=len, reverse=True)) + ")",
+    re.S)
+
+
+def josa(text):
+    """'금정구은(는)' -> '금정구는'. 앞 글자의 받침 유무로 병기형 조사를 확정한다.
+    한글 음절이 아니면(영문·숫자·괄호·문두) 받침형을 기본으로 쓴다."""
+    def repl(m):
+        prev = m.group(1)
+        has, no = JOSA_PAIRS[m.group(2)]
+        if "가" <= prev <= "힣":
+            jong = (ord(prev) - 0xAC00) % 28
+            if no == "로" and jong == 8:   # ㄹ 받침 뒤는 '으로' 가 아니라 '로'
+                return prev + no
+            return prev + (has if jong else no)
+        # ponytail: 숫자는 읽는 소리(1=일, 2=이)를 따지지 않음 — 숫자 뒤 병기가 생기면 표 추가
+        return prev + has
+    return _JOSA_RE.sub(repl, text)
+
+
 def fmt(text, ctx):
-    """풀 문자열의 플레이스홀더 치환.
+    """풀 문자열의 플레이스홀더 치환 + 병기형 조사 확정.
     str.format 대신 명시적 replace 를 사용해 예기치 못한 중괄호로 인한
     크래시를 방지한다 (seo_spec.md 10절: 4개 키만 존재)."""
     for key in ("keyword", "loc", "parent", "sido"):
         text = text.replace("{" + key + "}", ctx.get(key, ""))
-    return text
+    return josa(text)
 
 
 def legacy_filename(keyword):
@@ -482,7 +511,7 @@ def intro_paragraph(ctx):
          f"{keyword} 지역 특성과 수강생 목표에 맞춘 맞춤형 회화 수업으로, "
          f"말할수록 입이 트이고 참여할수록 자신감이 쌓이는 양방향 온라인 수업을 경험할 수 있습니다."),
         (f"{keyword}에서 믿을 수 있는 영어회화 수업을 찾는다면, "
-         f"{loc} 학습자들이 눈여겨보는 이지스피크(EZspeak)를 확인해 보세요. "
+         f"{loc} 학습자를 위한 온라인 영어회화 이지스피크(EZspeak)를 확인해 보세요. "
          f"이동 없이 집에서 듣는 온라인 1:1 수업, 매일 쓰는 표현 중심의 커리큘럼으로 결과를 만듭니다."),
     ]
     return pick(variants, keyword, "intro")
@@ -494,9 +523,9 @@ def curriculum_lead(ctx):
     variants = [
         f"{keyword} 영어학원을 고를 때 가장 중요한 것은 실제로 말하는 시간입니다. 이지스피크의 운영 방식을 확인해 보세요.",
         f"{loc} 수강생을 위한 이지스피크만의 운영 방식은 이렇게 다릅니다.",
-        f"말이 트이는 데에는 이유가 있습니다. {keyword} 지역에서 검증된 이지스피크 학습 시스템.",
+        f"말이 트이는 데에는 이유가 있습니다. {keyword} 지역에서도 1:1 원어민 화상 수업과 플래너 관리로 운영하는 이지스피크 학습 시스템.",
         f"{keyword} 원어민 회화부터 학습 관리까지, 이지스피크의 3단계 운영 원칙을 소개합니다.",
-        f"이지스피크가 {loc} 학습자에게 꾸준히 선택받는 이유를 정리했습니다.",
+        f"이지스피크가 {loc} 학습자의 수업과 학습 관리를 어떻게 운영하는지 정리했습니다.",
     ]
     return pick(variants, keyword, "curlead")
 
@@ -528,9 +557,16 @@ def head_common():
     <link rel="stylesheet" href="/style.css?v={ASSET_VER}">"""
 
 
-def header_html():
+def contact_href(src=None):
+    """상담 CTA 링크. src(유입 슬러그)가 있으면 /?from={src}#contact.
+    메인 script.js 가 from 쿼리를 읽어 상담폼 hidden 필드에 넣는다 (형식 변경 금지).
+    canonical·sitemap·JSON-LD 에는 쓰지 않는다 — 링크 href 전용."""
+    return "/?from=%s#contact" % src if src else "/#contact"
+
+
+def header_html(src=None):
     """index.html 과 동일한 .header 마크업. 링크는 /#앵커 (루트 절대경로)."""
-    return """    <header class="header">
+    return f"""    <header class="header">
         <div class="container">
             <div class="logo">
                 <a href="/" aria-label="이지스피크 홈"><img src="/logo.png" width="32" height="32" alt="이지스피크 EZspeak 로고"><span class="logo-word">이지스피크</span></a>
@@ -541,7 +577,7 @@ def header_html():
                     <li><a href="/#programs">커리큘럼</a></li>
                     <li><a href="/#features">운영 방식</a></li>
                     <li><a href="/#reviews">후기</a></li>
-                    <li><a href="/#contact">상담문의</a></li>
+                    <li><a href="{esc(contact_href(src))}">상담문의</a></li>
                 </ul>
             </nav>
             <button class="mobile-menu-btn" aria-label="메뉴 열기" aria-expanded="false">
@@ -553,7 +589,7 @@ def header_html():
     </header>"""
 
 
-def footer_html():
+def footer_html(src=None):
     return f"""    <footer class="site-footer">
         <div class="container">
             <div class="footer-brand">EZspeak</div>
@@ -563,7 +599,7 @@ def footer_html():
     </footer>
 
     <nav class="mobile-cta-bar" aria-label="빠른 상담">
-        <a href="/#contact" class="mc-test">
+        <a href="{esc(contact_href(src))}" class="mc-test">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
             레벨테스트
         </a>
@@ -785,7 +821,7 @@ def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None):
 
 TIMELINE_STEPS = [
     ("01", "1:1 원어민 온라인 회화 수업",
-     "검증된 원어민 강사와 함께하는 1:1 맞춤 회화 수업으로 {kw} 지역 수강생의 실전 스피킹 실력을 키웁니다. 정해진 교재를 읽는 방식이 아니라 실제 상황을 가정한 대화 중심이며, 모든 수업은 실시간 화상으로 진행됩니다."),
+     "원어민 강사와 1:1로 진행하는 맞춤 회화 수업으로 {kw} 지역 수강생의 실전 스피킹 실력을 키웁니다. 정해진 교재를 읽는 방식이 아니라 실제 상황을 가정한 대화 중심이며, 모든 수업은 실시간 화상으로 진행됩니다."),
     ("02", "1:1 한국인 플래너 밀착 케어",
      "수업 외 시간에도 담당 플래너가 예습·복습과 학습 스케줄을 관리해 혼자서는 이어가기 어려운 꾸준함을 함께 만들어 갑니다."),
     ("03", "레벨별 커리큘럼과 부가 콘텐츠",
@@ -796,6 +832,9 @@ TIMELINE_STEPS = [
 def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     keyword = ctx["keyword"]
     canonical = canonical_of(keyword)
+    # 상담 CTA 유입 슬러그 (href 전용, canonical 에는 붙이지 않음)
+    src = slug_of(keyword)
+    contact = esc(contact_href(src))
     # 지역별 고유 OG 썸네일 (generate_og_images.py 로 미리 생성해 두어야 한다)
     og_image = og_image_url(keyword)
     og_image_alt = "%s 영어회화 - 이지스피크, 집에서 하는 온라인 어학연수" % keyword
@@ -947,7 +986,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     </script>
 </head>
 <body>
-{header_html()}
+{header_html(src)}
 
     <main class="rg-main">
         <nav class="rg-crumb" aria-label="브레드크럼">
@@ -974,7 +1013,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                     <div><dt>상담 방법</dt><dd>홈페이지 상담 폼 · 이메일</dd></div>
                 </dl>
                 <div class="rg-actions">
-                    <a href="/#contact" class="btn btn--solid">무료 레벨테스트 신청</a>
+                    <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
                     <a href="/#programs" class="btn btn--outline">커리큘럼 둘러보기</a>
                 </div>
             </div>
@@ -1024,7 +1063,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 <div class="rg-inline-cta-inner">
                     <p><strong>{esc(keyword)} 영어회화, 어디서부터 시작할지 고민되시나요?</strong>무료 레벨테스트로 지금 말하기 수준을 확인하고, 나에게 맞는 과정부터 시작해 보세요. 상담과 테스트 모두 온라인으로 진행되어 방문이 필요 없습니다.</p>
                     <div class="rg-inline-cta-actions">
-                        <a href="/#contact" class="btn btn--solid">무료 레벨테스트 신청</a>
+                        <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
                         <a href="/#faq" class="rg-inline-link">자주 묻는 질문 먼저 보기</a>
                     </div>
                 </div>
@@ -1049,7 +1088,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 <div class="rg-cta-inner">
                     <h2>{esc(keyword)}에서<br>영어로 말하는 즐거움</h2>
                     <p>{esc(cta)}</p>
-                    <a href="/#contact" class="btn btn--ghost">무료 레벨테스트 신청</a>
+                    <a href="{contact}" class="btn btn--ghost">무료 레벨테스트 신청</a>
                 </div>
             </div>
         </section>
@@ -1057,7 +1096,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
 
     <div class="container"><p class="rg-updated">최종 업데이트: {BUILD_DATE_DOT}</p></div>
 
-{footer_html()}
+{footer_html(src)}
 {PAGE_SCRIPT}
 </body>
 </html>
@@ -1163,7 +1202,7 @@ def render_hub_page(sido_list, sido_counts, total):
             <div class="container">
                 <div class="rg-prose" style="max-width:78ch;">
                     <p>이지스피크(EZspeak)는 시험을 위한 영어가 아니라 실제로 입이 트이는 영어, 곧 &lsquo;말이 되는 영어&rsquo;를 목표로 하는 실전 영어회화 전문 학원입니다. 모든 수업은 100% 온라인 실시간 화상으로 진행되며, 오프라인 지점이나 대면 수업은 운영하지 않습니다. 이 페이지는 전국 {total}개 지역, {len(sido_list)}개 시·도에 걸친 이지스피크 지역별 영어회화 안내를 한곳에 모은 허브입니다. 우리 동네 이름으로 개설된 페이지에서 1:1 원어민 회화 수업, 한국인 플래너의 밀착 학습 관리, 무료 레벨테스트 등 이지스피크가 제공하는 학습 방식을 지역 맥락에 맞춰 확인하실 수 있습니다. 영어회화를 처음 알아보는 분이라면, 먼저 내가 사는 지역 페이지를 열어 어떤 수업이 진행되는지, 어떤 절차로 시작하는지부터 살펴보시길 권합니다.</p>
-                    <p>지역별 영어회화 페이지는 단순히 지역명만 바꾼 안내가 아니라, 해당 지역 학습자가 가장 궁금해하는 정보를 중심으로 구성했습니다. 각 페이지에는 이지스피크의 3단계 운영 방식, 즉 검증된 원어민 강사와의 1:1 회화 수업, 수업 외 시간까지 챙기는 한국인 플래너의 예·복습 관리, 그리고 레벨테스트 결과에 맞춘 단계별 커리큘럼과 복습 콘텐츠가 정리되어 있습니다. 여기에 수강 안내와 함께 수강료·수업 방식·수업 횟수·대상 연령을 다루는 자주 묻는 질문까지 담아, 상담 전에 궁금증을 미리 해소할 수 있도록 했습니다. 초등학생부터 성인 직장인까지, 그리고 알파벳이 낯선 왕초보부터 실무에서 바로 쓰는 비즈니스 회화까지 각자의 상황에 맞는 시작점을 찾을 수 있습니다.</p>
+                    <p>지역별 영어회화 페이지는 단순히 지역명만 바꾼 안내가 아니라, 해당 지역 학습자가 가장 궁금해하는 정보를 중심으로 구성했습니다. 각 페이지에는 이지스피크의 3단계 운영 방식, 즉 원어민 강사와의 1:1 화상 회화 수업, 수업 외 시간까지 챙기는 한국인 플래너의 예·복습 관리, 그리고 레벨테스트 결과에 맞춘 단계별 커리큘럼과 복습 콘텐츠가 정리되어 있습니다. 여기에 수강 안내와 함께 수강료·수업 방식·수업 횟수·대상 연령을 다루는 자주 묻는 질문까지 담아, 상담 전에 궁금증을 미리 해소할 수 있도록 했습니다. 초등학생부터 성인 직장인까지, 그리고 알파벳이 낯선 왕초보부터 실무에서 바로 쓰는 비즈니스 회화까지 각자의 상황에 맞는 시작점을 찾을 수 있습니다.</p>
                     <p>우리 동네 페이지를 찾는 방법은 간단합니다. 위쪽 검색창에 시·도명(예: 서울, 경기, 부산)을 입력하면 해당 시·도 카드가 바로 필터링됩니다. 시·도 페이지로 들어가면 그 안의 시·군·구, 다시 그 아래의 읍·면·동으로 단계별로 좁혀 이동할 수 있어, 내가 생활하고 일하는 동네와 가장 가까운 영어회화 안내까지 확인할 수 있습니다. 반대로 세부 지역 페이지에서는 상위 지역과 인근 지역으로도 자유롭게 이동할 수 있어, 직장이 있는 지역과 사는 지역의 안내를 함께 비교해 보기에도 좋습니다. 수업 자체는 어느 지역 페이지로 들어오시든 동일한 온라인 1:1 방식이므로, 오가는 거리나 교통편을 따질 필요 없이 시간대만 맞추면 됩니다.</p>
                     <p>이지스피크는 일상영어회화, 비즈니스영어회화, 여행영어, 시사토론, 중등교과, 키즈영어, 문법·어휘까지 모두 7개 과정을 운영합니다. 일상 대화가 목표라면 매일 쓰는 표현 중심의 일상영어회화가, 업무에 당장 필요하다면 회의·이메일·프레젠테이션을 다루는 비즈니스영어회화가 적합합니다. 유아와 초등 자녀에게는 놀이로 익히며 자신감을 붙이는 키즈영어, 중학생에게는 내신과 실용 영어를 함께 잡는 중등교과 과정을 마련했습니다. 어떤 과정이 나에게 맞을지는 무료 레벨테스트로 현재 실력을 정확히 진단한 뒤, 담당 플래너가 목표와 일정에 맞춰 함께 정해 드립니다.</p>
                     <p>시작은 부담 없는 무료 레벨테스트 한 번이면 충분합니다. 상담 폼이나 이메일({BUSINESS_EMAIL})로 문의를 남기시면 담당 플래너가 현재 실력을 진단하고, 목표에 맞는 커리큘럼과 수업 횟수(주 1~5회)를 안내해 드립니다. 상담과 레벨테스트, 첫 수업까지 모두 온라인으로 이어져 어디를 방문하실 필요가 없습니다. 수업은 정해진 교재를 읽는 방식이 아니라 실제 상황을 가정한 대화와 롤플레이, 질의응답 중심으로 진행되어, 배운 표현을 바로 말로 꺼내 쓰는 연습을 반복합니다. 직장인을 위한 시간대 운영과 연령별 맞춤 케어까지 갖춰, 바쁜 일정 속에서도 꾸준히 이어갈 수 있도록 돕습니다.</p>
@@ -1207,7 +1246,7 @@ def render_hub_page(sido_list, sido_counts, total):
     </script>
 </head>
 <body>
-{header_html()}
+{header_html("region")}
 
     <main class="rg-main">
         <nav class="rg-crumb" aria-label="브레드크럼">
@@ -1257,7 +1296,7 @@ def render_hub_page(sido_list, sido_counts, total):
 
     <div class="container"><p class="rg-updated">최종 업데이트: {BUILD_DATE_DOT}</p></div>
 
-{footer_html()}
+{footer_html("region")}
     <script>
         (function () {{
             var btn = document.querySelector('.mobile-menu-btn');
@@ -1625,6 +1664,14 @@ if __name__ == "__main__":
         assert got == expect, "%s -> %s (기대 %s)" % (kw, got, expect)
     # parents 1개면 그 값을 그대로 쓴다
     assert representative_parent({"keyword": "X", "parents": ["강원특별자치도 원주시"]}) == "강원특별자치도 원주시"
+    # 병기형 조사 확정
+    for src, want in (("금정구은(는)", "금정구는"), ("신림동은(는)", "신림동은"), ("서울은(는)", "서울은"),
+                      ("분당은(는)", "분당은"), ("판교은(는)", "판교는"), ("유가(이)라고", "유가라고"),
+                      ("신림동(이)라는", "신림동이라는"), ("서울(으)로", "서울로"), ("신림동(으)로", "신림동으로"),
+                      ("판교(으)로", "판교로"), ("분당이(가)", "분당이"), ("EZ은(는)", "EZ은")):
+        assert josa(src) == want, "%s -> %s (기대 %s)" % (src, josa(src), want)
+    # 상담 CTA 유입 슬러그
+    assert contact_href("sillim-dong") == "/?from=sillim-dong#contact" and contact_href() == "/#contact"
     assert "100%%" not in render_rss(s)
     assert s.hub_page().count("<dt>") >= 8
     print("site_lib self-check OK (%d pages, %d overrides)"
