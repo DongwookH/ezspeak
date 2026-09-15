@@ -3,7 +3,8 @@
   "functions": {
     "api/*.py": {
       "includeFiles": "{site_lib.py,data/**}",
-      "excludeFiles": "{og/**,*.jpeg,*.jpg,logo.png}"
+      "excludeFiles": "{og/**,*.jpeg,*.jpg,logo.png}",
+      "maxDuration": 30
     }
   },
   "headers": [

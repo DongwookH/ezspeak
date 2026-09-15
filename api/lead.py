@@ -51,9 +51,22 @@ def notify_telegram(data):
     if not chat_id:
         return "no-chat"
     lines = ["📩 이지스피크 상담신청"] + ["%s: %s" % (label, data.get(k) or "-") for k, label in FIELDS]
-    status, body = _post("https://api.telegram.org/bot%s/sendMessage" % TG_TOKEN,
-                         {"chat_id": chat_id, "text": "\n".join(lines)})
-    return "ok" if status == 200 else body[:200]
+    return send_telegram(chat_id, "\n".join(lines))
+
+
+def send_telegram(chat_id, text, attempts=2):
+    # 알림이 조용히 사라지지 않도록 1회 재시도 (urlopen 은 4xx/5xx 에서 예외를 던진다)
+    last = ""
+    for _ in range(attempts):
+        try:
+            status, body = _post("https://api.telegram.org/bot%s/sendMessage" % TG_TOKEN,
+                                 {"chat_id": chat_id, "text": text}, timeout=8)
+            if status == 200:
+                return "ok"
+            last = body[:200]
+        except Exception as e:
+            last = "error: %s" % e
+    return last
 
 
 class handler(BaseHTTPRequestHandler):
@@ -77,17 +90,23 @@ class handler(BaseHTTPRequestHandler):
             return self._json(400, {"ok": False, "error": "name/phone required"})
         data = {k: str(data.get(k, ""))[:200 if k == "sourcePage" else 500] for k, _ in FIELDS}
 
-        try:
-            sheet_status, _ = _post(SCRIPT_URL, data, timeout=20)
-            sheet = "ok" if sheet_status < 400 else "http %s" % sheet_status
-        except Exception as e:  # 시트 실패는 접수 실패
-            return self._json(502, {"ok": False, "error": "sheet: %s" % e})
-
+        # 텔레그램을 먼저 보낸다: 느린 앱스 스크립트 때문에 함수가 끊겨도 알림(=신청 기록 백업)은 남는다
         try:
             tg = notify_telegram(data)
-        except Exception as e:  # 알림 실패는 접수 성공에 영향 없음
+        except Exception as e:
             tg = "error: %s" % e
-        self._json(200, {"ok": True, "sheet": sheet, "telegram": tg})
+
+        try:
+            sheet_status, _ = _post(SCRIPT_URL, data, timeout=20)
+            if sheet_status >= 400:
+                raise RuntimeError("http %s" % sheet_status)
+        except Exception as e:  # 시트 실패는 접수 실패 — 알림으로 수동 기록을 요청한다
+            if tg == "ok":
+                send_telegram(_chat_id(), "⚠ 위 신청(%s) 구글시트 저장 실패 — 수동 기록 필요\n%s"
+                              % (data.get("name"), str(e)[:150]))
+            return self._json(502, {"ok": False, "error": "sheet: %s" % e, "telegram": tg})
+
+        self._json(200, {"ok": True, "sheet": "ok", "telegram": tg})
 
     def do_GET(self):
         self._json(405, {"ok": False, "error": "POST only"})
