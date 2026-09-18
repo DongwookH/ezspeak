@@ -357,7 +357,7 @@ def main():
 
     problems = validate(slugs)
 
-    out_path = os.path.join(ROOT_DIR, "data", "slugs.json")
+    out_path = os.path.join(ROOT_DIR, "api", "_data", "slugs.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(slugs, f, ensure_ascii=False, indent=2, sort_keys=False)
 

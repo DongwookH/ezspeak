@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/*.py": {
-      "includeFiles": "{site_lib.py,data/**}",
+      "includeFiles": "{site_lib.py,api/_data/**}",
       "excludeFiles": "{og/**,*.jpeg,*.jpg,logo.png}",
       "maxDuration": 30
     }
@@ -11,35 +11,78 @@
     {
       "source": "/data/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/(.*)\\.(css|js|png|jpg|jpeg|svg|ico|woff2)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/rss.xml", "destination": "/api/rss" },
-
-    { "source": "/region", "destination": "/api/region" },
-    { "source": "/region/", "destination": "/api/region" },
-    { "source": "/region/:slug", "destination": "/api/region?slug=:slug" },
-    { "source": "/region/:slug/", "destination": "/api/region?slug=:slug" },
-
-    { "source": "/지역", "destination": "/api/legacy" },
-    { "source": "/지역/", "destination": "/api/legacy" },
-    { "source": "/지역/:file", "destination": "/api/legacy?file=:file" },
-
-    { "source": "/%EC%A7%80%EC%97%AD", "destination": "/api/legacy" },
-    { "source": "/%EC%A7%80%EC%97%AD/", "destination": "/api/legacy" },
-    { "source": "/%EC%A7%80%EC%97%AD/:file", "destination": "/api/legacy?file=:file" },
-
-    { "source": "/:dir/:file(.+\\.html)", "destination": "/api/legacy?file=:file" },
-
-    { "source": "/og/:og", "destination": "/api/legacy?og=:og" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/rss.xml",
+      "destination": "/api/rss"
+    },
+    {
+      "source": "/region",
+      "destination": "/api/region"
+    },
+    {
+      "source": "/region/",
+      "destination": "/api/region"
+    },
+    {
+      "source": "/region/:slug",
+      "destination": "/api/region?slug=:slug"
+    },
+    {
+      "source": "/region/:slug/",
+      "destination": "/api/region?slug=:slug"
+    },
+    {
+      "source": "/지역",
+      "destination": "/api/legacy"
+    },
+    {
+      "source": "/지역/",
+      "destination": "/api/legacy"
+    },
+    {
+      "source": "/지역/:file",
+      "destination": "/api/legacy?file=:file"
+    },
+    {
+      "source": "/%EC%A7%80%EC%97%AD",
+      "destination": "/api/legacy"
+    },
+    {
+      "source": "/%EC%A7%80%EC%97%AD/",
+      "destination": "/api/legacy"
+    },
+    {
+      "source": "/%EC%A7%80%EC%97%AD/:file",
+      "destination": "/api/legacy?file=:file"
+    },
+    {
+      "source": "/:dir/:file(.+\\.html)",
+      "destination": "/api/legacy?file=:file"
+    },
+    {
+      "source": "/og/:og",
+      "destination": "/api/legacy?og=:og"
+    }
   ]
 }

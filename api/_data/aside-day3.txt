@@ -1,0 +1,67 @@
+[작업] 네이버 서치어드바이저 — 웹 페이지 수집 요청 (Day 3)
+
+지금 이 브라우저에 네이버 계정이 로그인되어 있다. 아래 절차를 정확히 따르되, 절차 밖의 행동(설정 변경, 사이트 삭제, 다른 메뉴 조작)은 절대 하지 마라.
+
+1. https://searchadvisor.naver.com 접속 → 웹마스터 도구에서 사이트 "https://ezspeak.vercel.app" 선택
+2. 왼쪽 메뉴에서 [요청] → [웹 페이지 수집] 화면으로 이동
+3. 아래 URL 목록을 위에서부터 순서대로 하나씩 처리한다:
+   - 입력창에 URL 전체를 붙여넣고 [확인] 버튼 클릭
+   - "수집 요청이 완료되었습니다" 류의 성공 메시지를 확인한 뒤 다음 URL로 넘어간다
+   - 이미 요청된 URL이라는 안내가 나오면 그냥 다음 URL로 넘어간다 (재시도 금지)
+4. 다음 상황에서는 즉시 작업을 멈추고 나에게 보고해라 (계속 시도하지 마라):
+   - "일일 요청 한도 초과" 안내가 나올 때 (몇 번째 URL까지 성공했는지 함께 보고)
+   - 캡차(자동입력 방지)가 나타날 때
+   - 같은 오류가 2회 연속 반복될 때
+5. 전부 끝나면 "성공 N건 / 중복 M건 / 실패 K건 (실패 URL 목록)" 형식으로 결과를 요약해라
+
+[오늘 처리할 URL 50개 — 순서대로]
+https://ezspeak.vercel.app/region/bucheon-si
+https://ezspeak.vercel.app/region/dongnam-gu
+https://ezspeak.vercel.app/region/deokjin-gu
+https://ezspeak.vercel.app/region/dalseo-gu
+https://ezspeak.vercel.app/region/gyeyang-gu
+https://ezspeak.vercel.app/region/gimpo-si
+https://ezspeak.vercel.app/region/taebaek-si
+https://ezspeak.vercel.app/region/paldal-gu
+https://ezspeak.vercel.app/region/sujeong-gu
+https://ezspeak.vercel.app/region/hapcheon-gun
+https://ezspeak.vercel.app/region/suseong-gu
+https://ezspeak.vercel.app/region/bundang-gu
+https://ezspeak.vercel.app/region/cheoin-gu
+https://ezspeak.vercel.app/region/pocheon-si
+https://ezspeak.vercel.app/region/sangdang-gu
+https://ezspeak.vercel.app/region/danwon-gu
+https://ezspeak.vercel.app/region/jecheon-si
+https://ezspeak.vercel.app/region/boryeong-si
+https://ezspeak.vercel.app/region/sinan-gun
+https://ezspeak.vercel.app/region/uiseong-gun
+https://ezspeak.vercel.app/region/miryang-si
+https://ezspeak.vercel.app/region/dangjin-si
+https://ezspeak.vercel.app/region/seongdong-gu
+https://ezspeak.vercel.app/region/seodaemun-gu
+https://ezspeak.vercel.app/region/daedeok-gu
+https://ezspeak.vercel.app/region/uijeongbu-si
+https://ezspeak.vercel.app/region/sangnok-gu
+https://ezspeak.vercel.app/region/ilsandong-gu
+https://ezspeak.vercel.app/region/mungyeong-si
+https://ezspeak.vercel.app/region/hadong-gun
+https://ezspeak.vercel.app/region/gwonseon-gu
+https://ezspeak.vercel.app/region/sokcho-si
+https://ezspeak.vercel.app/region/seosan-si
+https://ezspeak.vercel.app/region/gwangyang-si
+https://ezspeak.vercel.app/region/seoul
+https://ezspeak.vercel.app/region/busan
+https://ezspeak.vercel.app/region/daegu
+https://ezspeak.vercel.app/region/incheon
+https://ezspeak.vercel.app/region/gwangju
+https://ezspeak.vercel.app/region/daejeon
+https://ezspeak.vercel.app/region/ulsan
+https://ezspeak.vercel.app/region/gyeonggi
+https://ezspeak.vercel.app/region/jongno
+https://ezspeak.vercel.app/region/yongsan
+https://ezspeak.vercel.app/region/gwangjin
+https://ezspeak.vercel.app/region/dongdaemun
+https://ezspeak.vercel.app/region/jungnang
+https://ezspeak.vercel.app/region/seongbuk
+https://ezspeak.vercel.app/region/gangbuk
+https://ezspeak.vercel.app/region/dobong

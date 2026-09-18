@@ -64,9 +64,12 @@ ASSET_VER = "20260725b"
 
 # 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_INPUT = os.path.join(ROOT_DIR, "data", "regions.json")
-POOLS_PATH = os.path.join(ROOT_DIR, "data", "seo_pools.json")
-SLUGS_PATH = os.path.join(ROOT_DIR, "data", "slugs.json")
+# 데이터는 api/_data/ 에 둔다 — api/ 아래는 정적 파일로 공개되지 않으므로
+# 서버 함수는 읽을 수 있고 외부에서는 내려받을 수 없다.
+DATA_DIR = os.path.join(ROOT_DIR, "api", "_data")
+DEFAULT_INPUT = os.path.join(DATA_DIR, "regions.json")
+POOLS_PATH = os.path.join(DATA_DIR, "seo_pools.json")
+SLUGS_PATH = os.path.join(DATA_DIR, "slugs.json")
 
 # 지역 페이지 URL 프리픽스 (/region/{slug}) 와 허브 경로 (/region)
 REGION_PREFIX = "/region"
