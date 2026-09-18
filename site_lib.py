@@ -1442,7 +1442,8 @@ def render_robots():
     bots = ["*", "Yeti", "GPTBot", "OAI-SearchBot", "ChatGPT-User",
             "ClaudeBot", "Claude-SearchBot", "Claude-User",
             "PerplexityBot", "Perplexity-User", "Google-Extended"]
-    blocks = "\n\n".join("User-agent: %s\nAllow: /\nDisallow: /api/" % b for b in bots)
+    blocks = "\n\n".join("User-agent: %s\nAllow: /\nDisallow: /api/\nDisallow: /data/" % b
+                       for b in bots)
     return "%s\n\nSitemap: %s/sitemap.xml\n" % (blocks, BASE_URL)
 
 

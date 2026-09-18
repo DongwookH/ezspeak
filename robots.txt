@@ -1,45 +1,56 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: Yeti
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: GPTBot
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: Claude-SearchBot
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: Claude-User
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: Perplexity-User
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 User-agent: Google-Extended
 Allow: /
 Disallow: /api/
+Disallow: /data/
 
 Sitemap: https://ezspeak.vercel.app/sitemap.xml
