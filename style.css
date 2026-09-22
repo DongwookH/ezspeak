@@ -716,7 +716,8 @@ ul { list-style: none; }
 
 /* 교재 슬라이더: 1장 = 교재 1종, [큰 이미지 스테이지 | 설명] (transform 방식, 후기 캐러셀과 동일) */
 .book-slider { margin-top: 8px; }
-.bs-viewport { overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; touch-action: pan-y; }
+/* overflow: clip — 찾기·포커스 이동으로 틀이 가로 스크롤돼 슬라이드가 어긋나는 것 방지 */
+.bs-viewport { overflow: hidden; overflow: clip; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; touch-action: pan-y; }
 .bs-track { list-style: none; display: flex; transition: transform .5s ease; }
 .bs-slide {
   flex: 0 0 100%; min-width: 0;
@@ -727,7 +728,7 @@ ul { list-style: none; }
 /* 교재 이미지 스테이지: 한 번에 1장 크게, 좌우로 넘김 (교재 페이지 api/textbooks.py 와 같은 클래스·동작) */
 .stage { min-width: 0; border-radius: var(--r-md); }
 .stage:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
-.stage-view { position: relative; overflow: hidden; background: #F3F6FA; border: 1px solid var(--line-2); border-radius: var(--r-md); touch-action: pan-y; }
+.stage-view { position: relative; overflow: hidden; overflow: clip; background: #F3F6FA; border: 1px solid var(--line-2); border-radius: var(--r-md); touch-action: pan-y; }
 .stage-track { list-style: none; margin: 0; padding: 0; display: flex; transition: transform .35s ease; }
 /* 좌우 64px 은 화살표 자리 — 화살표가 교재 이미지를 가리지 않게 */
 .stage-item { flex: 0 0 100%; min-width: 0; height: 520px; padding: 16px 64px; display: flex; align-items: center; justify-content: center; }
@@ -810,9 +811,11 @@ ul { list-style: none; }
 }
 @media (max-width: 640px) {
   .bs-slide { grid-template-columns: 1fr; padding: 14px; gap: 14px; }
-  /* 모바일: 이미지는 전폭, 화살표는 이미지 아래 공간으로 */
-  .stage-item { height: 380px; padding: 10px 10px 58px; }
-  .stage-arrow { width: 38px; height: 38px; top: auto; bottom: 10px; transform: none; }
+  /* 모바일: 하단 여백 없이 이미지를 크게, 화살표는 좌우 세로 가운데 */
+  .stage-item { height: 440px; padding: 8px 8px; }
+  .stage-arrow { width: 36px; height: 36px; }
+  .stage-prev { left: 6px; }
+  .stage-next { right: 6px; }
   .bs-body { padding: 4px 2px 0; }
   .bs-name { font-size: 20px; }
   .bs-controls { gap: 8px; }

@@ -239,7 +239,7 @@ TB_INLINE_CSS = """    <style>
         /* 교재 이미지 스테이지 — 메인 style.css 의 .stage 와 같은 규칙(이 페이지는 자산 캐시 때문에 인라인) */
         .stage { min-width: 0; }
         .stage:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
-        .stage-view { position: relative; overflow: hidden; background: #F3F6FA; border: 1px solid var(--line-2);
+        .stage-view { position: relative; overflow: hidden; overflow: clip; background: #F3F6FA; border: 1px solid var(--line-2);
             border-radius: var(--r-md); touch-action: pan-y; }
         .stage-track { list-style: none; margin: 0; padding: 0; display: flex; transition: transform .35s ease; }
         .stage-item { flex: 0 0 100%; min-width: 0; height: 520px; padding: 16px 64px;
@@ -279,8 +279,10 @@ TB_INLINE_CSS = """    <style>
         }
         @media (max-width: 560px) {
             .tb-card > .stage { padding: 12px; }
-            .stage-item { height: 380px; padding: 10px 10px 58px; }
-            .stage-arrow { width: 38px; height: 38px; top: auto; bottom: 10px; transform: none; }
+            .stage-item { height: 440px; padding: 8px; }
+            .stage-arrow { width: 36px; height: 36px; }
+            .stage-prev { left: 6px; }
+            .stage-next { right: 6px; }
         }
         html:has(.tb-lb[open]) { overflow: hidden; }
         .tb-lb { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 56px 64px 20px;
@@ -339,6 +341,9 @@ TB_LIGHTBOX = """    <dialog class="tb-lb" id="tb-lb" aria-label="교재 이미�
     <script>
         /* 교재 이미지 스테이지 — 메인 script.js 의 initStage 와 같은 동작(transform 방식, smooth 스크롤 없음) */
         (function () {
+            Array.prototype.forEach.call(document.querySelectorAll('.stage-view'), function (v) {
+                v.addEventListener('scroll', function () { if (v.scrollLeft) v.scrollLeft = 0; }, { passive: true });
+            });
             Array.prototype.forEach.call(document.querySelectorAll('.stage'), function (root) {
                 var track = root.querySelector('.stage-track');
                 var items = Array.prototype.slice.call(root.querySelectorAll('.stage-item'));

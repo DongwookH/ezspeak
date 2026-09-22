@@ -171,6 +171,12 @@
     });
   }
 
+
+  /* 틀이 가로로 밀리면 즉시 되돌린다 (overflow: clip 미지원 브라우저 대비) */
+  document.querySelectorAll('.bs-viewport, .stage-view').forEach((v) => {
+    v.addEventListener('scroll', () => { if (v.scrollLeft) v.scrollLeft = 0; }, { passive: true });
+  });
+
   /* ---- Reviews carousel --------------------------------------------------- */
   const reviewsTrack = document.querySelector('.reviews-track');
   const reviewSlides = document.querySelectorAll('.review-slide');
