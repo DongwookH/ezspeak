@@ -700,3 +700,121 @@ ul { list-style: none; }
   .key-facts { grid-template-columns: 1fr; }
   .key-facts > div:nth-child(2) { border-top: 1px solid var(--line); }
 }
+
+/* ---- TEXTBOOKS (자체 제작 교재 + 수업에 함께 쓰는 교재) ------------------- */
+.programs-table .prog-books { display: block; margin-top: 6px; font-size: 13px; color: var(--blue-deep); font-weight: 600; }
+.textbooks { background: #fff; }
+.book-tag {
+  align-self: flex-start; font-size: 12.5px; font-weight: 700; color: var(--blue);
+  background: var(--blue-tint); border-radius: var(--r-pill); padding: 3px 10px;
+}
+.book-course { margin-top: auto; padding-top: 14px; font-size: 13.5px; color: var(--ink-3); }
+.book-course b { color: var(--ink); font-weight: 700; margin-left: 6px; }
+.book-partner { margin-top: clamp(40px, 6vw, 64px); padding-top: clamp(28px, 4vw, 40px); border-top: 1px solid var(--line); }
+.book-partner-title { font-weight: 800; font-size: 20px; color: var(--ink); letter-spacing: -.02em; }
+.book-partner-sub { margin-top: 6px; margin-bottom: 18px; font-size: 14.5px; color: var(--ink-2); }
+
+/* 교재 슬라이더: 1장 = 교재 1종, [큰 이미지 스테이지 | 설명] (transform 방식, 후기 캐러셀과 동일) */
+.book-slider { margin-top: 8px; }
+.bs-viewport { overflow: hidden; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; touch-action: pan-y; }
+.bs-track { list-style: none; display: flex; transition: transform .5s ease; }
+.bs-slide {
+  flex: 0 0 100%; min-width: 0;
+  display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 28px; padding: 24px; align-items: start;
+}
+
+/* 교재 이미지 스테이지: 한 번에 1장 크게, 좌우로 넘김 (교재 페이지 api/textbooks.py 와 같은 클래스·동작) */
+.stage { min-width: 0; border-radius: var(--r-md); }
+.stage:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.stage-view { position: relative; overflow: hidden; background: #F3F6FA; border: 1px solid var(--line-2); border-radius: var(--r-md); touch-action: pan-y; }
+.stage-track { list-style: none; margin: 0; padding: 0; display: flex; transition: transform .35s ease; }
+/* 좌우 64px 은 화살표 자리 — 화살표가 교재 이미지를 가리지 않게 */
+.stage-item { flex: 0 0 100%; min-width: 0; height: 520px; padding: 16px 64px; display: flex; align-items: center; justify-content: center; }
+/* max-width/max-height 로 가두어야 세로형 표지도 잘리지 않는다 (height:100% 는 이 배치에서 풀리지 않음) */
+.stage-item img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+.stage-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
+  border: 0; border-radius: 50%; background: rgba(15, 23, 42, .45); color: #fff;
+  display: grid; place-items: center; cursor: pointer; transition: background-color .16s;
+}
+.stage-arrow:hover { background: rgba(15, 23, 42, .7); }
+.stage-arrow:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.stage-prev { left: 10px; }
+.stage-next { right: 10px; }
+.stage-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.stage-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.stage-tabs button {
+  font: 600 13px var(--font-body); color: var(--ink-2); background: #fff; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 5px 12px;
+}
+.stage-tabs button:hover { border-color: var(--blue); color: var(--blue); }
+.stage-tabs button[aria-current="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.stage-count { font-size: 13px; font-weight: 600; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .stage-track, .bs-track { transition: none; } }
+
+.bs-body { display: flex; flex-direction: column; align-self: stretch; padding: 4px 4px 2px; }
+.bs-name { margin-top: 12px; font-weight: 800; font-size: 22px; line-height: 1.3; color: var(--ink); letter-spacing: -.02em; word-break: keep-all; }
+.bs-name .en { display: block; margin-top: 2px; font-weight: 600; font-size: 14px; color: var(--ink-3); letter-spacing: 0; }
+.bs-pub { margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--blue-deep); }
+.bs-meta { margin-top: 14px; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 14px; padding-block: 12px; border-block: 1px solid var(--line-2); }
+.bs-meta dt { color: var(--ink-3); font-weight: 600; }
+.bs-meta dd { color: var(--ink); word-break: keep-all; }
+.bs-desc { margin-top: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.7; word-break: keep-all; }
+
+/* 교재 필터(레벨·목적) — script.js 가 슬라이더 위에 만든다. JS 가 없으면 필터 없이 전체 */
+.bs-filter { display: grid; gap: 8px; margin: 4px 0 14px; }
+.bs-frow { display: flex; align-items: flex-start; gap: 10px; }
+.bs-flabel { flex: 0 0 34px; padding-top: 6px; font-size: 13px; font-weight: 700; color: var(--ink-3); }
+.bs-fopts { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.bs-fopts button {
+  font: 600 13px var(--font-body); color: var(--ink-2); background: #fff; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 5px 12px;
+  transition: border-color .16s, color .16s, background-color .16s;
+}
+.bs-fopts button:hover { border-color: var(--blue); color: var(--blue); }
+.bs-fopts button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.bs-fopts button:focus-visible, .bs-empty button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.bs-slide[hidden], .bs-controls[hidden], .bs-empty[hidden] { display: none; }
+.bs-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px 20px;
+  border: 1px dashed var(--line); border-radius: var(--r-lg); background: #fff; text-align: center;
+}
+.bs-empty p { font-size: 15px; color: var(--ink-2); }
+.bs-empty button {
+  font: 600 13px var(--font-body); color: var(--blue); background: #fff; cursor: pointer;
+  border: 1px solid var(--blue); border-radius: var(--r-pill); padding: 7px 14px;
+}
+.bs-empty button:hover { background: var(--blue); color: #fff; }
+
+.bs-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; }
+.bs-btn {
+  width: 42px; height: 42px; flex: none; border-radius: 50%; border: 1px solid var(--line);
+  background: #fff; color: var(--ink); display: grid; place-items: center;
+  transition: background-color .16s, color .16s, border-color .16s;
+}
+.bs-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.bs-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.bs-dots button { width: 22px; height: 22px; border: 0; background: none; padding: 0; display: grid; place-items: center; cursor: pointer; }
+.bs-dots button::before { content: ""; width: 8px; height: 8px; border-radius: var(--r-pill); background: var(--line); transition: width .25s, background-color .25s; }
+.bs-dots button[aria-current="true"]::before { width: 22px; background: var(--blue); }
+.bs-pause {
+  flex: none; font: 600 13px var(--font-body); color: var(--ink-2); background: #fff;
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 7px 13px;
+}
+.bs-pause:hover { border-color: var(--blue); color: var(--blue); }
+
+@media (max-width: 940px) {
+  .bs-slide { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; }
+  .stage-item { height: 440px; }
+}
+@media (max-width: 640px) {
+  .bs-slide { grid-template-columns: 1fr; padding: 14px; gap: 14px; }
+  /* 모바일: 이미지는 전폭, 화살표는 이미지 아래 공간으로 */
+  .stage-item { height: 380px; padding: 10px 10px 58px; }
+  .stage-arrow { width: 38px; height: 38px; top: auto; bottom: 10px; transform: none; }
+  .bs-body { padding: 4px 2px 0; }
+  .bs-name { font-size: 20px; }
+  .bs-controls { gap: 8px; }
+  .bs-dots button { width: 18px; }
+}

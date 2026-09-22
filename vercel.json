@@ -3,7 +3,7 @@
   "functions": {
     "api/*.py": {
       "includeFiles": "{site_lib.py,api/_data/**}",
-      "excludeFiles": "{og/**,*.jpeg,*.jpg,logo.png}",
+      "excludeFiles": "{og/**,*.jpeg,*.jpg,logo.png,textbooks/**}",
       "maxDuration": 30
     }
   },
@@ -51,6 +51,30 @@
     {
       "source": "/region/:slug/",
       "destination": "/api/region?slug=:slug"
+    },
+    {
+      "source": "/guide",
+      "destination": "/api/guide"
+    },
+    {
+      "source": "/guide/",
+      "destination": "/api/guide"
+    },
+    {
+      "source": "/guide/:slug",
+      "destination": "/api/guide?slug=:slug"
+    },
+    {
+      "source": "/guide/:slug/",
+      "destination": "/api/guide?slug=:slug"
+    },
+    {
+      "source": "/textbooks",
+      "destination": "/api/textbooks"
+    },
+    {
+      "source": "/textbooks/",
+      "destination": "/api/textbooks"
     },
     {
       "source": "/지역",

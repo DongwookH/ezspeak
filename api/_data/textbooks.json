@@ -1,0 +1,2872 @@
+{
+  "updated": "2026-09-21",
+  "groups": [
+    {
+      "id": "daily",
+      "name": "일상영어회화"
+    },
+    {
+      "id": "biz",
+      "name": "비즈니스영어회화"
+    },
+    {
+      "id": "travel",
+      "name": "여행영어"
+    },
+    {
+      "id": "current",
+      "name": "시사토론"
+    },
+    {
+      "id": "mid",
+      "name": "중등교과"
+    },
+    {
+      "id": "kids",
+      "name": "키즈영어"
+    },
+    {
+      "id": "grammar",
+      "name": "문법·어휘"
+    },
+    {
+      "id": "writing",
+      "name": "쓰기·토론"
+    },
+    {
+      "id": "exam",
+      "name": "말하기 시험 대비"
+    }
+  ],
+  "books": [
+    {
+      "slug": "icantalk",
+      "name": "아이캔톡",
+      "name_en": "I Can Talk",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "audience": "성인 왕초보",
+      "keywords": [
+        "왕초보",
+        "기초 회화",
+        "발음 표기"
+      ],
+      "series": "Unit 1~20",
+      "levels": [
+        "입문"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "왕초보 수강생을 위한 일상 대화 기초 회화 입문 교재. 단어·발음, 핵심 패턴, 연습 문제로 구성되고 영어 문장에 한글 발음이 함께 표기돼 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/icantalk/cover.jpg",
+        "w": 700,
+        "h": 393
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/icantalk/p1.jpg",
+          "w": 1000,
+          "h": 562
+        },
+        {
+          "src": "/textbooks/lib/icantalk/p2.jpg",
+          "w": 1000,
+          "h": 562
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "eea-reading",
+      "name": "EEA 낭독편",
+      "name_en": "English for Everyday Activities (일상표현 낭독편)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "daily",
+      "audience": "성인 기초",
+      "keywords": [
+        "낭독",
+        "일상 표현",
+        "그림 사전"
+      ],
+      "series": "50일 과정",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "50일 영어 낭독 과정의 한글판 교재. 일상 행동을 그림과 문장으로 보여주는 픽처 프로세스 딕셔너리 형식입니다. 저자 Lawrence J. Zwier.",
+      "cover": {
+        "src": "/textbooks/lib/eea-reading/cover.jpg",
+        "w": 526,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/eea-reading/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/eea-reading/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "eea-survival",
+      "name": "EEA 서바이벌편",
+      "name_en": "English for Everyday Activities (일상회화 서바이벌편)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "daily",
+      "audience": "성인 기초",
+      "keywords": [
+        "롤플레잉",
+        "생활 회화",
+        "핵심 표현"
+      ],
+      "series": "50일 과정",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "50일 롤플레잉 연습으로 구성된 일상회화 교재. Day별 핵심 어휘·표현과 그림 대화문이 실려 있습니다. 저자 Karl Nordvall.",
+      "cover": {
+        "src": "/textbooks/lib/eea-survival/cover.jpg",
+        "w": 526,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/eea-survival/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/eea-survival/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "eea-idiom",
+      "name": "EEA 이디엄편",
+      "name_en": "English for Everyday Activities (일상활용 이디엄편)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "daily",
+      "audience": "성인 기초~중급",
+      "keywords": [
+        "이디엄",
+        "관용 표현",
+        "대화문"
+      ],
+      "series": "50일 과정",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "50일 이디엄 학습 교재. Day별 대화문과 이디엄 뜻·예문으로 구성돼 있습니다. 저자 Thomas Hong.",
+      "cover": {
+        "src": "/textbooks/lib/eea-idiom/cover.jpg",
+        "w": 526,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/eea-idiom/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/eea-idiom/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "nlife-1",
+      "name": "앤라이프 1",
+      "name_en": "NLife 1",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "audience": "성인 중급",
+      "keywords": [
+        "패턴 표현",
+        "관용 표현",
+        "토론"
+      ],
+      "series": "Unit 1~",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "다양한 상황별 패턴 표현과 관용 표현을 다루는 중급 회화 교재. Key Pattern, Reading, Discussion, Words in Use, Composition, Activity로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/nlife-1/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/nlife-1/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/nlife-1/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "nlife-2",
+      "name": "앤라이프 2",
+      "name_en": "NLife 2",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "audience": "성인 중급",
+      "keywords": [
+        "패턴 표현",
+        "관용 표현",
+        "토론"
+      ],
+      "series": "Unit 67~",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "다양한 상황별 패턴 표현과 관용 표현을 다루는 중급 회화 교재. 클럽 활동 등 생활 주제의 Key Pattern, 읽기, 토론 문항이 실려 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/nlife-2/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/nlife-2/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/nlife-2/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "nlife-3",
+      "name": "앤라이프 3",
+      "name_en": "NLife 3",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "audience": "성인 중급",
+      "keywords": [
+        "패턴 표현",
+        "관용 표현",
+        "토론"
+      ],
+      "series": "Unit 133~",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "시사·토론"
+      ],
+      "description": "다양한 상황별 패턴 표현과 관용 표현을 다루는 중급 회화 교재. 미디어 등 사회 주제의 Key Pattern, 읽기, 롤플레이, 토론 문항이 실려 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/nlife-3/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/nlife-3/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/nlife-3/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "blueprint",
+      "name": "블루프린트",
+      "name_en": "Blueprint",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "daily",
+      "audience": "성인 초급~중급",
+      "keywords": [
+        "4기능 통합",
+        "모델 대화",
+        "문법"
+      ],
+      "series": "Book 1~4 (A1~B1)",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "유학·어학연수"
+      ],
+      "description": "Student Book 1~4권 시리즈로 A1 Beginner부터 B1 Intermediate까지 단계가 나뉩니다. 레슨마다 모델 대화, 어휘, 문법 연습이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/blueprint/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/blueprint/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/blueprint/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "jazz-english-1",
+      "name": "재즈잉글리시 1",
+      "name_en": "Jazz English 1 (Third Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "daily",
+      "audience": "성인·대학생",
+      "keywords": [
+        "자유 회화",
+        "대화 주제",
+        "어휘"
+      ],
+      "series": "Third Edition 1",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "Gunther Breaux 저. 주제별 Vocabulary Vitamins, Conversation Starters, 모델 대화, 문화 비교, 말하기 과제로 구성된 회화 교재입니다.",
+      "cover": {
+        "src": "/textbooks/lib/jazz-english-1/cover.jpg",
+        "w": 529,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/jazz-english-1/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/jazz-english-1/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "jazz-english-2",
+      "name": "재즈잉글리시 2",
+      "name_en": "Jazz English 2 (Third Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "daily",
+      "audience": "성인·대학생",
+      "keywords": [
+        "자유 회화",
+        "대화 주제",
+        "어휘"
+      ],
+      "series": "Third Edition 2",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화"
+      ],
+      "description": "Gunther Breaux 저. 1권과 같은 구성으로 성격 등 개인 주제의 어휘, 대화 질문, 모델 대화가 실려 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/jazz-english-2/cover.jpg",
+        "w": 519,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/jazz-english-2/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/jazz-english-2/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-1-2",
+      "name": "레귤러 1-2",
+      "name_en": "NVOIM English Regular Course Level 1-2",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 입문자 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "입문",
+        "가족"
+      ],
+      "series": "Level 1-2 (7단계 과정)",
+      "levels": [
+        "입문"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정의 입문 레벨 교재. 그림 단어, 읽기, 대화, 핵심 표현, 노래 페이지로 구성돼 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-1-2/cover.jpg",
+        "w": 525,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-1-2/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-1-2/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-2",
+      "name": "레귤러 2",
+      "name_en": "NVOIM English Regular Course Level 2",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 초급 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "문장 연습",
+        "문법"
+      ],
+      "series": "Level 2/7, Unit 1~20",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정 2레벨. 문장 연습, 단어, 읽기, 문법 포인트, 숙제, 대화 페이지로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-2/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-2/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-2/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-3",
+      "name": "레귤러 3",
+      "name_en": "NVOIM English Regular Course Level 3",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 초급 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "대화",
+        "읽기"
+      ],
+      "series": "Level 3/7, Unit 1~20",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정 3레벨. 대화, 연습, 단어, 읽기, 문법 포인트, 숙제로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-3/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-3/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-3/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-4",
+      "name": "레귤러 4",
+      "name_en": "NVOIM English Regular Course Level 4",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 초중급 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "대화",
+        "읽기"
+      ],
+      "series": "Level 4/7, Unit 1~20",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정 4레벨. 대화, 연습, 단어, 읽기, 문법 포인트, 숙제로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-4/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-4/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-4/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-5",
+      "name": "레귤러 5",
+      "name_en": "NVOIM English Regular Course Level 5",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 중급 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "수동태",
+        "읽기"
+      ],
+      "series": "Level 5/7, Unit 1~20",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정 5레벨. 대화, 연습, 단어, 읽기, 문법 포인트, 숙제로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-5/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-5/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-5/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-6",
+      "name": "레귤러 6",
+      "name_en": "NVOIM English Regular Course Level 6",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 중급 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "접속사",
+        "읽기"
+      ],
+      "series": "Level 6/7, Unit 1~20",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정 6레벨. 대화, 연습, 단어, 읽기, 문법 포인트, 숙제로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-6/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-6/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-6/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "regular-7",
+      "name": "레귤러 7",
+      "name_en": "NVOIM English Regular Course Level 7",
+      "type": "self",
+      "publisher": null,
+      "group": "daily",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "영어 중상급 (초중등·성인)",
+      "keywords": [
+        "정규과정",
+        "완료 수동태",
+        "읽기"
+      ],
+      "series": "Level 7/7, Unit 1~20",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "일상회화",
+        "중등 내신"
+      ],
+      "description": "7단계 정규과정 마지막 레벨. 대화, 연습, 단어, 읽기, 문법 포인트, 숙제로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/regular-7/cover.jpg",
+        "w": 495,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/regular-7/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/regular-7/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "cbe-1",
+      "name": "CBE 1",
+      "name_en": "Communicating in Business English 1 (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "biz",
+      "audience": "직장인 (B1+)",
+      "keywords": [
+        "전화 영어",
+        "비즈니스 글쓰기",
+        "프레젠테이션"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "비즈니스"
+      ],
+      "description": "Bob Dignen·Lucas Foster 저. English for Calls, Business Writing, Presentations 3개 챕터로 구성된 비즈니스 영어 교재입니다.",
+      "cover": {
+        "src": "/textbooks/lib/cbe-1/cover.jpg",
+        "w": 488,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/cbe-1/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/cbe-1/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "cbe-2",
+      "name": "CBE 2",
+      "name_en": "Communicating in Business English 2 (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "biz",
+      "audience": "직장인 (B1+)",
+      "keywords": [
+        "회의",
+        "협상",
+        "사교"
+      ],
+      "series": "Book 2",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "비즈니스"
+      ],
+      "description": "Bob Dignen·Lucas Foster 저. English for Meetings, Negotiating, Socializing 3개 챕터로 구성된 비즈니스 영어 교재입니다.",
+      "cover": {
+        "src": "/textbooks/lib/cbe-2/cover.jpg",
+        "w": 494,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/cbe-2/p1.jpg",
+          "w": 707,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/cbe-2/p2.jpg",
+          "w": 707,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "momentum-a",
+      "name": "모멘텀 A",
+      "name_en": "Momentum A",
+      "type": "self",
+      "publisher": null,
+      "group": "biz",
+      "audience": "기초 레벨 성인",
+      "keywords": [
+        "실전 회화",
+        "대화문",
+        "핵심 표현"
+      ],
+      "series": "Day 단위",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "비즈니스"
+      ],
+      "description": "기초 레벨 성인을 위한 실전 회화 과정. 어휘, 대화 A·B, 핵심 표현, 연습, 액티비티, 복습 순으로 진행됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/momentum-a/cover.jpg",
+        "w": 700,
+        "h": 393
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/momentum-a/p1.jpg",
+          "w": 1000,
+          "h": 562
+        },
+        {
+          "src": "/textbooks/lib/momentum-a/p2.jpg",
+          "w": 1000,
+          "h": 562
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "momentum-b",
+      "name": "모멘텀 B",
+      "name_en": "Momentum B for English Speaking",
+      "type": "self",
+      "publisher": null,
+      "group": "exam",
+      "also_groups": [
+        "biz"
+      ],
+      "audience": "토익스피킹·오픽 준비생",
+      "keywords": [
+        "토익스피킹",
+        "오픽",
+        "사진 묘사"
+      ],
+      "series": "Unit 단위",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "비즈니스",
+        "말하기 시험"
+      ],
+      "description": "토익 스피킹·오픽 말하기 시험 대비 교재. 사진 묘사, 질문 응답, 의견 말하기, 읽기 단계로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/momentum-b/cover.jpg",
+        "w": 700,
+        "h": 393
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/momentum-b/p1.jpg",
+          "w": 1000,
+          "h": 562
+        },
+        {
+          "src": "/textbooks/lib/momentum-b/p2.jpg",
+          "w": 1000,
+          "h": 562
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "momentum-c1",
+      "name": "모멘텀 C-1",
+      "name_en": "Momentum C Part 1: Interview",
+      "type": "self",
+      "publisher": null,
+      "group": "exam",
+      "also_groups": [
+        "biz"
+      ],
+      "audience": "영어 면접 준비생",
+      "keywords": [
+        "영어 면접",
+        "자기소개",
+        "모범 답변"
+      ],
+      "series": "Part 1 Interview, Unit 1~20",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "비즈니스",
+        "말하기 시험"
+      ],
+      "description": "직무별 영어 면접 대비 교재. 상황별 프로필, 예상 질문과 모범 답변, 답변 연습, 면접 팁으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/momentum-c1/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/momentum-c1/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/momentum-c1/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "momentum-c2",
+      "name": "모멘텀 C-2",
+      "name_en": "Momentum C Part 2: Business",
+      "type": "self",
+      "publisher": null,
+      "group": "biz",
+      "audience": "직장인",
+      "keywords": [
+        "비즈니스 회화",
+        "업무 영어",
+        "협상"
+      ],
+      "series": "Part 2 Business, Unit 1~40",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "비즈니스"
+      ],
+      "description": "회사 소개, 견적, 주문, 협상 등 40개 업무 상황 유닛. 유닛마다 어휘, 핵심 표현, 대화, 액티비티, 복습으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/momentum-c2/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/momentum-c2/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/momentum-c2/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "toeic-speaking-beginner",
+      "name": "토익스피킹 비기너",
+      "name_en": "TOEIC Speaking Beginner",
+      "type": "unverified",
+      "publisher": null,
+      "group": "exam",
+      "audience": "토익스피킹 입문자",
+      "keywords": [
+        "토익스피킹",
+        "입문",
+        "파트별 연습"
+      ],
+      "series": null,
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "말하기 시험"
+      ],
+      "description": "토익스피킹 시험 입문자를 위한 교재. 지문 읽기, 사진 묘사, 질문 응답, 정보 활용, 의견 말하기 파트별로 연습합니다.",
+      "cover": {
+        "src": "/textbooks/lib/toeic-speaking-beginner/cover.jpg",
+        "w": 700,
+        "h": 495
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/toeic-speaking-beginner/p1.jpg",
+          "w": 1000,
+          "h": 714
+        },
+        {
+          "src": "/textbooks/lib/toeic-speaking-beginner/p2.jpg",
+          "w": 1000,
+          "h": 714
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "toeic-speaking-pagoda",
+      "name": "토익스피킹 파고다",
+      "name_en": "토익스피킹 벼락치기 7일 완성 IM2~AL",
+      "type": "partner",
+      "publisher": "파고다북스 (PAGODA Books)",
+      "group": "exam",
+      "audience": "토익스피킹 단기 준비생",
+      "keywords": [
+        "토익스피킹",
+        "7일 완성",
+        "IM2~AL"
+      ],
+      "series": "2022 개정 시험 반영",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "말하기 시험"
+      ],
+      "description": "2022 개정 시험을 반영한 7일 완성 토익스피킹 교재. 파트별 전략, 빈출 유형, 답변 순서와 모범 답변이 실려 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/toeic-speaking-pagoda/cover.jpg",
+        "w": 509,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/toeic-speaking-pagoda/p1.jpg",
+          "w": 1000,
+          "h": 705
+        },
+        {
+          "src": "/textbooks/lib/toeic-speaking-pagoda/p2.jpg",
+          "w": 1000,
+          "h": 705
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "opic-pagoda",
+      "name": "오픽 파고다",
+      "name_en": "파고다 오픽의 신 OPIC IM2-AL (전면개정3판)",
+      "type": "partner",
+      "publisher": "파고다북스 (PAGODA Books)",
+      "group": "exam",
+      "also_groups": [],
+      "audience": "오픽 준비생",
+      "keywords": [
+        "오픽",
+        "OPIc",
+        "IM2~AL"
+      ],
+      "series": "전면개정3판",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "말하기 시험"
+      ],
+      "description": "김소라 저. 주제별 기출 질문 분석과 키워드, 답변 소재 구축, 모범 답변 순으로 학습하는 오픽 교재입니다.",
+      "cover": {
+        "src": "/textbooks/lib/opic-pagoda/cover.jpg",
+        "w": 472,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/opic-pagoda/p1.jpg",
+          "w": 670,
+          "h": 994
+        },
+        {
+          "src": "/textbooks/lib/opic-pagoda/p2.jpg",
+          "w": 670,
+          "h": 994
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "k-history",
+      "name": "K 히스토리",
+      "name_en": "Korean History Level 1",
+      "type": "unverified",
+      "publisher": null,
+      "group": "current",
+      "audience": "초중등",
+      "keywords": [
+        "한국사",
+        "영어 읽기",
+        "어휘"
+      ],
+      "series": "Level 1",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "키즈·주니어"
+      ],
+      "description": "영어로 읽는 한국사 교재. 1권은 선사시대와 단군 신화를 다루며 단어 목록, 스토리 읽기, 독해 문제, 생각 나누기로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/k-history/cover.jpg",
+        "w": 539,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/k-history/p1.jpg",
+          "w": 782,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/k-history/p2.jpg",
+          "w": 782,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "ntimes",
+      "name": "앤타임즈",
+      "name_en": "N·times",
+      "type": "self",
+      "publisher": null,
+      "group": "current",
+      "audience": "고급 학습자",
+      "keywords": [
+        "시사",
+        "토론",
+        "배경지식"
+      ],
+      "series": "Set 8",
+      "levels": [
+        "고급"
+      ],
+      "purposes": [
+        "시사·토론"
+      ],
+      "description": "사회, 경제, 문화 등 다양한 분야 기사로 어휘와 배경지식을 넓히는 고급 영어 토론 교재. 기사 본문, 이해 질문, 토론 질문으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/ntimes/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/ntimes/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/ntimes/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "ted-1",
+      "name": "테드 1",
+      "name_en": "21st Century Reading 1: Creative Thinking and Reading with TED Talks",
+      "type": "partner",
+      "publisher": "National Geographic Learning · Cengage Learning",
+      "group": "current",
+      "audience": "중급 이상",
+      "keywords": [
+        "TED",
+        "읽기",
+        "비판적 사고"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "시사·토론"
+      ],
+      "description": "TED Talks를 바탕으로 한 읽기 교재. 사전 읽기, 본문, 강연 연계 활동, 사실·의견 구분 같은 비판적 사고 문항으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/ted-1/cover.jpg",
+        "w": 547,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/ted-1/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/ted-1/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "ted-2",
+      "name": "테드 2",
+      "name_en": "21st Century Reading 2: Creative Thinking and Reading with TED Talks",
+      "type": "partner",
+      "publisher": "National Geographic Learning · Cengage Learning",
+      "group": "current",
+      "audience": "중급 이상",
+      "keywords": [
+        "TED",
+        "읽기",
+        "리더십"
+      ],
+      "series": "Book 2",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "시사·토론"
+      ],
+      "description": "TED Talks를 바탕으로 한 읽기 교재. 본문 읽기, 지시어 파악, 어휘, 강연 연계 활동, 비판적 사고 문항으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/ted-2/cover.jpg",
+        "w": 549,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/ted-2/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/ted-2/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-1",
+      "name": "이머전 1",
+      "name_en": "Jungle Phonics 1",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [],
+      "audience": "초등 입문",
+      "keywords": [
+        "파닉스",
+        "알파벳 음가",
+        "스토리"
+      ],
+      "series": "Book 1 (Single-Letter Sounds)",
+      "levels": [
+        "입문"
+      ],
+      "purposes": [
+        "키즈·주니어"
+      ],
+      "description": "E.J. Lewis 저. 알파벳 단일 글자 소리(Single-Letter Sounds)를 다루는 파닉스 교재로, 듣고 따라 말하기, 챈트, 따라 쓰기, 짧은 스토리 읽기 활동이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-1/cover.jpg",
+        "w": 529,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-1/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-1/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-2",
+      "name": "이머전 2",
+      "name_en": "Super Easy Reading 1 (Third Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [],
+      "audience": "초등 저학년",
+      "keywords": [
+        "리딩",
+        "첫 읽기",
+        "어휘"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "입문"
+      ],
+      "purposes": [
+        "키즈·주니어"
+      ],
+      "description": "짧은 이야기 읽기와 새 단어, 독해 확인, 문장 연습, 패턴 연습 활동으로 구성된 첫 리딩 교재입니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-2/cover.jpg",
+        "w": 529,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-2/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-2/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-3",
+      "name": "이머전 3",
+      "name_en": "Very Easy Reading 1 (Fourth Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "초등 저학년",
+      "keywords": [
+        "리딩",
+        "파닉스 이후",
+        "어휘"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "Casey Malarcher·Anne Taylor·Lucas Foster 저. 짧은 이야기 읽기와 새 단어, 독해 문제, 연습 활동으로 구성된 리딩 교재입니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-3/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-3/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-3/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-4",
+      "name": "이머전 4",
+      "name_en": "Real Easy Reading 1 (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "초등",
+      "keywords": [
+        "리딩",
+        "과학 주제",
+        "어휘"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "Moraig Macgillivray 저. 주제별 읽기 본문, 새 단어, 사전 활동, 읽기 후 문제, 말하기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-4/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-4/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-4/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-5",
+      "name": "이머전 5",
+      "name_en": "School Subject Readings 1 (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "초등",
+      "keywords": [
+        "교과 리딩",
+        "독해",
+        "요약"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "David V. Kimel 저. 교과 주제 읽기, 핵심 단어, 독해 문제, 분류·요약 연습으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-5/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-5/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-5/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-6",
+      "name": "이머전 6",
+      "name_en": "Reading Shelf 1",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "초등",
+      "keywords": [
+        "리딩",
+        "픽션",
+        "어휘"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "Casey Malarcher 저. 준비 질문, 새 단어, 읽기 본문, 확인 문제, 마인드맵, 어휘 복습, 요약으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-6/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-6/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-6/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-7",
+      "name": "이머전 7",
+      "name_en": "Reading Jump 1",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "초등 고학년",
+      "keywords": [
+        "리딩",
+        "주제별 읽기",
+        "쓰기"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "Casey Malarcher 저. 다양한 주제의 읽기 교재로 어휘 미리보기, 본문, 이해 확인, 요약, 쓰기 문항으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-7/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-7/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-7/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-8",
+      "name": "이머전 8",
+      "name_en": "More School Subject Readings 1 (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "초등 고학년~중등",
+      "keywords": [
+        "교과 리딩",
+        "역사·과학",
+        "요약"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "역사 등 교과 주제의 읽기 교재. 핵심 어휘, 사전 질문, 본문, 세부 이해, 서술형 답하기, 분류·요약 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-8/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-8/p1.jpg",
+          "w": 755,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-8/p2.jpg",
+          "w": 755,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "immersion-9",
+      "name": "이머전 9",
+      "name_en": "Reading Challenge 1 (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "also_groups": [
+        "mid"
+      ],
+      "audience": "중등",
+      "keywords": [
+        "리딩",
+        "관용 표현",
+        "문법"
+      ],
+      "series": "Book 1",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "키즈·주니어",
+        "중등 내신"
+      ],
+      "description": "Casey Malarcher·Andrea Janzen 저. 어휘 미리보기, 본문, 독해 문제, 관용 표현, 토론, 문법, 쓰기로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/immersion-9/cover.jpg",
+        "w": 511,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/immersion-9/p1.jpg",
+          "w": 731,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/immersion-9/p2.jpg",
+          "w": 731,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "hangout-starter",
+      "name": "행아웃 스타트",
+      "name_en": "Hang Out! Starter",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등 입문",
+      "keywords": [
+        "노래",
+        "스토리",
+        "파닉스"
+      ],
+      "series": "Starter",
+      "levels": [
+        "입문"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Scott Thompson 저. 유닛마다 노래, 말하기, 스토리, 확장 어휘, 교과 읽기, 파닉스 활동이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-starter/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-starter/p1.jpg",
+          "w": 706,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/hangout-starter/p2.jpg",
+          "w": 706,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "hangout-1",
+      "name": "행아웃 1",
+      "name_en": "Hang Out! 1",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등",
+      "keywords": [
+        "노래",
+        "스토리",
+        "파닉스"
+      ],
+      "series": "Student Book 1",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Walton Burns·Laura-Claire Corson·Jake Murray 저. 노래, 읽기, 말하기, 스토리, 교과 읽기, 파닉스·쓰기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-1/cover.jpg",
+        "w": 529,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-1/p1.jpg",
+          "w": 756,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/hangout-1/p2.jpg",
+          "w": 756,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "hangout-2",
+      "name": "행아웃 2",
+      "name_en": "Hang Out! 2",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등",
+      "keywords": [
+        "노래",
+        "스토리",
+        "파닉스"
+      ],
+      "series": "2",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Scott Thompson 저. 노래, 읽기, 말하기, 스토리, 교과 읽기, 파닉스·쓰기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-2/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-2/p1.jpg",
+          "w": 756,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/hangout-2/p2.jpg",
+          "w": 756,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "hangout-3",
+      "name": "행아웃 3",
+      "name_en": "Hang Out! 3",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등",
+      "keywords": [
+        "일과",
+        "스토리",
+        "쓰기"
+      ],
+      "series": "3",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Scott Thompson 저. 노래, 읽기, 말하기, 스토리, 교과 읽기, 쓰기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-3/cover.jpg",
+        "w": 530,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-3/p1.jpg",
+          "w": 756,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/hangout-3/p2.jpg",
+          "w": 756,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "hangout-4",
+      "name": "행아웃 4",
+      "name_en": "Hang Out! 4",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등",
+      "keywords": [
+        "생활 표현",
+        "스토리",
+        "쓰기"
+      ],
+      "series": "4",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Scott Thompson 저. 노래, 읽기, 말하기, 스토리, 문화 읽기, 쓰기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-4/cover.jpg",
+        "w": 529,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-4/p1.jpg",
+          "w": 756,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/hangout-4/p2.jpg",
+          "w": 756,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "hangout-5",
+      "name": "행아웃 5",
+      "name_en": "Hang Out! 5",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등 고학년",
+      "keywords": [
+        "요리",
+        "스토리",
+        "쓰기"
+      ],
+      "series": "5",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Scott Thompson 저. 읽기, 말하기, 스토리, 확장 어휘, 문화 읽기, 쓰기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-5/cover.jpg",
+        "w": 530,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-5/p1.jpg",
+          "w": 756,
+          "h": 1000
+        }
+      ],
+      "exclude": true,
+      "exclude_reason": "원본 표지 파일이 행아웃 4 표지와 동일(권 번호 배지 4) — 올바른 표지 확보 전까지 숨김"
+    },
+    {
+      "slug": "hangout-6",
+      "name": "행아웃 6",
+      "name_en": "Hang Out! 6",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "kids",
+      "audience": "초등 고학년",
+      "keywords": [
+        "환경",
+        "의견 쓰기",
+        "스토리"
+      ],
+      "series": "6",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Scott Thompson 저. 읽기, 말하기, 스토리, 확장 어휘, 교과 읽기, 쓰기 활동으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/hangout-6/cover.jpg",
+        "w": 530,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/hangout-6/p1.jpg",
+          "w": 756,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/hangout-6/p2.jpg",
+          "w": 756,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "talking-time",
+      "name": "토킹타임",
+      "name_en": "Talking Time",
+      "type": "partner",
+      "publisher": "Happy House (다락원)",
+      "group": "kids",
+      "audience": "초등",
+      "keywords": [
+        "주니어 회화",
+        "롤플레이",
+        "대화"
+      ],
+      "series": "1~3 (Daily Life·Special Places·School Life)",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Georgeanna Hall 저. 3권 시리즈로 유닛마다 읽고 말하기, 대화, 연습, 롤플레이, 짝 활동이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/talking-time/cover.jpg",
+        "w": 534,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/talking-time/p1.jpg",
+          "w": 763,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/talking-time/p2.jpg",
+          "w": 763,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-3",
+      "name": "토픽톡 3",
+      "name_en": "Topic Talk Level 3",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "핵심 표현",
+        "대화"
+      ],
+      "series": "Level 3",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Key Expressions, Key Words, Let's Talk 대화가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-3/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-3/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-3/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-4",
+      "name": "토픽톡 4",
+      "name_en": "Topic Talk Level 4",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "핵심 표현",
+        "대화"
+      ],
+      "series": "Level 4",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Key Expressions, Key Words, Let's Talk 대화가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-4/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-4/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-4/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-5",
+      "name": "토픽톡 5",
+      "name_en": "Topic Talk Level 5",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "핵심 질문",
+        "대화"
+      ],
+      "series": "Level 5",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Key Expressions, Let's Talk 대화, Key Questions가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-5/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-5/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-5/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-6",
+      "name": "토픽톡 6",
+      "name_en": "Topic Talk Level 6",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "핵심 질문",
+        "대화"
+      ],
+      "series": "Level 6",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Key Expressions, Let's Talk 대화, Key Questions가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-6/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-6/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-6/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-7",
+      "name": "토픽톡 7",
+      "name_en": "Topic Talk Level 7",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "핵심 질문",
+        "대화"
+      ],
+      "series": "Level 7",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Key Expressions, Key Words, Let's Talk 대화, Key Questions가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-7/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-7/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-7/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-8",
+      "name": "토픽톡 8",
+      "name_en": "Topic Talk Level 8",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "핵심 질문",
+        "대화"
+      ],
+      "series": "Level 8",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Key Expressions, Key Words, Let's Talk 대화, Key Questions가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-8/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-8/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-8/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "topic-talk-9",
+      "name": "토픽톡 9",
+      "name_en": "Topic Talk Level 9",
+      "type": "self",
+      "publisher": null,
+      "group": "kids",
+      "audience": "주니어",
+      "keywords": [
+        "주제별 회화",
+        "읽기",
+        "토론 질문"
+      ],
+      "series": "Level 9",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "일상회화",
+        "시사·토론",
+        "키즈·주니어"
+      ],
+      "description": "주제별 주니어 회화 교재. 유닛마다 Vocabulary, Preparation 읽기, Questions가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/topic-talk-9/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/topic-talk-9/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/topic-talk-9/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "talk-to-me",
+      "name": "톡투미",
+      "name_en": "Talk to Me (2nd Edition)",
+      "type": "partner",
+      "publisher": "Happy House (다락원)",
+      "group": "kids",
+      "audience": "초등",
+      "keywords": [
+        "주니어 회화",
+        "그림 말하기",
+        "게임"
+      ],
+      "series": "1~3",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "일상회화",
+        "키즈·주니어"
+      ],
+      "description": "Annette Woolley 저. 3권 시리즈로 그림 보고 말하기, Let's Talk, Speak Out, 보드게임 활동이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/talk-to-me/cover.jpg",
+        "w": 533,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/talk-to-me/p1.jpg",
+          "w": 763,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/talk-to-me/p2.jpg",
+          "w": 763,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "fun-fun-trip",
+      "name": "펀펀트립",
+      "name_en": "Fun Fun Trip",
+      "type": "self",
+      "publisher": null,
+      "group": "travel",
+      "audience": "여행 준비 성인",
+      "keywords": [
+        "여행 영어",
+        "공항·호텔",
+        "대화"
+      ],
+      "series": "Unit 1~10",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "여행"
+      ],
+      "description": "여행지에서 벌어지는 상황별 실전 여행 영어 교재. 유닛마다 어휘, 대화 A·B, 표현 확장 연습이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/fun-fun-trip/cover.jpg",
+        "w": 700,
+        "h": 525
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/fun-fun-trip/p1.jpg",
+          "w": 1000,
+          "h": 750
+        },
+        {
+          "src": "/textbooks/lib/fun-fun-trip/p2.jpg",
+          "w": 1000,
+          "h": 750
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "words-1000",
+      "name": "1000 Basic English Words",
+      "name_en": "1000 Basic English Words",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "grammar",
+      "audience": "초급 학습자",
+      "keywords": [
+        "기초 어휘",
+        "읽기",
+        "쓰기"
+      ],
+      "series": "1~4",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "문법·어휘"
+      ],
+      "description": "Kelli Ripatti·Tamara Wilburn 저. 4권 시리즈로 유닛마다 단어 목록, 연습 문제, 읽기, 쓰기 연습이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/words-1000/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/words-1000/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/words-1000/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "words-2000",
+      "name": "2000 Core English Words",
+      "name_en": "2000 Core English Words",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "grammar",
+      "audience": "초중급 학습자",
+      "keywords": [
+        "주제별 어휘",
+        "읽기",
+        "연습 문제"
+      ],
+      "series": "1~4",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "문법·어휘"
+      ],
+      "description": "Peggy Anderson·Thomas Hong 외 저. 4권 시리즈로 주제별 단어 목록, 연습 문제, 읽기 연습이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/words-2000/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/words-2000/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/words-2000/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "words-4000",
+      "name": "4000 Essential English Words",
+      "name_en": "4000 Essential English Words (Second Edition)",
+      "type": "partner",
+      "publisher": "Compass Publishing",
+      "group": "grammar",
+      "audience": "중급 학습자",
+      "keywords": [
+        "필수 어휘",
+        "읽기",
+        "독해"
+      ],
+      "series": "1~4",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "문법·어휘"
+      ],
+      "description": "Paul Nation 저. 유닛마다 단어 목록, 연습 문제, 읽기 본문, 독해 문제가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/words-4000/cover.jpg",
+        "w": 528,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/words-4000/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/words-4000/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "grammarn-1",
+      "name": "그래머앤 1",
+      "name_en": "GrammarN 1",
+      "type": "self",
+      "publisher": null,
+      "group": "grammar",
+      "audience": "기초~중급",
+      "keywords": [
+        "패턴 문법",
+        "기초 시제",
+        "토론"
+      ],
+      "series": "기초 (Basic tense)",
+      "levels": [
+        "초급",
+        "중급"
+      ],
+      "purposes": [
+        "문법·어휘"
+      ],
+      "description": "필수 기초 문법부터 고급 단계까지 패턴 표현으로 익히는 문법 교재. Key Pattern, Pattern Extension, Grammar Patterns, Pattern in Use, Topic Discussion으로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/grammarn-1/cover.jpg",
+        "w": 484,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/grammarn-1/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/grammarn-1/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "grammarn-2",
+      "name": "그래머앤 2",
+      "name_en": "GrammarN 2",
+      "type": "self",
+      "publisher": null,
+      "group": "grammar",
+      "audience": "중급",
+      "keywords": [
+        "패턴 문법",
+        "진행 시제",
+        "토론"
+      ],
+      "series": "중급 (Intermediate tense)",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "문법·어휘"
+      ],
+      "description": "필수 기초 문법부터 고급 단계까지 패턴 표현으로 익히는 문법 교재. 진행 시제 등 중급 유닛이 실려 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/grammarn-2/cover.jpg",
+        "w": 484,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/grammarn-2/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/grammarn-2/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "grammarn-3",
+      "name": "그래머앤 3",
+      "name_en": "GrammarN 3",
+      "type": "self",
+      "publisher": null,
+      "group": "grammar",
+      "audience": "중고급",
+      "keywords": [
+        "패턴 문법",
+        "조동사 완료",
+        "토론"
+      ],
+      "series": "고급 (Advanced tense)",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "문법·어휘"
+      ],
+      "description": "필수 기초 문법부터 고급 단계까지 패턴 표현으로 익히는 문법 교재. 조동사+have p.p. 등 고급 유닛이 실려 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/grammarn-3/cover.jpg",
+        "w": 484,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/grammarn-3/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/grammarn-3/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "grammar-points",
+      "name": "그래머 포인트",
+      "name_en": "Grammar Points",
+      "type": "unverified",
+      "publisher": null,
+      "group": "grammar",
+      "audience": "초등·기초",
+      "keywords": [
+        "기초 문법",
+        "그림 예문",
+        "연습 문제"
+      ],
+      "series": "8 Units",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "문법·어휘",
+        "키즈·주니어"
+      ],
+      "description": "꼭 알아야 할 필수 기초 문법을 그림과 예시 문장으로 익히는 8유닛 교재. 규칙 정리, 고르기, 어순 배열, 문장 완성 연습이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/grammar-points/cover.jpg",
+        "w": 525,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/grammar-points/p1.jpg",
+          "w": 750,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/grammar-points/p2.jpg",
+          "w": 750,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "debate-pro-junior",
+      "name": "디베이트프로 주니어",
+      "name_en": "Debate Pro Junior",
+      "type": "partner",
+      "publisher": "다락원 (DARAKWON)",
+      "group": "writing",
+      "audience": "초등 고학년",
+      "keywords": [
+        "토론 입문",
+        "논리적 사고",
+        "주장 만들기"
+      ],
+      "series": "Book 1~4",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "시사·토론",
+        "쓰기",
+        "키즈·주니어"
+      ],
+      "description": "Jonathan S. McClelland 저. 기초 토론과 논리적 사고를 다루며 주제 읽기, 주장 세우기, 근거 정리, 내 주장 쓰기 활동이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/debate-pro-junior/cover.jpg",
+        "w": 525,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/debate-pro-junior/p1.jpg",
+          "w": 749,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/debate-pro-junior/p2.jpg",
+          "w": 749,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "debate-pro",
+      "name": "디베이트프로",
+      "name_en": "Debate Pro",
+      "type": "partner",
+      "publisher": "다락원 (DARAKWON)",
+      "group": "writing",
+      "audience": "중등 이상",
+      "keywords": [
+        "토론",
+        "비판적 사고",
+        "발의안"
+      ],
+      "series": "Book 1~8",
+      "levels": [
+        "중급",
+        "고급"
+      ],
+      "purposes": [
+        "시사·토론",
+        "쓰기"
+      ],
+      "description": "Jonathan S. McClelland 저. 권마다 10개 토론 주제와 5가지 토론 기술을 다루며 주제 읽기, 토론 질문, 토론 기술, 찬반 토론 준비로 구성됩니다.",
+      "cover": {
+        "src": "/textbooks/lib/debate-pro/cover.jpg",
+        "w": 525,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/debate-pro/p1.jpg",
+          "w": 749,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/debate-pro/p2.jpg",
+          "w": 749,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "write-right",
+      "name": "롸이트롸이트",
+      "name_en": "Write Right",
+      "type": "partner",
+      "publisher": "NE능률 (NE_Build & Grow)",
+      "group": "writing",
+      "audience": "초등",
+      "keywords": [
+        "영작",
+        "단락 쓰기",
+        "글쓰기 과정"
+      ],
+      "series": "1~3",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "쓰기",
+        "키즈·주니어"
+      ],
+      "description": "3권 시리즈 쓰기 교재. 유닛마다 워밍업, 모델 글, 쓰기 기초·연습, 구성하기, 초안 쓰기가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/write-right/cover.jpg",
+        "w": 539,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/write-right/p1.jpg",
+          "w": 785,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/write-right/p2.jpg",
+          "w": 785,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "write-it-essay",
+      "name": "롸이트잇 에세이",
+      "name_en": "Write It! Paragraph to Essay",
+      "type": "partner",
+      "publisher": "NE능률 (NE_Build & Grow)",
+      "group": "writing",
+      "audience": "중등",
+      "keywords": [
+        "에세이",
+        "글 구조",
+        "그래픽 오거나이저"
+      ],
+      "series": "1~3",
+      "levels": [
+        "중급"
+      ],
+      "purposes": [
+        "쓰기",
+        "키즈·주니어"
+      ],
+      "description": "단락에서 에세이로 넘어가는 쓰기 교재. 글 구성 패턴 설명, 그래픽 오거나이저, 단계별 쓰기 과제가 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/write-it-essay/cover.jpg",
+        "w": 521,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/write-it-essay/p1.jpg",
+          "w": 785,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/write-it-essay/p2.jpg",
+          "w": 785,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    },
+    {
+      "slug": "write-it-beginner",
+      "name": "롸이트잇 비기너",
+      "name_en": "Write It! Beginner",
+      "type": "partner",
+      "publisher": "NE능률 (NE_Build & Grow)",
+      "group": "writing",
+      "audience": "초등",
+      "keywords": [
+        "쓰기 입문",
+        "모델 글",
+        "단계별 쓰기"
+      ],
+      "series": "1~3",
+      "levels": [
+        "초급"
+      ],
+      "purposes": [
+        "쓰기",
+        "키즈·주니어"
+      ],
+      "description": "단계별 가이드 쓰기 교재. 유닛마다 준비 활동, 모델 글, 아이디어 정리, 초안 쓰기와 점검이 있습니다.",
+      "cover": {
+        "src": "/textbooks/lib/write-it-beginner/cover.jpg",
+        "w": 530,
+        "h": 700
+      },
+      "pages": [
+        {
+          "src": "/textbooks/lib/write-it-beginner/p1.jpg",
+          "w": 785,
+          "h": 1000
+        },
+        {
+          "src": "/textbooks/lib/write-it-beginner/p2.jpg",
+          "w": 785,
+          "h": 1000
+        }
+      ],
+      "exclude": false
+    }
+  ]
+}

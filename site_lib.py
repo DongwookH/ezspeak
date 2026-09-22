@@ -70,6 +70,9 @@ DATA_DIR = os.path.join(ROOT_DIR, "api", "_data")
 DEFAULT_INPUT = os.path.join(DATA_DIR, "regions.json")
 POOLS_PATH = os.path.join(DATA_DIR, "seo_pools.json")
 SLUGS_PATH = os.path.join(DATA_DIR, "slugs.json")
+# 칼럼(가이드) 목록 — 다른 빌드 단계가 만든다. 없어도 사이트맵은 정상 동작해야 한다.
+GUIDES_PATH = os.path.join(DATA_DIR, "guides.json")
+GUIDE_PREFIX = "/guide"
 
 # 지역 페이지 URL 프리픽스 (/region/{slug}) 와 허브 경로 (/region)
 REGION_PREFIX = "/region"
@@ -442,6 +445,10 @@ class Pools:
         self.faq = data["faq"]
         self.local_intros = data["local_intros"]
         self.body_blocks = data["body_blocks"]
+        # 대상별(페르소나) 블록 — 풀이 없으면 해당 섹션을 그냥 렌더하지 않는다.
+        self.audience = data.get("audience_blocks") or {}
+        # 자체 제작 교재 블록 도입 문구 — 비어 있으면 도입 문장 없이 블록만 렌더.
+        self.textbook_leads = data.get("textbook_leads") or []
 
 
 def load_pools(path):
@@ -490,6 +497,41 @@ def body_blocks_for(pools, ctx):
         b = pools.body_blocks[i]
         out.append({"title": fmt(b["title"], ctx), "text": fmt(b["text"], ctx)})
     return out
+
+
+def audience_blocks_for(pools, ctx):
+    """대상별(유아·초등 / 중등 / 성인·직장인) 블록.
+
+    풀의 그룹 순서(= JSON 기재 순서)를 그대로 쓴다 — 연령 순이라 섞지 않는다.
+    소제목·본문은 각각 다른 salt 로 뽑아 조합 수를 늘린다."""
+    out = []
+    for group, g in pools.audience.items():
+        heads, texts = (g or {}).get("headings"), (g or {}).get("texts")
+        if not heads or not texts:
+            continue
+        out.append({
+            "heading": fmt(pick(heads, ctx["keyword"], "aud_h_" + group), ctx),
+            "text": fmt(pick(texts, ctx["keyword"], "aud_t_" + group), ctx),
+        })
+    return out
+
+
+def textbook_lead_for(pools, ctx):
+    if not pools.textbook_leads:
+        return ""
+    return fmt(pick(pools.textbook_leads, ctx["keyword"], "textbook_lead"), ctx)
+
+
+# 이지스피크 자체 제작 교재 (지역 페이지용 — 시판 교재는 넣지 않는다)
+# (교재명, 표지 경로, alt 중간 문구, 대상 한 줄)
+OWN_TEXTBOOKS = [
+    ("아이캔톡", "/textbooks/icantalk-cover.jpg", "왕초보 영어회화",
+     "왕초보 기초 회화 입문 · Unit 1~20, 영어 문장 아래 한글 발음 표기"),
+    ("앤타임즈", "/textbooks/ntimes-cover.jpg", "영어 토론",
+     "사회·경제·문화 기사로 어휘와 배경지식을 넓히는 고급 영어 토론"),
+    ("그래머앤", "/textbooks/grammarn-cover.jpg", "영어 문법",
+     "기초~고급 문법을 패턴 표현으로 익히고 토픽 토론까지"),
+]
 
 
 # ---- 기존 인트로/CTA 변형 (loc 활용, seo_spec.md 6절 "기존 유지") -------------
@@ -681,6 +723,23 @@ REGION_INLINE_CSS = """    <style>
         .rg-blocks .card__title { font-size: 17px; }
         .rg-blocks .card__text { color: var(--ink-2); font-size: 14.5px; line-height: 1.7; }
 
+        /* 대상별(연령대별) 블록 */
+        .rg-aud { margin-top: 24px; display: grid; gap: 16px; max-width: 74ch; }
+        .rg-aud-item { border-left: 2px solid var(--line-2); padding-left: 18px; }
+        .rg-aud-item h3 { font-size: 17px; font-weight: 700; color: var(--ink); word-break: keep-all; }
+        .rg-aud-item p { margin-top: 9px; color: var(--ink-2); font-size: 15px; line-height: 1.78; word-break: keep-all; }
+
+        /* 자체 제작 교재 — 표지 비율이 제각각이라 고정 박스 + contain */
+        .rg-books { margin-top: 22px; padding: 0; list-style: none; display: grid; gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+        .rg-book { display: flex; gap: 14px; align-items: center; background: #fff;
+            border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px; }
+        .rg-book img { flex: 0 0 96px; width: 96px; height: 96px; object-fit: contain;
+            background: var(--line-2); border-radius: var(--r-sm); }
+        .rg-book strong { display: block; color: var(--ink); font-size: 16px; }
+        .rg-book span { display: block; margin-top: 4px; color: var(--ink-2); font-size: 13.5px;
+            line-height: 1.6; word-break: keep-all; }
+
         .rg-faq { margin-top: 22px; display: grid; gap: 10px; }
         .rg-faq details { background: #fff; border: 1px solid var(--line);
             border-radius: var(--r-md); overflow: hidden; }
@@ -848,6 +907,8 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     local_intro = local_intro_for(pools, kw, ctx)
     curlead = curriculum_lead(ctx)
     blocks = body_blocks_for(pools, ctx)
+    audiences = audience_blocks_for(pools, ctx)
+    book_lead = textbook_lead_for(pools, ctx)
     faqs = faq_for(pools, ctx, count=5)
     cta = cta_copy(ctx)
 
@@ -899,6 +960,46 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                     </div>
                 </div>""")
     blocks_html = "\n".join(blocks_html)
+
+    # ---- 대상별 블록 (롱테일: "{지역} 초등/중학생/직장인 영어회화") ----
+    audience_section = ""
+    if audiences:
+        aud_items = "\n".join(f"""                    <div class="rg-aud-item">
+                        <h3>{esc(a['heading'])}</h3>
+                        <p>{esc(a['text'])}</p>
+                    </div>""" for a in audiences)
+        audience_section = f"""
+        <section class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">대상별 안내</span>
+                    <h2 class="section-title">{esc(keyword)} 영어회화<br>대상별로 보기</h2>
+                    <p class="section-sub">{esc(josa(keyword + "은(는)"))} 유아·초등부터 중학생, 성인·직장인까지 같은 온라인 1:1 방식으로 수강합니다. 연령대별로 자주 묻는 점을 정리했습니다.</p>
+                </div>
+                <div class="rg-aud">
+{aud_items}
+                </div>
+            </div>
+        </section>"""
+
+    # ---- 자체 제작 교재 ----
+    book_items = "\n".join(f"""                    <li class="rg-book">
+                        <img src="{src}" alt="{esc("%s %s 자체 제작 교재 %s" % (keyword, alt_mid, name))}" width="96" height="96" loading="lazy" decoding="async">
+                        <div><strong>{esc(name)}</strong><span>{esc(desc)}</span></div>
+                    </li>""" for name, src, alt_mid, desc in OWN_TEXTBOOKS)
+    book_lead_html = f'\n                    <p class="section-sub">{esc(book_lead)}</p>' if book_lead else ""
+    textbook_section = f"""
+        <section class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">교재 소개</span>
+                    <h2 class="section-title">이지스피크 자체 제작 교재</h2>{book_lead_html}
+                </div>
+                <ul class="rg-books">
+{book_items}
+                </ul>
+            </div>
+        </section>"""
 
     # ---- FAQ ----
     faq_html = []
@@ -1047,6 +1148,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 </div>
             </div>
         </section>
+{textbook_section}
 
         <section class="section">
             <div class="container">
@@ -1060,6 +1162,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 </div>
             </div>
         </section>
+{audience_section}
 
         <section class="rg-inline-cta">
             <div class="container">
@@ -1343,9 +1446,33 @@ def render_hub_page(sido_list, sido_counts, total):
 # sitemap.xml / robots.txt
 # ---------------------------------------------------------------------------
 
+def guide_slugs():
+    """api/_data/guides.json 의 칼럼 슬러그 목록.
+
+    파일이 없거나 비어 있거나 형식이 깨져도 예외 없이 빈 리스트를 돌려준다
+    (칼럼 빌드가 늦어도 사이트맵은 나가야 한다)."""
+    try:
+        with open(GUIDES_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return []
+    items = data.get("guides") if isinstance(data, dict) else data
+    out = []
+    for g in items or []:
+        slug = g.get("slug") if isinstance(g, dict) else g
+        slug = (slug or "").strip().strip("/") if isinstance(slug, str) else ""
+        if slug and slug not in out:
+            out.append(slug)
+    return out
+
+
 def render_sitemap(keywords):
-    """메인 + 허브 + 전체 지역 페이지. keywords 는 {"keyword": ...} dict 또는 문자열 모두 허용."""
-    urls = [BASE_URL + "/", HUB_CANONICAL]
+    """메인 + 허브 + 전체 지역 페이지 (+ 칼럼 목록·상세). keywords 는 {"keyword": ...} dict 또는 문자열 모두 허용."""
+    urls = [BASE_URL + "/", HUB_CANONICAL, BASE_URL + "/textbooks"]  # 교재 페이지는 데이터 유무와 무관하게 항상 존재
+    guides = guide_slugs()
+    if guides:
+        urls.append(BASE_URL + GUIDE_PREFIX)
+        urls.extend(BASE_URL + GUIDE_PREFIX + "/" + quote(s) for s in guides)
     for kw in keywords:
         urls.append(canonical_of(kw["keyword"] if isinstance(kw, dict) else kw))
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
@@ -1678,5 +1805,24 @@ if __name__ == "__main__":
     assert contact_href("sillim-dong") == "/?from=sillim-dong#contact" and contact_href() == "/#contact"
     assert "100%%" not in render_rss(s)
     assert s.hub_page().count("<dt>") >= 8
+    # 대상별 블록: 3개 모두 렌더되고, 지역명이 소제목에 들어간다
+    for name in ("신림동", "금정구", "서울특별시"):
+        page = s.region_page(name)
+        assert page.count('class="rg-aud-item"') == 3, name
+        assert page.count("<h3>" + name) == 3, name
+    # 페이지마다 다른 조합이 나오는지 (샘플 300개에서 20종 이상)
+    combos = {tuple(a["heading"] + "|" + a["text"] for a in
+                    audience_blocks_for(s.pools, build_ctx(kw)))
+              for kw in s.all_pages[:300]}
+    assert len(combos) >= 20, "대상별 블록 조합이 너무 적다: %d" % len(combos)
+    # 자체 제작 교재 블록: 전 페이지 이미지 3개, alt 에 지역명, 도입 문구 변형 2종 이상
+    for name in ("신림동", "금정구", "서울특별시"):
+        page = s.region_page(name)
+        assert page.count('class="rg-book"') == 3 and page.count('alt="%s ' % name) == 3, name
+    assert len({textbook_lead_for(s.pools, build_ctx(kw)) for kw in s.all_pages[:100]}) >= 2
+    # 사이트맵: guides.json 이 없어도 예외 없이, 있으면 /guide 와 /guide/{slug} 포함
+    sm = render_sitemap(s.all_pages[:3])
+    assert sm.startswith("<?xml") and ("<loc>%s/guide</loc>" % BASE_URL in sm) == bool(guide_slugs())
+    assert "<loc>%s/textbooks</loc>" % BASE_URL in sm
     print("site_lib self-check OK (%d pages, %d overrides)"
           % (len(s.all_pages), len(REPRESENTATIVE_OVERRIDES)))

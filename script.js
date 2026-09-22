@@ -7,6 +7,8 @@
    - phone auto-format
    - consult form submit -> Google Apps Script
    - Reviews carousel (responsive, dots, arrows, autoplay)
+   - Textbook sliders (교재 1종 = 1장, 자동 넘김·점·스와이프·키보드)
+   - Textbook image stage (표지·속지를 한 장씩 크게, 교재 슬라이더 안)
    ========================================================================== */
 (function () {
   'use strict';
@@ -85,7 +87,10 @@
   /* 유입 페이지: ?from={slug} → region/{slug}, 없으면 referrer, 없으면 direct */
   function resolveSourcePage(search, referrer, origin) {
     const from = new URLSearchParams(search).get('from');
-    if (from && /^[a-z0-9-]{1,80}$/.test(from)) return from === 'region' ? 'region' : 'region/' + from;
+    if (from && /^[a-z0-9-]{1,80}$/.test(from)) {
+      /* 지역 허브·칼럼·교재 페이지는 그대로, 나머지는 지역 슬러그 */
+      return ['region', 'guide', 'textbooks'].includes(from) ? from : 'region/' + from;
+    }
     if (referrer) {
       try {
         const u = new URL(referrer);
@@ -236,4 +241,224 @@
       }, 150);
     });
   }
+
+  /* ---- Textbook sliders (교재 슬라이더 A/B) --------------------------------
+     후기 캐러셀과 같은 transform 방식. 슬라이드가 100% 폭이라 translateX(-n*100%)
+     만으로 위치가 정해져 resize 처리 불필요. hover/focus/정지 버튼 시 멈춤,
+     reduced-motion 이면 자동 넘김 없음 */
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 교재 이미지 스테이지: 표지 → 속지 1 → 속지 2 를 한 장씩 크게.
+     교재 페이지(api/textbooks.py 인라인 JS)와 같은 클래스·동작. 스테이지 안의 키·스와이프는
+     여기서 멈춰(stopPropagation) 바깥 교재 슬라이더로 가지 않는다. onUser: 사용자가 넘겼을 때 */
+  function initStage(root, onUser) {
+    const track = root.querySelector('.stage-track');
+    const items = Array.from(root.querySelectorAll('.stage-item'));
+    const tabs = Array.from(root.querySelectorAll('.stage-tabs button'));
+    const count = root.querySelector('.stage-count');
+    const n = items.length;
+    let i = 0;
+    const eager = (k) => { const img = items[k] && items[k].querySelector('img'); if (img) img.loading = 'eager'; };
+
+    function go(k, user) {
+      i = (k + n) % n;
+      track.style.transform = `translateX(-${i * 100}%)`;
+      items.forEach((it, j) => { it.inert = j !== i; });
+      tabs.forEach((t, j) => t.setAttribute('aria-current', String(j === i)));
+      if (count) count.textContent = `${i + 1} / ${n}`;
+      if (user) { eager(i); eager((i + 1) % n); if (onUser) onUser(); }
+    }
+
+    root.querySelector('.stage-prev').addEventListener('click', () => go(i - 1, true));
+    root.querySelector('.stage-next').addEventListener('click', () => go(i + 1, true));
+    tabs.forEach((t, j) => t.addEventListener('click', () => go(j, true)));
+    root.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      e.stopPropagation();
+      go(i + (e.key === 'ArrowRight' ? 1 : -1), true);
+    });
+    const view = root.querySelector('.stage-view');
+    let x0 = null, y0 = 0;
+    view.addEventListener('touchstart', (e) => { e.stopPropagation(); x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    view.addEventListener('touchend', (e) => {
+      e.stopPropagation();
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      const dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(i + (dx < 0 ? 1 : -1), true);
+    }, { passive: true });
+
+    go(0, false);
+    /* 전환 애니메이션 없이 즉시 표지로 (들어오는 교재가 화면 밖에 있을 때 호출) */
+    function reset() {
+      if (i === 0) return;
+      track.style.transition = 'none';
+      go(0, false);
+      void track.offsetWidth;
+      track.style.transition = '';
+    }
+    return { reset, eager };
+  }
+
+  /* 필터 값 표시 순서(데이터: api/_data/textbooks.json 의 levels / purposes) */
+  const BOOK_FILTERS = [
+    ['levels', '레벨', ['입문', '초급', '중급', '고급']],
+    ['purposes', '목적', ['일상회화', '비즈니스', '여행', '유학·어학연수', '시사·토론', '문법·어휘', '쓰기', '말하기 시험', '키즈·주니어', '중등 내신']],
+  ];
+
+  function initBookSlider(root) {
+    const viewport = root.querySelector('.bs-viewport');
+    const track = root.querySelector('.bs-track');
+    const slides = Array.from(root.querySelectorAll('.bs-slide'));
+    const dotsBox = root.querySelector('.bs-dots');
+    const controls = root.querySelector('.bs-controls');
+    const pauseBtn = root.querySelector('.bs-pause');
+    if (!track || !slides.length) return;
+
+    /* 슬라이드마다 레벨·목적(시리즈 전 권 합집합)과 이름 */
+    const meta = slides.map((s) => ({
+      levels: (s.dataset.levels || '').split(',').filter(Boolean),
+      purposes: (s.dataset.purposes || '').split(',').filter(Boolean),
+      name: (s.getAttribute('aria-label') || '').replace(/^[^:]*:\s*/, ''),
+    }));
+    const picked = { levels: '', purposes: '' };
+    let active = slides.map((_, i) => i);  // 필터에 맞는 슬라이드 번호
+    let index = 0;                          // active 안에서의 위치
+    let dots = [];
+    let timer = null;
+    let hovering = false;
+    let focused = false;
+    let userPaused = reduceMotion;
+    /* 이미지를 넘기면 보고 있는 중이므로 교재 자동 넘김은 정지 상태로 */
+    const stages = slides.map((s) => {
+      const st = s.querySelector('.stage');
+      return st ? initStage(st, () => { if (!userPaused) { userPaused = true; sync(); } }) : null;
+    });
+
+    /* ---- 필터 바(JS 가 있을 때만 생김 — 없으면 전체 슬라이드 그대로) ---- */
+    const bar = document.createElement('div');
+    bar.className = 'bs-filter';
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', (root.getAttribute('aria-label') || '교재') + ' 골라 보기');
+    const groups = BOOK_FILTERS.map(([key, label, order]) => {
+      const values = order.filter((v) => meta.some((m) => m[key].includes(v)));
+      const row = document.createElement('div');
+      row.className = 'bs-frow';
+      const cap = document.createElement('span');
+      cap.className = 'bs-flabel';
+      cap.textContent = label;
+      const opts = document.createElement('div');
+      opts.className = 'bs-fopts';
+      const btns = [''].concat(values).map((v) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = v || '전체';
+        b.setAttribute('aria-pressed', String(v === ''));
+        b.addEventListener('click', () => { picked[key] = v; applyFilter(); });
+        opts.appendChild(b);
+        return [v, b];
+      });
+      row.append(cap, opts);
+      bar.appendChild(row);
+      return [key, btns];
+    });
+    root.before(bar);
+
+    const empty = document.createElement('div');
+    empty.className = 'bs-empty';
+    empty.hidden = true;
+    empty.innerHTML = '<p>조건에 맞는 교재가 없습니다.</p><button type="button">필터 초기화</button>';
+    empty.querySelector('button').addEventListener('click', () => {
+      picked.levels = picked.purposes = '';
+      applyFilter();
+    });
+    viewport.after(empty);
+
+    function applyFilter() {
+      groups.forEach(([key, btns]) => btns.forEach(([v, b]) => b.setAttribute('aria-pressed', String(picked[key] === v))));
+      active = slides.map((_, i) => i).filter((i) =>
+        (!picked.levels || meta[i].levels.includes(picked.levels)) &&
+        (!picked.purposes || meta[i].purposes.includes(picked.purposes)));
+      slides.forEach((s, i) => { s.hidden = !active.includes(i); });
+      const none = !active.length;
+      empty.hidden = !none;
+      viewport.hidden = none;
+      if (controls) controls.hidden = none;
+      dotsBox.textContent = '';
+      dots = active.map((_, p) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', `${p + 1}번째 교재 보기`);
+        b.addEventListener('click', () => goTo(p));
+        dotsBox.appendChild(b);
+        return b;
+      });
+      track.style.transition = 'none';  // 필터 전환은 애니메이션 없이 첫 교재로
+      goTo(0);
+      void track.offsetWidth;
+      track.style.transition = '';
+      sync();
+    }
+
+    function goTo(p) {
+      const n = active.length;
+      if (!n) return;
+      index = (p + n) % n;
+      const cur = active[index];
+      const next = active[(index + 1) % n];
+      track.style.transform = `translateX(-${index * 100}%)`;  // 숨긴 슬라이드는 자리를 차지하지 않는다
+      slides.forEach((s, k) => {
+        const on = k === cur;
+        s.inert = !on;
+        s.setAttribute('aria-hidden', String(!on));
+        const pos = active.indexOf(k);
+        if (pos >= 0) s.setAttribute('aria-label', `${pos + 1} / ${n}: ${meta[k].name}`);
+        const st = stages[k];
+        if (!st) return;
+        /* 들어오는 교재는 표지(1/3)부터. 현재 교재는 표지·속지 1, 다음 교재는 표지만 미리 받기 */
+        if (on) { st.reset(); st.eager(0); st.eager(1); } else if (k === next) st.eager(0);
+      });
+      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === index)));
+    }
+
+    function sync() {
+      clearInterval(timer);
+      const running = !userPaused && !hovering && !focused && active.length > 1;
+      if (running) timer = setInterval(() => goTo(index + 1), 5000);
+      viewport.setAttribute('aria-live', running ? 'off' : 'polite');
+      if (pauseBtn) {
+        pauseBtn.textContent = userPaused ? '재생' : '정지';
+        pauseBtn.setAttribute('aria-label', userPaused ? '자동 넘김 재생' : '자동 넘김 정지');
+      }
+    }
+
+    root.querySelector('.bs-prev').addEventListener('click', () => { goTo(index - 1); sync(); });
+    root.querySelector('.bs-next').addEventListener('click', () => { goTo(index + 1); sync(); });
+    if (pauseBtn) pauseBtn.addEventListener('click', () => { userPaused = !userPaused; sync(); });
+
+    root.addEventListener('mouseenter', () => { hovering = true; sync(); });
+    root.addEventListener('mouseleave', () => { hovering = false; sync(); });
+    root.addEventListener('focusin', () => { focused = true; sync(); });
+    root.addEventListener('focusout', (e) => { if (!root.contains(e.relatedTarget)) { focused = false; sync(); } });
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(index - 1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); goTo(index + 1); }
+    });
+
+    let x0 = null, y0 = 0;
+    viewport.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    viewport.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      const dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { goTo(index + (dx < 0 ? 1 : -1)); sync(); }
+    }, { passive: true });
+
+    applyFilter();
+  }
+
+  document.querySelectorAll('.book-slider').forEach(initBookSlider);
 })();
