@@ -39,7 +39,7 @@ from urllib.parse import quote
 #   ⚠️ 서버리스에서 date.today() 를 쓰면 내용이 그대로인데도 매일 lastmod 가 바뀌어
 #      검색엔진에 거짓 신선도 신호를 보내게 된다. 콘텐츠를 실제로 손볼 때만 이 값을 올린다.
 #      (배포 환경변수 EZ_BUILD_DATE=YYYY-MM-DD 로도 덮어쓸 수 있다.)
-CONTENT_DATE = "2026-09-11"
+CONTENT_DATE = "2026-09-24"
 BUILD_DATE = datetime.date.fromisoformat(os.environ.get("EZ_BUILD_DATE") or CONTENT_DATE)
 BUILD_DATE_ISO = BUILD_DATE.isoformat()          # 예: 2026-08-14
 BUILD_DATE_DOT = BUILD_DATE.strftime("%Y.%m.%d")  # 예: 2026.08.14
@@ -72,6 +72,8 @@ POOLS_PATH = os.path.join(DATA_DIR, "seo_pools.json")
 SLUGS_PATH = os.path.join(DATA_DIR, "slugs.json")
 # 칼럼(가이드) 목록 — 다른 빌드 단계가 만든다. 없어도 사이트맵은 정상 동작해야 한다.
 GUIDES_PATH = os.path.join(DATA_DIR, "guides.json")
+# 교재 데이터 (api/textbooks.py 와 공용). 없어도 지역 페이지는 교재 섹션만 빼고 렌더한다.
+TEXTBOOKS_PATH = os.path.join(DATA_DIR, "textbooks.json")
 GUIDE_PREFIX = "/guide"
 
 # 지역 페이지 URL 프리픽스 (/region/{slug}) 와 허브 경로 (/region)
@@ -447,8 +449,8 @@ class Pools:
         self.body_blocks = data["body_blocks"]
         # 대상별(페르소나) 블록 — 풀이 없으면 해당 섹션을 그냥 렌더하지 않는다.
         self.audience = data.get("audience_blocks") or {}
-        # 자체 제작 교재 블록 도입 문구 — 비어 있으면 도입 문장 없이 블록만 렌더.
-        self.textbook_leads = data.get("textbook_leads") or []
+        # 자체 제작 교재 섹션 문구 — 제목 인덱스("0".."6") 별 {heading, lead} 변형.
+        self.textbook_leads = data.get("textbook_leads") or {}
 
 
 def load_pools(path):
@@ -456,8 +458,13 @@ def load_pools(path):
         return Pools(json.load(f))
 
 
+def title_index_for(pools, ctx):
+    """선택된 제목의 인덱스. 교재 연결이 제목과 항상 일치하도록 같은 해시를 공유한다."""
+    return kw_hash(ctx["keyword"], "title") % len(pools.titles)
+
+
 def title_for(pools, ctx):
-    return fmt(pick(pools.titles, ctx["keyword"], "title"), ctx)
+    return fmt(pools.titles[title_index_for(pools, ctx)], ctx)
 
 
 def meta_for(pools, ctx):
@@ -516,22 +523,183 @@ def audience_blocks_for(pools, ctx):
     return out
 
 
-def textbook_lead_for(pools, ctx):
-    if not pools.textbook_leads:
-        return ""
-    return fmt(pick(pools.textbook_leads, ctx["keyword"], "textbook_lead"), ctx)
-
-
-# 이지스피크 자체 제작 교재 (지역 페이지용 — 시판 교재는 넣지 않는다)
-# (교재명, 표지 경로, alt 중간 문구, 대상 한 줄)
-OWN_TEXTBOOKS = [
-    ("아이캔톡", "/textbooks/icantalk-cover.jpg", "왕초보 영어회화",
-     "왕초보 기초 회화 입문 · Unit 1~20, 영어 문장 아래 한글 발음 표기"),
-    ("앤타임즈", "/textbooks/ntimes-cover.jpg", "영어 토론",
-     "사회·경제·문화 기사로 어휘와 배경지식을 넓히는 고급 영어 토론"),
-    ("그래머앤", "/textbooks/grammarn-cover.jpg", "영어 문법",
-     "기초~고급 문법을 패턴 표현으로 익히고 토픽 토론까지"),
+# 제목 인덱스 -> 그 고민에 맞는 자체 제작 교재 후보 (seo_pools.json 의 titles 순서와 1:1).
+#   제목이 겨냥한 고민 ↔ 노출 교재가 항상 같은 묶음이 되도록 제목 해시를 그대로 쓴다.
+#   주석의 과정명은 후보를 고른 기준이고, 화면에 쓰는 과정명은 textbooks.json 의 group 이름이다.
+TITLE_BOOKS = [
+    ["icantalk", "regular-1-2", "regular-2", "momentum-a"],                    # 0 왕초보 스피킹
+    ["nlife-1", "nlife-2", "nlife-3", "regular-5", "regular-6", "regular-7"],  # 1 중급 정체
+    ["regular-3", "regular-4", "nlife-1", "nlife-2"],                          # 2 시간·이동
+    ["icantalk", "regular-1-2", "regular-2", "momentum-a"],                    # 3 입문 부담
+    ["regular-2", "regular-3", "regular-4", "regular-5"],                      # 4 지속·관리
+    ["grammarn-1", "grammarn-2", "grammarn-3", "nlife-2"],                     # 5 문법 -> 발화
+    ["regular-1-2", "regular-4", "regular-7", "nlife-1"],                      # 6 레벨 진단
 ]
+
+# 페이지당 노출 교재 수 (후보가 이보다 적으면 있는 만큼).
+BOOKS_PER_PAGE = 4
+
+_TEXTBOOKS = None
+_BOOK_GROUPS = None
+
+
+def _load_textbooks():
+    """api/_data/textbooks.json -> (slug별 교재, group id별 이름). 파일이 없거나 깨져도 예외 없이 비어 있는 값."""
+    global _TEXTBOOKS, _BOOK_GROUPS
+    if _TEXTBOOKS is None:
+        try:
+            with open(TEXTBOOKS_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            _TEXTBOOKS = {b["slug"]: b for b in (data.get("books") or [])
+                          if isinstance(b, dict) and b.get("slug")}
+            _BOOK_GROUPS = {g["id"]: g["name"] for g in (data.get("groups") or [])
+                            if isinstance(g, dict) and g.get("id")}
+        except (OSError, ValueError, AttributeError, KeyError):
+            _TEXTBOOKS, _BOOK_GROUPS = {}, {}
+    return _TEXTBOOKS, _BOOK_GROUPS
+
+
+def textbooks_by_slug():
+    return _load_textbooks()[0]
+
+
+def book_course(b):
+    """교재가 속한 과정 이름 (textbooks.json 의 groups). 없으면 빈 문자열."""
+    return _load_textbooks()[1].get(b.get("group"), "")
+
+
+def textbooks_for(pools, ctx, count=BOOKS_PER_PAGE):
+    """제목 인덱스에 맞는 자체 제작 교재 묶음 -> (제목 인덱스, [교재, ...]).
+    첫 권은 그 제목의 대표 교재, 나머지 순서도 지역 해시로 정해 지역마다 구성이 달라진다.
+    데이터가 없으면 None (섹션 통째 생략)."""
+    i = title_index_for(pools, ctx)
+    if i >= len(TITLE_BOOKS):
+        return None
+    books = textbooks_by_slug()
+    cands = [sl for sl in TITLE_BOOKS[i] if sl in books]
+    if not cands:
+        return None
+    keyword = ctx["keyword"]
+    lead = pick(cands, keyword, "regionbook")
+    rest = sorted((sl for sl in cands if sl != lead),
+                  key=lambda sl: kw_hash(keyword, "bookorder|" + sl))
+    return i, [books[sl] for sl in ([lead] + rest)[:count]]
+
+
+def textbook_lead_for(pools, ctx, i):
+    """제목 인덱스별 교재 섹션 문구 {heading, lead}. 풀이 없으면 None."""
+    variants = pools.textbook_leads.get(str(i)) if pools.textbook_leads else None
+    if not variants:
+        return None
+    v = pick(variants, ctx["keyword"], "tblead")
+    return {"heading": fmt(v.get("heading") or "", ctx), "lead": fmt(v.get("lead") or "", ctx)}
+
+
+_ARROW = ('<svg width="%d" height="%d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="%s" '
+          'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="%s"></polyline></svg>')
+_ARROW_L = _ARROW % (22, 22, "2.2", "15 18 9 12 15 6")
+_ARROW_R = _ARROW % (22, 22, "2.2", "9 18 15 12 9 6")
+_BS_ARROW_L = _ARROW % (20, 20, "2", "15 18 9 12 15 6")
+_BS_ARROW_R = _ARROW % (20, 20, "2", "9 18 15 12 9 6")
+
+
+def _stage(shots, label, eager_first):
+    """한 번에 한 장 크게 보여주고 좌우로 넘기는 이미지 스테이지.
+    마크업·클래스는 index.html / api/textbooks.py 와 동일 (동작은 PAGE_SCRIPT 인라인 JS).
+    eager_first=True 인 첫 슬라이드의 표지만 즉시 로드하고 나머지는 전부 lazy."""
+    items = "".join(
+        '<li class="stage-item"><img src="%s"%s%s decoding="async" alt="%s"></li>'
+        % (esc(src), ' width="%d" height="%d"' % (int(w), int(h)) if w and h else "",
+           "" if (eager_first and k == 0) else ' loading="lazy"', esc(alt))
+        for k, (src, w, h, alt, _) in enumerate(shots))
+    tabs = "".join('<button type="button" aria-current="%s">%s</button>'
+                   % ("true" if k == 0 else "false", esc(cap))
+                   for k, (_, _, _, _, cap) in enumerate(shots))
+    return f"""<div class="stage" tabindex="0" aria-roledescription="carousel" aria-label="{esc(label)}">
+                                <div class="stage-view">
+                                    <ul class="stage-track">{items}</ul>
+                                    <button type="button" class="stage-arrow stage-prev" aria-label="이전 이미지">{_ARROW_L}</button>
+                                    <button type="button" class="stage-arrow stage-next" aria-label="다음 이미지">{_ARROW_R}</button>
+                                </div>
+                                <div class="stage-bar"><div class="stage-tabs">{tabs}</div><span class="stage-count" aria-live="polite">1 / {len(shots)}</span></div>
+                            </div>"""
+
+
+def _book_shots(b, keyword):
+    """교재 한 권의 스테이지 이미지 (표지 + 속지 2장). alt 에 지역명·과정·교재명을 넣는다."""
+    name, course = b.get("name") or "", book_course(b)
+    label = ("%s %s 교재 %s" % (keyword, course, name)) if course else ("%s 교재 %s" % (keyword, name))
+    shots = []
+    cover = b.get("cover") or {}
+    if cover.get("src"):
+        shots.append((cover["src"], cover.get("w"), cover.get("h"), label + " 표지", "표지"))
+    pages = [pg for pg in (b.get("pages") or []) if isinstance(pg, dict) and pg.get("src")]
+    for k, pg in enumerate(pages[:2], start=1):
+        shots.append((pg["src"], pg.get("w"), pg.get("h"), "%s 속지 %d" % (label, k), "속지 %d" % k))
+    return shots
+
+
+def _book_slide(b, shots, pos, total, first):
+    """교재 슬라이더의 한 장 = [이미지 스테이지 | 설명]."""
+    name, course = b.get("name") or "", book_course(b)
+    en = ' <span class="en">%s</span>' % esc(b["name_en"]) if b.get("name_en") else ""
+    meta = "".join("<dt>%s</dt><dd>%s</dd>" % (lb, esc(b[key]))
+                   for key, lb in (("audience", "대상"), ("series", "구성")) if b.get(key))
+    meta_html = '<dl class="bs-meta">%s</dl>' % meta if meta else ""
+    desc = '<p class="bs-desc">%s</p>' % esc(b["description"]) if b.get("description") else ""
+    course_html = '<p class="book-course">연결 과정 <b>%s</b></p>' % esc(course) if course else ""
+    return f"""<li class="bs-slide" role="group" aria-roledescription="slide" aria-label="{pos} / {total}: {esc(name)}">
+                            {_stage(shots, "%s 표지·속지 보기" % name, first)}
+                            <div class="bs-body">
+                                <span class="book-tag">이지스피크 자체 제작</span>
+                                <h3 class="bs-name">{esc(name)}{en}</h3>
+                                {meta_html}
+                                {desc}
+                                {course_html}
+                            </div>
+                        </li>"""
+
+
+def textbook_section_html(pools, ctx):
+    """제목이 겨냥한 고민 -> 그 과정의 자체 제작 교재 3~4권을 좌우로 넘기는 슬라이더로.
+    각 권은 표지+속지 2장 스테이지. 교재 데이터가 없으면 빈 문자열(섹션 통째 생략)."""
+    picked = textbooks_for(pools, ctx)
+    if not picked:
+        return ""
+    i, books = picked
+    keyword = ctx["keyword"]
+    shots = [(b, _book_shots(b, keyword)) for b in books]
+    shots = [(b, sh) for b, sh in shots if sh]   # 이미지 없는 교재는 뺀다
+    if not shots:
+        return ""
+    slides = [_book_slide(b, sh, k + 1, len(shots), k == 0) for k, (b, sh) in enumerate(shots)]
+
+    lead = textbook_lead_for(pools, ctx, i)
+    heading = (lead or {}).get("heading") or "이지스피크 자체 제작 교재"
+    lead_html = ('\n                    <p class="section-sub">%s</p>' % esc(lead["lead"])
+                 if lead and lead.get("lead") else "")
+    return f"""
+        <section class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">교재 소개</span>
+                    <h2 class="section-title">{esc(heading)}</h2>{lead_html}
+                </div>
+                <div class="book-slider" aria-roledescription="carousel" aria-label="{esc(keyword)} 영어회화 수업 교재">
+                    <div class="bs-viewport" tabindex="0" aria-live="off">
+                        <ul class="bs-track">
+                            {"".join(slides)}
+                        </ul>
+                    </div>
+                    <div class="bs-controls">
+                        <button type="button" class="bs-btn bs-prev" aria-label="이전 교재">{_BS_ARROW_L}</button>
+                        <div class="bs-dots"></div>
+                        <button type="button" class="bs-btn bs-next" aria-label="다음 교재">{_BS_ARROW_R}</button>
+                    </div>
+                </div>
+                <p class="rg-books-more"><a href="/textbooks">이지스피크 자체 제작 교재 전체 보기</a></p>
+            </div>
+        </section>"""
 
 
 # ---- 기존 인트로/CTA 변형 (loc 활용, seo_spec.md 6절 "기존 유지") -------------
@@ -669,6 +837,114 @@ PAGE_SCRIPT = """    <script>
                 window.addEventListener('scroll', onScroll, { passive: true });
             }
         })();
+        /* 교재 슬라이더(바깥) + 이미지 스테이지(안쪽) — 메인 script.js 와 같은 동작.
+           지역 페이지는 자동 넘김·필터 없이 이전/다음·점·스와이프·키보드만 쓴다. */
+        (function () {
+            Array.prototype.forEach.call(document.querySelectorAll('.stage-view, .bs-viewport'), function (v) {
+                v.addEventListener('scroll', function () { if (v.scrollLeft) v.scrollLeft = 0; }, { passive: true });
+            });
+
+            /* 스테이지 안의 키·스와이프는 여기서 멈춰(stopPropagation) 바깥 교재 슬라이더로 가지 않는다 */
+            function initStage(root) {
+                var track = root.querySelector('.stage-track');
+                var items = Array.prototype.slice.call(root.querySelectorAll('.stage-item'));
+                var tabs = Array.prototype.slice.call(root.querySelectorAll('.stage-tabs button'));
+                var count = root.querySelector('.stage-count');
+                var n = items.length, i = 0;
+                if (!track || !n) return null;
+                function eager(k) { var img = items[k] && items[k].querySelector('img'); if (img) img.loading = 'eager'; }
+                function go(k, user) {
+                    i = (k + n) % n;
+                    track.style.transform = 'translateX(-' + (i * 100) + '%)';
+                    items.forEach(function (it, j) { it.inert = j !== i; });
+                    tabs.forEach(function (t, j) { t.setAttribute('aria-current', String(j === i)); });
+                    if (count) count.textContent = (i + 1) + ' / ' + n;
+                    if (user) { eager(i); eager((i + 1) % n); }
+                }
+                root.querySelector('.stage-prev').addEventListener('click', function () { go(i - 1, true); });
+                root.querySelector('.stage-next').addEventListener('click', function () { go(i + 1, true); });
+                tabs.forEach(function (t, j) { t.addEventListener('click', function () { go(j, true); }); });
+                root.addEventListener('keydown', function (e) {
+                    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    go(i + (e.key === 'ArrowRight' ? 1 : -1), true);
+                });
+                var view = root.querySelector('.stage-view'), x0 = null, y0 = 0;
+                view.addEventListener('touchstart', function (e) {
+                    e.stopPropagation(); x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+                }, { passive: true });
+                view.addEventListener('touchend', function (e) {
+                    e.stopPropagation();
+                    if (x0 === null) return;
+                    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                    x0 = null;
+                    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(i + (dx < 0 ? 1 : -1), true);
+                }, { passive: true });
+                go(0, false);
+                /* 화면 밖에 있는 교재는 전환 없이 표지로 되돌린다 */
+                function reset() {
+                    if (i === 0) return;
+                    track.style.transition = 'none';
+                    go(0, false);
+                    void track.offsetWidth;
+                    track.style.transition = '';
+                }
+                return { reset: reset, eager: eager };
+            }
+
+            Array.prototype.forEach.call(document.querySelectorAll('.book-slider'), function (root) {
+                var viewport = root.querySelector('.bs-viewport');
+                var track = root.querySelector('.bs-track');
+                var slides = Array.prototype.slice.call(root.querySelectorAll('.bs-slide'));
+                var dotsBox = root.querySelector('.bs-dots');
+                if (!track || !slides.length) return;
+                var stages = slides.map(function (sl) {
+                    var st = sl.querySelector('.stage');
+                    return st ? initStage(st) : null;
+                });
+                var n = slides.length, index = 0;
+                var dots = slides.map(function (_, p) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.setAttribute('aria-label', (p + 1) + '번째 교재 보기');
+                    b.addEventListener('click', function () { goTo(p); });
+                    if (dotsBox) dotsBox.appendChild(b);
+                    return b;
+                });
+                function goTo(p) {
+                    index = (p + n) % n;
+                    var next = (index + 1) % n;
+                    track.style.transform = 'translateX(-' + (index * 100) + '%)';
+                    slides.forEach(function (sl, k) {
+                        var on = k === index;
+                        sl.inert = !on;
+                        sl.setAttribute('aria-hidden', String(!on));
+                        var st = stages[k];
+                        if (!st) return;
+                        /* 보고 있는 교재는 표지·속지 1, 다음 교재는 표지만 미리 받는다 */
+                        if (on) { st.reset(); st.eager(0); st.eager(1); } else if (k === next) st.eager(0);
+                    });
+                    dots.forEach(function (d, k) { d.setAttribute('aria-current', String(k === index)); });
+                }
+                root.querySelector('.bs-prev').addEventListener('click', function () { goTo(index - 1); });
+                root.querySelector('.bs-next').addEventListener('click', function () { goTo(index + 1); });
+                root.addEventListener('keydown', function (e) {
+                    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+                    e.preventDefault();
+                    goTo(index + (e.key === 'ArrowRight' ? 1 : -1));
+                });
+                var x0 = null, y0 = 0;
+                viewport.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+                viewport.addEventListener('touchend', function (e) {
+                    if (x0 === null) return;
+                    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                    x0 = null;
+                    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(index + (dx < 0 ? 1 : -1));
+                }, { passive: true });
+                goTo(0);
+            });
+        })();
     </script>"""
 
 
@@ -729,16 +1005,47 @@ REGION_INLINE_CSS = """    <style>
         .rg-aud-item h3 { font-size: 17px; font-weight: 700; color: var(--ink); word-break: keep-all; }
         .rg-aud-item p { margin-top: 9px; color: var(--ink-2); font-size: 15px; line-height: 1.78; word-break: keep-all; }
 
-        /* 자체 제작 교재 — 표지 비율이 제각각이라 고정 박스 + contain */
-        .rg-books { margin-top: 22px; padding: 0; list-style: none; display: grid; gap: 12px;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-        .rg-book { display: flex; gap: 14px; align-items: center; background: #fff;
-            border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px; }
-        .rg-book img { flex: 0 0 96px; width: 96px; height: 96px; object-fit: contain;
-            background: var(--line-2); border-radius: var(--r-sm); }
-        .rg-book strong { display: block; color: var(--ink); font-size: 16px; }
-        .rg-book span { display: block; margin-top: 4px; color: var(--ink-2); font-size: 13.5px;
-            line-height: 1.6; word-break: keep-all; }
+        /* 자체 제작 교재 — 제목에 맞는 3~4권을 좌우로 넘기는 슬라이더 (틀은 style.css 의 .book-slider/.bs-*) */
+        .rg-books-more { margin-top: 14px; font-size: 14px; }
+        .rg-books-more a { color: var(--blue-deep); font-weight: 700;
+            text-decoration: underline; text-underline-offset: 3px; }
+
+        /* 이미지 스테이지 — index.html / api/textbooks.py 의 .stage 와 같은 규칙 (여기는 인라인) */
+        .stage { min-width: 0; }
+        .stage:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+        .stage-view { position: relative; overflow: hidden; overflow: clip; background: #F3F6FA;
+            border: 1px solid var(--line-2); border-radius: var(--r-md); touch-action: pan-y; }
+        /* overflow: clip — 찾기·포커스 이동으로 틀이 가로 스크롤돼 슬라이드가 어긋나는 것 방지 */
+        .bs-viewport { overflow: hidden; overflow: clip; touch-action: pan-y; }
+        .stage-track { list-style: none; margin: 0; padding: 0; display: flex; transition: transform .35s ease; }
+        .stage-item { flex: 0 0 100%; min-width: 0; height: 520px; padding: 16px 64px;
+            display: flex; align-items: center; justify-content: center; }  /* 좌우 64px = 화살표 자리 */
+        /* max-width/max-height 로 가두어야 세로형 표지도 잘리지 않는다 */
+        .stage-item img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; }
+        .stage-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
+            border: 0; border-radius: 50%; background: rgba(15, 23, 42, .45); color: #fff;
+            display: grid; place-items: center; cursor: pointer; transition: background-color .16s; }
+        .stage-arrow:hover { background: rgba(15, 23, 42, .7); }
+        .stage-arrow:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+        .stage-prev { left: 10px; }
+        .stage-next { right: 10px; }
+        .stage-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+        .stage-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+        .stage-tabs button { font: 600 13px var(--font-body); color: var(--ink-2); background: #fff; cursor: pointer;
+            border: 1px solid var(--line); border-radius: var(--r-pill); padding: 5px 12px; }
+        .stage-tabs button:hover { border-color: var(--blue); color: var(--blue); }
+        .stage-tabs button[aria-current="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+        .stage-count { font-size: 13px; font-weight: 600; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+        @media (prefers-reduced-motion: reduce) { .stage-track { transition: none; } }
+        @media (max-width: 940px) {
+            .stage-item { height: 440px; }
+        }
+        @media (max-width: 640px) {
+            .stage-item { height: 440px; padding: 8px; }
+            .stage-arrow { width: 36px; height: 36px; }
+            .stage-prev { left: 6px; }
+            .stage-next { right: 6px; }
+        }
 
         .rg-faq { margin-top: 22px; display: grid; gap: 10px; }
         .rg-faq details { background: #fff; border: 1px solid var(--line);
@@ -908,7 +1215,6 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     curlead = curriculum_lead(ctx)
     blocks = body_blocks_for(pools, ctx)
     audiences = audience_blocks_for(pools, ctx)
-    book_lead = textbook_lead_for(pools, ctx)
     faqs = faq_for(pools, ctx, count=5)
     cta = cta_copy(ctx)
 
@@ -982,24 +1288,8 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
             </div>
         </section>"""
 
-    # ---- 자체 제작 교재 ----
-    book_items = "\n".join(f"""                    <li class="rg-book">
-                        <img src="{src}" alt="{esc("%s %s 자체 제작 교재 %s" % (keyword, alt_mid, name))}" width="96" height="96" loading="lazy" decoding="async">
-                        <div><strong>{esc(name)}</strong><span>{esc(desc)}</span></div>
-                    </li>""" for name, src, alt_mid, desc in OWN_TEXTBOOKS)
-    book_lead_html = f'\n                    <p class="section-sub">{esc(book_lead)}</p>' if book_lead else ""
-    textbook_section = f"""
-        <section class="section">
-            <div class="container">
-                <div class="section-head">
-                    <span class="eyebrow">교재 소개</span>
-                    <h2 class="section-title">이지스피크 자체 제작 교재</h2>{book_lead_html}
-                </div>
-                <ul class="rg-books">
-{book_items}
-                </ul>
-            </div>
-        </section>"""
+    # ---- 자체 제작 교재 (제목이 겨냥한 고민 -> 그 과정의 교재 1권, 표지+속지) ----
+    textbook_section = textbook_section_html(pools, ctx)
 
     # ---- FAQ ----
     faq_html = []
@@ -1815,11 +2105,32 @@ if __name__ == "__main__":
                     audience_blocks_for(s.pools, build_ctx(kw)))
               for kw in s.all_pages[:300]}
     assert len(combos) >= 20, "대상별 블록 조합이 너무 적다: %d" % len(combos)
-    # 자체 제작 교재 블록: 전 페이지 이미지 3개, alt 에 지역명, 도입 문구 변형 2종 이상
+    # 자체 제작 교재: 3~4권 슬라이더, 각 권 이미지 3장, 첫 표지만 즉시 로드, alt 에 지역명
     for name in ("신림동", "금정구", "서울특별시"):
         page = s.region_page(name)
-        assert page.count('class="rg-book"') == 3 and page.count('alt="%s ' % name) == 3, name
-    assert len({textbook_lead_for(s.pools, build_ctx(kw)) for kw in s.all_pages[:100]}) >= 2
+        books = page.count('class="bs-slide"')
+        assert 3 <= books <= BOOKS_PER_PAGE, (name, books)
+        assert page.count('class="stage-item"') == books * 3, name
+        assert page.count('alt="%s ' % name) == books * 3, name
+        assert page.count('loading="lazy"') == books * 3 - 1, name   # 첫 슬라이드 표지만 eager
+        assert 'href="/textbooks"' in page and 'class="bs-dots"' in page, name
+        assert 'max-width: 100%; max-height: 100%' in page and "overflow: clip" in page, name
+    # 제목 ↔ 교재: 표에 없는 조합이 나오면 안 된다 + 첫 권은 제목 대표 교재 + 문구 변형 2종 이상
+    leads, combos = {}, set()
+    for kw in s.all_pages[:400]:
+        ctx = build_ctx(kw)
+        i, books = textbooks_for(s.pools, ctx)
+        picked = [b["slug"] for b in books]
+        assert len(picked) == len(set(picked)) and 3 <= len(picked) <= BOOKS_PER_PAGE, (kw, picked)
+        assert all(sl in TITLE_BOOKS[i] for sl in picked), (kw, i, picked)
+        assert picked[0] == pick([sl for sl in TITLE_BOOKS[i] if sl in textbooks_by_slug()],
+                                ctx["keyword"], "regionbook"), (kw, picked)
+        assert title_for(s.pools, ctx) == fmt(s.pools.titles[i], ctx)
+        combos.add((i, tuple(picked)))
+        leads.setdefault(i, set()).add(textbook_lead_for(s.pools, ctx, i)["heading"])
+    assert len(leads) == len(s.pools.titles) and min(len(v) for v in leads.values()) >= 2, leads
+    # 같은 제목이라도 지역마다 교재 구성이 달라야 한다
+    assert len(combos) >= 40, "교재 조합이 너무 적다: %d" % len(combos)
     # 사이트맵: guides.json 이 없어도 예외 없이, 있으면 /guide 와 /guide/{slug} 포함
     sm = render_sitemap(s.all_pages[:3])
     assert sm.startswith("<?xml") and ("<loc>%s/guide</loc>" % BASE_URL in sm) == bool(guide_slugs())
