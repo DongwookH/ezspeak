@@ -60,7 +60,7 @@ BUSINESS_PHONE = "010-2311-6543"
 BUSINESS_EMAIL = "ft9990@naver.com"
 
 # 캐시버스팅 버전 (index.html 과 동일하게 유지)
-ASSET_VER = "20260928b"
+ASSET_VER = "20260928c"
 
 # 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -664,7 +664,7 @@ def _book_slide(b, shots, pos, total, first):
                         </li>"""
 
 
-def textbook_section_html(pools, ctx):
+def textbook_section_html(pools, ctx, with_lead=True):
     """제목이 겨냥한 고민 -> 그 과정의 자체 제작 교재 3~4권을 좌우로 넘기는 슬라이더로.
     각 권은 표지+속지 2장 스테이지. 교재 데이터가 없으면 빈 문자열(섹션 통째 생략)."""
     picked = textbooks_for(pools, ctx)
@@ -681,7 +681,7 @@ def textbook_section_html(pools, ctx):
     lead = textbook_lead_for(pools, ctx, i)
     heading = (lead or {}).get("heading") or "이지스피크 자체 제작 교재"
     lead_html = ('\n                    <p class="section-sub">%s</p>' % esc(lead["lead"])
-                 if lead and lead.get("lead") else "")
+                 if with_lead and lead and lead.get("lead") else "")
     return f"""
         <section class="section">
             <div class="container">
@@ -969,6 +969,12 @@ REGION_INLINE_CSS = """    <style>
         .rg-hero h1 .easy { color: var(--blue); font-weight: 800; }
         .rg-lead { margin-top: 18px; max-width: 62ch; font-size: clamp(15px, 2.3vw, 17px);
             color: var(--ink-2); line-height: 1.78; word-break: keep-all; }
+        .rg-h1-kw { display: block; font-size: .5em; letter-spacing: -.02em; margin-bottom: 10px; }
+        .rg-hook { display: block; }
+        .rg-facts-sec { padding-top: 0; }
+        .rg-hero:has(.rg-hook) { padding-bottom: 8px; }
+        .rg-hero:has(.rg-hook) + .section { padding-top: 24px; }
+        .rg-lead--plain { margin-top: 0; }
         .rg-actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; }
 
         /* 핵심 정보 그리드 — AI 답변엔진이 추출하기 쉬운 라벨-값 구조 */
@@ -1293,7 +1299,13 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
         </section>"""
 
     # ---- 자체 제작 교재 (제목이 겨냥한 고민 -> 그 과정의 교재 1권, 표지+속지) ----
-    textbook_section = textbook_section_html(pools, ctx)
+    textbook_section = textbook_section_html(pools, ctx, with_lead=False)
+    # 첫 화면 = 검색 제목이 던진 질문 + 그 답 (제목과 첫 화면 메시지 일치)
+    hook = title.split(", ", 1)[1] if ", " in title else ""
+    hero_lead = None
+    picked = textbooks_for(pools, ctx)
+    if picked:
+        hero_lead = (textbook_lead_for(pools, ctx, picked[0]) or {}).get("lead")
 
     # ---- FAQ ----
     faq_html = []
@@ -1397,9 +1409,23 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
 
         <section class="rg-hero">
             <div class="container">
-                <span class="eyebrow">지역별 영어회화</span>
-                <h1>{esc(keyword)} <span class="easy">영어회화</span></h1>
-                <p class="rg-lead">{esc(keyword)} 영어회화는 학원 방문 없이 100% 온라인 1:1 원어민 화상 수업으로 시작할 수 있습니다. 무료 레벨테스트로 현재 말하기 수준을 확인한 뒤, 담당 플래너가 맞는 과정을 안내해 드립니다.</p>
+                <h1><span class="rg-h1-kw">{esc(keyword)} <span class="easy">영어회화</span></span>{('<span class="rg-hook">' + esc(hook) + '</span>') if hook else ""}</h1>
+                <p class="rg-lead">{esc(hero_lead or intro)}</p>
+                <div class="rg-actions">
+                    <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
+                    <a href="/#programs" class="btn btn--outline">커리큘럼 둘러보기</a>
+                </div>
+            </div>
+        </section>
+{textbook_section}
+
+        <section class="section rg-facts-sec">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">핵심 정보</span>
+                    <h2 class="section-title">{esc(keyword)} 영어회화 한눈에 보기</h2>
+                </div>
+                <p class="rg-lead rg-lead--plain">{esc(keyword)} 영어회화는 학원 방문 없이 100% 온라인 1:1 원어민 화상 수업으로 시작할 수 있습니다. 무료 레벨테스트로 현재 말하기 수준을 확인한 뒤, 담당 플래너가 맞는 과정을 안내해 드립니다.</p>
                 <dl class="rg-facts">
                     <div><dt>수업 방식</dt><dd>100% 온라인 1:1 원어민 화상 수업 (오프라인 지점 없음)</dd></div>
                     <div><dt>수업 횟수</dt><dd>주 1~5회 중 선택</dd></div>
@@ -1410,10 +1436,6 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                     <div><dt>수강 지역</dt><dd>{esc(keyword)} 포함 전국 어디서나 (인터넷만 있으면 수강 가능)</dd></div>
                     <div><dt>상담 방법</dt><dd>홈페이지 상담 폼 · 이메일</dd></div>
                 </dl>
-                <div class="rg-actions">
-                    <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
-                    <a href="/#programs" class="btn btn--outline">커리큘럼 둘러보기</a>
-                </div>
             </div>
         </section>
 
@@ -1442,7 +1464,6 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 </div>
             </div>
         </section>
-{textbook_section}
 
         <section class="section">
             <div class="container">

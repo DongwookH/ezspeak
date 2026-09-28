@@ -395,6 +395,13 @@ ul { list-style: none; }
   padding-top: 22px; border-top: 1px solid var(--line); max-width: 540px; margin-inline: auto;
 }
 .hero-stat .num { font-weight: 800; font-size: clamp(22px, 5vw, 30px); color: var(--blue); line-height: 1; letter-spacing: -.02em; }
+.hero-books { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px; text-decoration: none; }
+.hero-books-row { display: flex; justify-content: center; }
+.hero-books img { height: clamp(120px, 22vw, 170px); width: auto; border-radius: 6px; box-shadow: 0 8px 22px rgba(20,50,90,.18); background: #fff; }
+.hero-books img + img { margin-left: -18px; }
+.hero-books img:nth-child(odd) { transform: rotate(-4deg); }
+.hero-books img:nth-child(even) { transform: rotate(3deg) translateY(6px); }
+.hero-books-cap { font-size: 14px; font-weight: 700; color: var(--blue); }
 .hero-stat .lbl { font-size: 13px; color: var(--ink-3); margin-top: 6px; font-weight: 600; }
 
 /* staggered page-load reveal (절제) */
@@ -429,6 +436,7 @@ ul { list-style: none; }
 
 /* 학습자 고민 (차이점 바로 앞 공감 블록) */
 .about-pain { margin-top: clamp(30px, 5vw, 52px); }
+.about .container > .about-pain:first-child { margin-top: 0; margin-bottom: clamp(30px, 5vw, 52px); }
 .about-pain-title {
   font-weight: 800; font-size: clamp(20px, 3vw, 26px); color: var(--ink);
   letter-spacing: -.02em; line-height: 1.4; margin-bottom: 16px; word-break: keep-all;
