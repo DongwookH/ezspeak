@@ -60,7 +60,7 @@ BUSINESS_PHONE = "010-2311-6543"
 BUSINESS_EMAIL = "ft9990@naver.com"
 
 # 캐시버스팅 버전 (index.html 과 동일하게 유지)
-ASSET_VER = "20260725b"
+ASSET_VER = "20260928a"
 
 # 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -527,13 +527,15 @@ def audience_blocks_for(pools, ctx):
 #   제목이 겨냥한 고민 ↔ 노출 교재가 항상 같은 묶음이 되도록 제목 해시를 그대로 쓴다.
 #   주석의 과정명은 후보를 고른 기준이고, 화면에 쓰는 과정명은 textbooks.json 의 group 이름이다.
 TITLE_BOOKS = [
-    ["icantalk", "regular-1-2", "regular-2", "momentum-a"],                    # 0 왕초보 스피킹
-    ["nlife-1", "nlife-2", "nlife-3", "regular-5", "regular-6", "regular-7"],  # 1 중급 정체
-    ["regular-3", "regular-4", "nlife-1", "nlife-2"],                          # 2 시간·이동
-    ["icantalk", "regular-1-2", "regular-2", "momentum-a"],                    # 3 입문 부담
-    ["regular-2", "regular-3", "regular-4", "regular-5"],                      # 4 지속·관리
-    ["grammarn-1", "grammarn-2", "grammarn-3", "nlife-2"],                     # 5 문법 -> 발화
-    ["regular-1-2", "regular-4", "regular-7", "nlife-1"],                      # 6 레벨 진단
+    # 한 줄 = 시리즈 묶음. 같은 시리즈는 페이지당 1권만 (지역 해시로 몇 권째를 보일지 고른다).
+    # 첫 묶음이 제목을 대표하는 교재라 항상 첫 슬라이드에 온다.
+    [["icantalk"], ["regular-1-2", "regular-2"], ["momentum-a"], ["grammarn-1"]],               # 0 왕초보 스피킹
+    [["nlife-1", "nlife-2", "nlife-3"], ["regular-5", "regular-6", "regular-7"], ["ntimes"], ["momentum-c2"]],  # 1 중급 정체
+    [["regular-3", "regular-4"], ["nlife-1", "nlife-2"], ["momentum-a"], ["fun-fun-trip"]],    # 2 시간·이동
+    [["icantalk"], ["regular-1-2", "regular-2"], ["momentum-a"], ["fun-fun-trip"]],             # 3 입문 부담
+    [["regular-2", "regular-3", "regular-4", "regular-5"], ["nlife-1", "nlife-2"], ["grammarn-1", "grammarn-2"], ["momentum-a"]],  # 4 지속·관리
+    [["grammarn-1", "grammarn-2", "grammarn-3"], ["nlife-1", "nlife-2"], ["regular-3", "regular-4"], ["icantalk"]],  # 5 문법 -> 발화
+    [["regular-1-2", "regular-4", "regular-7"], ["icantalk"], ["nlife-1", "nlife-2", "nlife-3"], ["ntimes"]],  # 6 레벨 진단
 ]
 
 # 페이지당 노출 교재 수 (후보가 이보다 적으면 있는 만큼).
@@ -576,14 +578,16 @@ def textbooks_for(pools, ctx, count=BOOKS_PER_PAGE):
     if i >= len(TITLE_BOOKS):
         return None
     books = textbooks_by_slug()
-    cands = [sl for sl in TITLE_BOOKS[i] if sl in books]
-    if not cands:
-        return None
     keyword = ctx["keyword"]
-    lead = pick(cands, keyword, "regionbook")
-    rest = sorted((sl for sl in cands if sl != lead),
-                  key=lambda sl: kw_hash(keyword, "bookorder|" + sl))
-    return i, [books[sl] for sl in ([lead] + rest)[:count]]
+    chosen = []
+    for j, series in enumerate(TITLE_BOOKS[i]):
+        have = [sl for sl in series if sl in books]
+        if have:
+            chosen.append(pick(have, keyword, "regionbook|%d" % j))
+    if not chosen:
+        return None
+    rest = sorted(chosen[1:], key=lambda sl: kw_hash(keyword, "bookorder|" + sl))
+    return i, [books[sl] for sl in ([chosen[0]] + rest)[:count]]
 
 
 def textbook_lead_for(pools, ctx, i):
@@ -2122,9 +2126,8 @@ if __name__ == "__main__":
         i, books = textbooks_for(s.pools, ctx)
         picked = [b["slug"] for b in books]
         assert len(picked) == len(set(picked)) and 3 <= len(picked) <= BOOKS_PER_PAGE, (kw, picked)
-        assert all(sl in TITLE_BOOKS[i] for sl in picked), (kw, i, picked)
-        assert picked[0] == pick([sl for sl in TITLE_BOOKS[i] if sl in textbooks_by_slug()],
-                                ctx["keyword"], "regionbook"), (kw, picked)
+        fams = [next(j for j, ser in enumerate(TITLE_BOOKS[i]) if sl in ser) for sl in picked]
+        assert fams[0] == 0 and len(fams) == len(set(fams)), (kw, i, picked)   # 대표 시리즈가 첫 권, 시리즈당 1권
         assert title_for(s.pools, ctx) == fmt(s.pools.titles[i], ctx)
         combos.add((i, tuple(picked)))
         leads.setdefault(i, set()).add(textbook_lead_for(s.pools, ctx, i)["heading"])
