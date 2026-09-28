@@ -60,7 +60,7 @@ BUSINESS_PHONE = "010-2311-6543"
 BUSINESS_EMAIL = "ft9990@naver.com"
 
 # 캐시버스팅 버전 (index.html 과 동일하게 유지)
-ASSET_VER = "20260928a"
+ASSET_VER = "20260928b"
 
 # 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -818,7 +818,7 @@ def footer_html(src=None):
     <nav class="mobile-cta-bar" aria-label="빠른 상담">
         <a href="{esc(contact_href(src))}" class="mc-test">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
-            레벨테스트
+            무료 레벨테스트 신청
         </a>
     </nav>"""
 

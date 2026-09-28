@@ -132,9 +132,9 @@
       const data = {
         gender: this.gender.value,
         prevStudy: this.prevStudy.value,
-        level: this.level.options[this.level.selectedIndex].text,
+        level: this.level.value ? this.level.options[this.level.selectedIndex].text : '',
         reason: reasons,
-        source: this.source.options[this.source.selectedIndex].text,
+        source: this.source.value ? this.source.options[this.source.selectedIndex].text : '',
         contactMethod: this.contactMethod.options[this.contactMethod.selectedIndex].text,
         name: this.name.value,
         phone: this.phone.value,
@@ -144,8 +144,8 @@
         sourcePage: this.sourcePage.value,
       };
 
-      if (!data.name || !data.phone || !data.testDate || !data.testTime) {
-        alert('이름, 연락처, 희망 레벨테스트 일시는 필수 입력 항목입니다.');
+      if (!data.name || !data.phone) {
+        alert('이름과 연락처를 입력해주세요.');
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
         return;

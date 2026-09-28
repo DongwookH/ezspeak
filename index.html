@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- Font: 전 영역 Pretendard (style.css 에서 @import) -->
-    <link rel="stylesheet" href="style.css?v=20260922e">
+    <link rel="stylesheet" href="style.css?v=20260928b">
 
     <!-- 구조화 데이터 (JSON-LD) -->
     <script type="application/ld+json">
@@ -1249,80 +1249,6 @@
                         </div>
 
                         <div class="field">
-                            <label class="field__label" for="gender">성별 <span class="req">필수</span></label>
-                            <select id="gender" name="gender" required>
-                                <option value="">해당하는 항목을 선택해주세요..</option>
-                                <option value="male">남성</option>
-                                <option value="female">여성</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label class="field__label" for="prevStudy">이전 영어 회화 공부 방식은? <span class="req">필수</span></label>
-                            <textarea id="prevStudy" name="prevStudy" rows="3" placeholder="내용을 입력해주세요." required></textarea>
-                        </div>
-
-                        <div class="field">
-                            <label class="field__label" for="level">현재 나의 영어실력은? <span class="req">필수</span></label>
-                            <select id="level" name="level" required>
-                                <option value="">해당하는 항목을 선택해주세요..</option>
-                                <option value="beginner">입문(영어회화 공부 경험 없음)</option>
-                                <option value="basic">초급(기본 단어로 단순 의사소통 가능)</option>
-                                <option value="preintermediate">초중급(간단한 의사소통 가능)</option>
-                                <option value="intermediate">중급(원어민과 일상 대화 가능)</option>
-                                <option value="advanced">고급(토론, 학회 등 전문적인 대화 가능)</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label class="field__label">영어회화 하려는 이유는? (복수 선택 가능) <span class="req">필수</span></label>
-                            <div class="choice-grid">
-                                <label class="choice">
-                                    <input type="checkbox" name="reason" value="daily">
-                                    <span class="checkmark"></span>
-                                    일상 영어회화 실력 향상
-                                </label>
-                                <label class="choice">
-                                    <input type="checkbox" name="reason" value="abroad">
-                                    <span class="checkmark"></span>
-                                    어학연수 또는 유학 전 준비
-                                </label>
-                                <label class="choice">
-                                    <input type="checkbox" name="reason" value="travel">
-                                    <span class="checkmark"></span>
-                                    여행용 영어 회화 실력 향상
-                                </label>
-                                <label class="choice">
-                                    <input type="checkbox" name="reason" value="general">
-                                    <span class="checkmark"></span>
-                                    그냥 영어를 준비해두면 도움이 될 것 같아서
-                                </label>
-                                <label class="choice">
-                                    <input type="checkbox" name="reason" value="test">
-                                    <span class="checkmark"></span>
-                                    토스/오픽과 같은 말하기 자격증 준비를 위해
-                                </label>
-                                <label class="choice">
-                                    <input type="checkbox" name="reason" value="business">
-                                    <span class="checkmark"></span>
-                                    비즈니스 영어회화가 필요해서
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="field__label" for="source">이지스피크를 어떻게 알게되셨나요? <span class="req">필수</span></label>
-                            <select id="source" name="source" required>
-                                <option value="">해당하는 항목을 선택해주세요..</option>
-                                <option value="friend">지인 소개</option>
-                                <option value="blog">네이버 - 블로그</option>
-                                <option value="map">네이버 - 지도</option>
-                                <option value="instagram">인스타그램</option>
-                                <option value="carrot">당근마켓</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
                             <label class="field__label" for="contactMethod">희망 연락 수단 <span class="req">필수</span></label>
                             <select id="contactMethod" name="contactMethod" required>
                                 <option value="">해당하는 항목을 선택해주세요..</option>
@@ -1332,10 +1258,10 @@
                         </div>
 
                         <div class="field">
-                            <label class="field__label" for="testDate">희망 레벨테스트 일시 <span class="req">필수</span> <span class="opt">가능한 시간으로 조정해 연락드립니다</span></label>
+                            <label class="field__label" for="testDate">희망 레벨테스트 일시 <span class="opt">가능한 시간으로 조정해 연락드립니다</span></label>
                             <div class="form-row two-columns">
-                                <input type="date" id="testDate" name="testDate" aria-label="희망 테스트 날짜" required>
-                                <select id="testTime" name="testTime" aria-label="희망 테스트 시간" required>
+                                <input type="date" id="testDate" name="testDate" aria-label="희망 테스트 날짜">
+                                <select id="testTime" name="testTime" aria-label="희망 테스트 시간">
                                     <option value="">시간 선택</option>
                                     <option value="10:00">10:00</option>
                                     <option value="11:00">11:00</option>
@@ -1353,6 +1279,84 @@
                                 </select>
                             </div>
                         </div>
+                        <details class="form-more">
+                            <summary>더 알려주시면 맞춤 상담이 빨라져요 <span class="opt">선택</span></summary>
+                            <div class="field">
+                                <label class="field__label" for="gender">성별</label>
+                                <select id="gender" name="gender">
+                                    <option value="">해당하는 항목을 선택해주세요..</option>
+                                    <option value="male">남성</option>
+                                    <option value="female">여성</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label class="field__label" for="prevStudy">이전 영어 회화 공부 방식은?</label>
+                                <textarea id="prevStudy" name="prevStudy" rows="3" placeholder="내용을 입력해주세요."></textarea>
+                            </div>
+
+                            <div class="field">
+                                <label class="field__label" for="level">현재 나의 영어실력은?</label>
+                                <select id="level" name="level">
+                                    <option value="">해당하는 항목을 선택해주세요..</option>
+                                    <option value="beginner">입문(영어회화 공부 경험 없음)</option>
+                                    <option value="basic">초급(기본 단어로 단순 의사소통 가능)</option>
+                                    <option value="preintermediate">초중급(간단한 의사소통 가능)</option>
+                                    <option value="intermediate">중급(원어민과 일상 대화 가능)</option>
+                                    <option value="advanced">고급(토론, 학회 등 전문적인 대화 가능)</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label class="field__label">영어회화 하려는 이유는? (복수 선택)</label>
+                                <div class="choice-grid">
+                                    <label class="choice">
+                                        <input type="checkbox" name="reason" value="daily">
+                                        <span class="checkmark"></span>
+                                        일상 영어회화 실력 향상
+                                    </label>
+                                    <label class="choice">
+                                        <input type="checkbox" name="reason" value="abroad">
+                                        <span class="checkmark"></span>
+                                        어학연수 또는 유학 전 준비
+                                    </label>
+                                    <label class="choice">
+                                        <input type="checkbox" name="reason" value="travel">
+                                        <span class="checkmark"></span>
+                                        여행용 영어 회화 실력 향상
+                                    </label>
+                                    <label class="choice">
+                                        <input type="checkbox" name="reason" value="general">
+                                        <span class="checkmark"></span>
+                                        그냥 영어를 준비해두면 도움이 될 것 같아서
+                                    </label>
+                                    <label class="choice">
+                                        <input type="checkbox" name="reason" value="test">
+                                        <span class="checkmark"></span>
+                                        토스/오픽과 같은 말하기 자격증 준비를 위해
+                                    </label>
+                                    <label class="choice">
+                                        <input type="checkbox" name="reason" value="business">
+                                        <span class="checkmark"></span>
+                                        비즈니스 영어회화가 필요해서
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="field__label" for="source">이지스피크를 어떻게 알게되셨나요?</label>
+                                <select id="source" name="source">
+                                    <option value="">해당하는 항목을 선택해주세요..</option>
+                                    <option value="friend">지인 소개</option>
+                                    <option value="blog">네이버 - 블로그</option>
+                                    <option value="map">네이버 - 지도</option>
+                                    <option value="instagram">인스타그램</option>
+                                    <option value="carrot">당근마켓</option>
+                                </select>
+                            </div>
+
+                        </details>
+
                         <input type="hidden" id="sourcePage" name="sourcePage" value="">
 
                         <div class="field">
@@ -1424,10 +1428,10 @@
     <nav class="mobile-cta-bar" aria-label="빠른 상담">
         <a href="#contact" class="mc-test">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
-            레벨테스트
+            무료 레벨테스트 신청
         </a>
     </nav>
 
-    <script src="script.js?v=20260922e"></script>
+    <script src="script.js?v=20260928b"></script>
 </body>
 </html>
