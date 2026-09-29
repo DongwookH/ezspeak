@@ -144,8 +144,14 @@
         sourcePage: this.sourcePage.value,
       };
 
-      if (!data.name || !data.phone) {
-        alert('이름과 연락처를 입력해주세요.');
+      if (!data.name || !data.phone || !data.testDate || !data.testTime) {
+        alert('이름, 연락처, 희망 레벨테스트 일시는 필수 입력 항목입니다.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        return;
+      }
+      if (!data.reason) {
+        alert('영어회화 하려는 이유를 하나 이상 선택해주세요.');
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
         return;

@@ -60,7 +60,7 @@ BUSINESS_PHONE = "010-2311-6543"
 BUSINESS_EMAIL = "ft9990@naver.com"
 
 # 캐시버스팅 버전 (index.html 과 동일하게 유지)
-ASSET_VER = "20260928c"
+ASSET_VER = "20260929a"
 
 # 경로
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))

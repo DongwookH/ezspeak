@@ -284,14 +284,6 @@ ul { list-style: none; }
 .footer-brand { font-weight: 800; font-size: 22px; letter-spacing: -.02em; color: var(--ink); margin-bottom: 12px; }
 .footer-meta { color: var(--ink-3); font-size: 14px; line-height: 1.9; }
 
-/* 상담폼: 선택 입력 접기 */
-.form-more { border: 1px solid var(--line); border-radius: var(--r-md); padding: 0 16px; margin-bottom: 20px; }
-.form-more summary { cursor: pointer; padding: 14px 0; font-weight: 700; color: var(--ink-2); list-style: none; }
-.form-more summary::-webkit-details-marker { display: none; }
-.form-more summary::after { content: "+"; float: right; font-weight: 400; }
-.form-more[open] summary::after { content: "−"; }
-.form-more[open] { padding-bottom: 4px; }
-
 /* ---- MOBILE 하단 고정 상담바 (한국 학원 사이트 실용 요소) ---------------- */
 .mobile-cta-bar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 95;
