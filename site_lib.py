@@ -664,6 +664,27 @@ def _book_slide(b, shots, pos, total, first):
                         </li>"""
 
 
+def textbook_itemlist_ld(pools, ctx, canonical):
+    """네이버 캐러셀(ItemList) 마크업 — 화면 슬라이더와 같은 교재·같은 순서, 표지(원본)는 필수.
+    url 은 넣지 않는다: /textbooks#book-x 는 네이버가 # 을 지워 모두 같은 주소(중복)로 본다."""
+    picked = textbooks_for(pools, ctx)
+    if not picked:
+        return None
+    books = [b for b in picked[1] if (b.get("cover") or {}).get("src")]
+    if not books:
+        return None
+    return {
+        "@type": "ItemList",
+        "@id": canonical + "#textbooks",
+        "name": "%s 영어회화 수업 교재" % ctx["keyword"],
+        "itemListElement": [
+            {"@type": "ListItem", "position": i, "item": {
+                "@type": "Book", "name": b["name"],
+                "image": BASE_URL + b["cover"]["src"]}}
+            for i, b in enumerate(books, start=1)],
+    }
+
+
 def textbook_section_html(pools, ctx, with_lead=True):
     """제목이 겨냥한 고민 -> 그 과정의 자체 제작 교재 3~4권을 좌우로 넘기는 슬라이더로.
     각 권은 표지+속지 2장 스테이지. 교재 데이터가 없으면 빈 문자열(섹션 통째 생략)."""
@@ -1103,14 +1124,15 @@ REGION_INLINE_CSS = """    <style>
 # JSON-LD @graph (seo_spec.md 5.3)
 # ---------------------------------------------------------------------------
 
-def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None):
+def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None, extra_nodes=None):
     keyword = ctx["keyword"]
     business_id = BASE_URL + "/#business"
     website_id = BASE_URL + "/#website"
 
     breadcrumb_els = []
     for i, (name, url) in enumerate(crumb_items, start=1):
-        el = {"@type": "ListItem", "position": i, "name": name}
+        # 네이버 가이드: "홈" 같은 일반 단어 대신 페이지를 설명하는 이름 (화면 표기는 그대로 "홈")
+        el = {"@type": "ListItem", "position": i, "name": BUSINESS_NAME if name == "홈" else name}
         if url:
             el["item"] = url
         breadcrumb_els.append(el)
@@ -1190,6 +1212,7 @@ def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None):
             ],
         })
 
+    graph.extend(extra_nodes or [])
     doc = {"@context": "https://schema.org", "@graph": graph}
     return json.dumps(doc, ensure_ascii=False, indent=2)
 
@@ -1252,7 +1275,8 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
     crumb_html_items.append(f'<li aria-current="page">{esc(keyword)}</li>')
     crumb_html = "\n".join("                    " + x for x in crumb_html_items)
 
-    jsonld = build_jsonld(ctx, canonical, title, desc, crumb, faqs, og_image)
+    jsonld = build_jsonld(ctx, canonical, title, desc, crumb, faqs, og_image,
+                          extra_nodes=[n for n in [textbook_itemlist_ld(pools, ctx, canonical)] if n])
 
     # ---- 커리큘럼 타임라인 ----
     steps_html = []
@@ -1608,7 +1632,7 @@ def render_hub_page(sido_list, sido_counts, total):
             "@type": "BreadcrumbList",
             "@id": canonical + "#breadcrumb",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "홈", "item": BASE_URL + "/"},
+                {"@type": "ListItem", "position": 1, "name": BUSINESS_NAME, "item": BASE_URL + "/"},
                 {"@type": "ListItem", "position": 2, "name": "전국 지역별 영어회화", "item": canonical},
             ],
         },
@@ -1819,6 +1843,23 @@ def render_rss(site, limit=50):
               "1:1 원어민 수업과 한국인 플래너 밀착 케어로 완성하는 실전 영어회화."),
              ("전국 지역별 영어회화 안내", HUB_CANONICAL,
               "시·도별 영어회화 페이지 모음. 전국 어디서나 온라인 수강 가능.")]
+    # 네이버 가이드: 최신글은 본문 전체를 RSS 에 — 칼럼은 질문·답·본문 문단을 모두 담는다
+    try:
+        with open(GUIDES_PATH, "r", encoding="utf-8") as f:
+            gdata = json.load(f)
+        guides = gdata.get("guides") if isinstance(gdata, dict) else gdata
+    except (OSError, ValueError):
+        guides = []
+    guide_items = []
+    for g in sorted((g for g in guides or [] if isinstance(g, dict) and g.get("slug")),
+                    key=lambda g: g.get("updated") or "", reverse=True):
+        body = [g.get("answer") or ""]
+        for sec in g.get("sections") or []:
+            body.append(sec.get("h2") or "")
+            body.extend(sec.get("paragraphs") or [])
+        guide_items.append((g.get("title") or g["slug"],
+                            BASE_URL + "/guide/" + g["slug"], "\n".join(t for t in body if t)))
+    items = guide_items + items
     for kw in top[:max(0, limit - len(items))]:
         ctx = build_ctx(kw)
         items.append((title_for(site.pools, ctx), canonical_of(kw["keyword"]),
@@ -2140,6 +2181,12 @@ if __name__ == "__main__":
         assert page.count('loading="lazy"') == books * 3 - 1, name   # 첫 슬라이드 표지만 eager
         assert 'href="/textbooks"' in page and 'class="bs-dots"' in page, name
         assert 'max-width: 100%; max-height: 100%' in page and "overflow: clip" in page, name
+        # 네이버 캐러셀: ItemList 1개, 화면 교재와 같은 수, 모든 항목에 절대경로 이미지 / 경로 이름에 "홈" 금지
+        ld = json.loads(re.search(r'<script type="application/ld\+json">([\s\S]*?)</script>', page).group(1))
+        lists = [n for n in ld["@graph"] if n["@type"] == "ItemList"]
+        assert len(lists) == 1 and len(lists[0]["itemListElement"]) == books, name
+        assert all(e["item"]["image"].startswith("https://") for e in lists[0]["itemListElement"]), name
+        assert '"홈"' not in json.dumps(ld, ensure_ascii=False), name
     # 제목 ↔ 교재: 표에 없는 조합이 나오면 안 된다 + 첫 권은 제목 대표 교재 + 문구 변형 2종 이상
     leads, combos = {}, set()
     for kw in s.all_pages[:400]:

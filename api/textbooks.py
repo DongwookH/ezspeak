@@ -199,8 +199,6 @@ def book_ld(b):
         node["image"] = _abs(b["cover"]["src"])
     if b.get("description"):
         node["description"] = b["description"]
-    if b.get("slug"):
-        node["url"] = TB_CANONICAL + "#book-" + b["slug"]
     t = b.get("type")
     if t == "self":
         # build_jsonld 의 WebPage 와 같은 규약: 자체 저작물은 author/publisher 모두 사업자 @id
