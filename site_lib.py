@@ -39,9 +39,11 @@ from urllib.parse import quote
 #   ⚠️ 서버리스에서 date.today() 를 쓰면 내용이 그대로인데도 매일 lastmod 가 바뀌어
 #      검색엔진에 거짓 신선도 신호를 보내게 된다. 콘텐츠를 실제로 손볼 때만 이 값을 올린다.
 #      (배포 환경변수 EZ_BUILD_DATE=YYYY-MM-DD 로도 덮어쓸 수 있다.)
-CONTENT_DATE = "2026-09-24"
+CONTENT_DATE = "2026-10-08"
 BUILD_DATE = datetime.date.fromisoformat(os.environ.get("EZ_BUILD_DATE") or CONTENT_DATE)
 BUILD_DATE_ISO = BUILD_DATE.isoformat()          # 예: 2026-08-14
+# 지역 페이지 첫 공개일 — 수정일(CONTENT_DATE)을 올려도 발행일은 움직이지 않는다
+PUBLISHED_DATE_ISO = "2026-08-14"
 BUILD_DATE_DOT = BUILD_DATE.strftime("%Y.%m.%d")  # 예: 2026.08.14
 
 # ---------------------------------------------------------------------------
@@ -1078,6 +1080,14 @@ REGION_INLINE_CSS = """    <style>
             .stage-next { right: 6px; }
         }
 
+        .rg-hub-links { margin-top: 14px; font-size: 14px; color: var(--ink-3); }
+        .rg-hub-links a { color: var(--blue); font-weight: 700; }
+        .rg-reads { margin-top: 26px; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--r-md); background: #fff; }
+        .rg-reads p { font-weight: 800; color: var(--ink); margin: 0 0 8px; }
+        .rg-reads ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+        .rg-reads li a { color: var(--blue); font-weight: 600; text-decoration: none; word-break: keep-all; }
+        .rg-reads li a:hover, .rg-reads-all:hover { text-decoration: underline; }
+        .rg-reads-all { display: inline-block; margin-top: 10px; font-size: 14px; color: var(--ink-2); }
         .rg-faq { margin-top: 22px; display: grid; gap: 10px; }
         .rg-faq details { background: #fff; border: 1px solid var(--line);
             border-radius: var(--r-md); overflow: hidden; }
@@ -1171,7 +1181,7 @@ def build_jsonld(ctx, canonical, title, desc, crumb_items, faqs, og_image=None, 
             "name": title,
             "description": desc,
             "inLanguage": "ko",
-            "datePublished": BUILD_DATE_ISO,
+            "datePublished": PUBLISHED_DATE_ISO,
             "dateModified": BUILD_DATE_ISO,
             "about": {"@id": business_id},
             "isPartOf": {"@id": website_id},
@@ -1433,7 +1443,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
 
         <section class="rg-hero">
             <div class="container">
-                <h1><span class="rg-h1-kw">{esc(keyword)} <span class="easy">영어회화</span></span>{('<span class="rg-hook">' + esc(hook) + '</span>') if hook else ""}</h1>
+                <h1><span class="rg-h1-kw">{esc(keyword)} <span class="easy">영어회화</span></span>{(' <span class="rg-hook">' + esc(hook) + '</span>') if hook else ""}</h1>
                 <p class="rg-lead">{esc(hero_lead or intro)}</p>
                 <div class="rg-actions">
                     <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
@@ -1523,7 +1533,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                 </div>
                 <div class="rg-faq">
 {faq_html}
-                </div>
+                </div>{guide_reads_html(pools, ctx)}
             </div>
         </section>
 {children_section}{nearby_section}
@@ -1609,7 +1619,7 @@ def render_hub_page(sido_list, sido_counts, total):
             "name": "전국 지역별 영어회화",
             "description": desc,
             "inLanguage": "ko",
-            "datePublished": BUILD_DATE_ISO,
+            "datePublished": PUBLISHED_DATE_ISO,
             "dateModified": BUILD_DATE_ISO,
             "isPartOf": {"@id": website_id},
             "about": {"@id": business_id},
@@ -1721,6 +1731,7 @@ def render_hub_page(sido_list, sido_counts, total):
                 <div class="hub-search">
                     <input type="text" id="sidoSearch" placeholder="시·도명으로 검색 (예: 서울, 경기, 부산)" autocomplete="off" aria-label="시·도 검색">
                 </div>
+                <p class="rg-hub-links"><a href="/guide">영어회화 가이드</a> · <a href="/textbooks">수업 교재</a></p>
             </div>
         </section>
 {hub_intro_html}
@@ -1784,6 +1795,42 @@ def render_hub_page(sido_list, sido_counts, total):
 # ---------------------------------------------------------------------------
 # sitemap.xml / robots.txt
 # ---------------------------------------------------------------------------
+
+# 제목 인덱스 -> 그 고민과 이어지는 칼럼 (첫 번째가 대표, 두 번째는 보조)
+TITLE_GUIDES = [
+    ["wangchobo-cheot-sueop-junbi", "hwasang-jeonhwa-offline-bigyo"],     # 0 왕초보 스피킹
+    ["ju-2hoe-3gaewol-byeonhwa", "muryo-level-test-5-yeongyeok"],         # 1 중급 정체
+    ["hwasang-jeonhwa-offline-bigyo", "jikjangin-toegeun-hu-yeongeo"],    # 2 시간·이동
+    ["wangchobo-cheot-sueop-junbi", "muryo-level-test-5-yeongyeok"],      # 3 입문 부담
+    ["jikjangin-toegeun-hu-yeongeo", "ju-2hoe-3gaewol-byeonhwa"],         # 4 지속·관리
+    ["ju-2hoe-3gaewol-byeonhwa", "wangchobo-cheot-sueop-junbi"],          # 5 문법 -> 발화
+    ["muryo-level-test-5-yeongyeok", "hwasang-jeonhwa-offline-bigyo"],    # 6 레벨 진단
+]
+
+
+def guide_titles():
+    """{slug: title} — guides.json 이 없거나 깨지면 빈 dict."""
+    try:
+        with open(GUIDES_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    items = data.get("guides") if isinstance(data, dict) else data
+    return {g["slug"]: g.get("title") or g["slug"] for g in items or []
+            if isinstance(g, dict) and g.get("slug")}
+
+
+def guide_reads_html(pools, ctx):
+    """지역 페이지 FAQ 아래 '함께 읽으면 좋은 글' — 제목 고민과 이어지는 칼럼 2편."""
+    i = title_index_for(pools, ctx)
+    titles = guide_titles()
+    picks = [sl for sl in (TITLE_GUIDES[i] if i < len(TITLE_GUIDES) else []) if sl in titles]
+    if not picks:
+        return ""
+    links = "".join('<li><a href="/guide/%s">%s</a></li>' % (sl, esc(titles[sl])) for sl in picks)
+    return ('\n                <div class="rg-reads"><p>함께 읽으면 좋은 글</p><ul>%s</ul>'
+            '<a class="rg-reads-all" href="/guide">칼럼 전체 보기</a></div>' % links)
+
 
 def guide_slugs():
     """api/_data/guides.json 의 칼럼 슬러그 목록.
@@ -1858,7 +1905,8 @@ def render_rss(site, limit=50):
             body.append(sec.get("h2") or "")
             body.extend(sec.get("paragraphs") or [])
         guide_items.append((g.get("title") or g["slug"],
-                            BASE_URL + "/guide/" + g["slug"], "\n".join(t for t in body if t)))
+                            BASE_URL + "/guide/" + g["slug"], "\n".join(t for t in body if t),
+                            g.get("updated")))
     items = guide_items + items
     for kw in top[:max(0, limit - len(items))]:
         ctx = build_ctx(kw)
@@ -1872,10 +1920,16 @@ def render_rss(site, limit=50):
              "<description>100% 온라인 1:1 원어민 영어회화 - 전국 지역별 안내</description>",
              "<language>ko</language>",
              "<lastBuildDate>%s</lastBuildDate>" % pub]
-    for title, link, desc in items:
+    for title, link, desc, *day in items:
+        item_pub = pub
+        if day and day[0]:
+            try:
+                item_pub = datetime.date.fromisoformat(day[0]).strftime("%a, %d %b %Y 09:00:00 +0900")
+            except ValueError:
+                pass
         lines.append("<item><title>%s</title><link>%s</link><guid>%s</guid>"
                      "<description>%s</description><pubDate>%s</pubDate></item>"
-                     % (esc(title), esc(link), esc(link), esc(desc), pub))
+                     % (esc(title), esc(link), esc(link), esc(desc), item_pub))
     lines.append("</channel></rss>")
     return "\n".join(lines) + "\n"
 

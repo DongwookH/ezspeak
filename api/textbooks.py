@@ -510,7 +510,7 @@ def render_page():
         if node.get("@type") == "WebPage":
             node["@type"] = "CollectionPage"
             if updated:
-                node["dateModified"] = updated
+                node["datePublished"] = node["dateModified"] = updated
             if books:
                 node["mainEntity"] = {
                     "@type": "ItemList",
@@ -583,6 +583,7 @@ def render_page():
                     <p><strong>어떤 교재로 시작할지 모르겠다면</strong>무료 레벨테스트로 지금 말하기 수준을 먼저 확인해 보세요. 결과를 보고 시작할 과정과 교재를 함께 정합니다.</p>
                     <div class="rg-inline-cta-actions">
                         <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
+                        <a href="/guide" class="rg-inline-link">영어회화 가이드 보기</a>
                     </div>
                 </div>
             </div>
@@ -601,6 +602,7 @@ def render_page():
     <meta property="og:url" content="{TB_CANONICAL}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ko_KR">
+{S.og_image_tags(S.BASE_URL + "/og/main.png", "이지스피크 영어회화 교재")}
 
 {S.head_common()}
 {S.REGION_INLINE_CSS}

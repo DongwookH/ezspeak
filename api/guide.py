@@ -107,6 +107,7 @@ def _shell(title, desc, canonical, jsonld, body, robots=""):
     <meta property="og:url" content="{S.esc(canonical)}">
     <meta property="og:type" content="article">
     <meta property="og:locale" content="ko_KR">
+{S.og_image_tags(S.BASE_URL + "/og/main.png", "이지스피크 영어회화")}
 
 {S.head_common()}
 {S.REGION_INLINE_CSS}
@@ -145,7 +146,7 @@ def render_guide(g):
                                     g["title"], g["answer"], crumb, faqs))
     for node in doc["@graph"]:
         if node.get("@type") == "WebPage":
-            node["dateModified"] = g["updated"]
+            node["datePublished"] = node["dateModified"] = g["updated"]
             node["headline"] = g["title"]
     jsonld = json.dumps(doc, ensure_ascii=False, indent=2)
 
@@ -214,6 +215,7 @@ def render_guide(g):
                     <div class="rg-inline-cta-actions">
                         <a href="{contact}" class="btn btn--solid">무료 레벨테스트 신청</a>
                         <a href="{GUIDE_PREFIX}" class="rg-inline-link">가이드 전체 보기</a>
+                        <a href="/textbooks" class="rg-inline-link">수업 교재 보기</a>
                     </div>
                 </div>
             </div>
@@ -252,6 +254,8 @@ def render_list():
     for node in doc["@graph"]:
         if node.get("@type") == "WebPage":
             node["@type"] = "CollectionPage"
+            node["datePublished"] = min(g["updated"] for g in gs)
+            node["dateModified"] = max(g["updated"] for g in gs)
             node["mainEntity"] = {
                 "@type": "ItemList",
                 "numberOfItems": len(gs),

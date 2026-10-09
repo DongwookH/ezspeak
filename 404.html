@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지를 찾을 수 없습니다 (404) - 이지스피크</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="/style.css?v=20260929a">
+    <style>
+        .rg-main { padding-top: var(--header-h); }
+        .rg-crumb { font-size: 13px; color: var(--ink-3); padding: 18px 0 0; }
+        .rg-crumb ol { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0; margin: 0; }
+        .rg-crumb a { color: var(--ink-2); text-decoration: none; }
+        .rg-crumb a:hover { color: var(--blue); text-decoration: underline; }
+        .rg-crumb li::after { content: "›"; margin-left: 6px; color: var(--line); }
+        .rg-crumb li:last-child::after { content: ""; }
+        .rg-crumb li[aria-current] { color: var(--ink); font-weight: 700; }
+
+        .rg-hero { padding: 26px 0 clamp(36px, 6vw, 64px); }
+        .rg-hero h1 { font-family: var(--font-body); font-weight: 800; line-height: 1.16;
+            letter-spacing: -.03em; font-size: clamp(30px, 7vw, 54px); color: var(--ink); word-break: keep-all; }
+        .rg-hero h1 .easy { color: var(--blue); font-weight: 800; }
+        .rg-lead { margin-top: 18px; max-width: 62ch; font-size: clamp(15px, 2.3vw, 17px);
+            color: var(--ink-2); line-height: 1.78; word-break: keep-all; }
+        .rg-h1-kw { display: block; font-size: .5em; letter-spacing: -.02em; margin-bottom: 10px; }
+        .rg-hook { display: block; }
+        .rg-facts-sec { padding-top: 0; }
+        .rg-hero:has(.rg-hook) { padding-bottom: 8px; }
+        .rg-hero:has(.rg-hook) + .section { padding-top: 24px; }
+        .rg-lead--plain { margin-top: 0; }
+        .rg-actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; }
+
+        /* 핵심 정보 그리드 — AI 답변엔진이 추출하기 쉬운 라벨-값 구조 */
+        .rg-facts { margin-top: 26px; max-width: 760px; display: grid;
+            grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line);
+            border-radius: var(--r-md); overflow: hidden; background: #fff; }
+        .rg-facts > div { display: flex; gap: 12px; padding: 11px 16px;
+            border-top: 1px solid var(--line); font-size: 14px; line-height: 1.6; }
+        .rg-facts > div:nth-child(-n+2) { border-top: 0; }
+        .rg-facts dt { flex: 0 0 74px; color: var(--ink-2); font-weight: 700; word-break: keep-all; }
+        .rg-facts dd { color: var(--ink); word-break: keep-all; }
+        @media (max-width: 720px) {
+            .rg-facts { grid-template-columns: 1fr; }
+            .rg-facts > div:nth-child(2) { border-top: 1px solid var(--line); }
+        }
+
+        .rg-prose p { color: var(--ink-2); line-height: 1.8; word-break: keep-all; margin-top: 13px; max-width: 68ch; }
+
+        .rg-dark { background: var(--blue-deep); color: #fff; border-radius: var(--r-lg);
+            margin-inline: clamp(0px, 2vw, 12px); padding-block: clamp(40px, 6vw, 76px); }
+        .rg-dark .section-title { color: #fff; }
+        .rg-dark .section-sub { color: rgba(255,255,255,.78); }
+        .rg-dark .eyebrow { color: #BFE0FA; }
+        .rg-dark .timeline { border-top-color: rgba(255,255,255,.2); }
+        .rg-dark .timeline__step { border-bottom-color: rgba(255,255,255,.2); }
+        .rg-dark .timeline__num { color: #fff; background: rgba(255,255,255,.16); }
+        .rg-dark .timeline__title { color: #fff; }
+        .rg-dark .timeline__desc { color: rgba(255,255,255,.8); }
+
+        .rg-blocks { margin-top: 28px; }
+        .rg-blocks .card__body { padding: 20px 20px 22px; }
+        .rg-blocks .card__title { font-size: 17px; }
+        .rg-blocks .card__text { color: var(--ink-2); font-size: 14.5px; line-height: 1.7; }
+
+        /* 대상별(연령대별) 블록 */
+        .rg-aud { margin-top: 24px; display: grid; gap: 16px; max-width: 74ch; }
+        .rg-aud-item { border-left: 2px solid var(--line-2); padding-left: 18px; }
+        .rg-aud-item h3 { font-size: 17px; font-weight: 700; color: var(--ink); word-break: keep-all; }
+        .rg-aud-item p { margin-top: 9px; color: var(--ink-2); font-size: 15px; line-height: 1.78; word-break: keep-all; }
+
+        /* 자체 제작 교재 — 제목에 맞는 3~4권을 좌우로 넘기는 슬라이더 (틀은 style.css 의 .book-slider/.bs-*) */
+        .rg-books-more { margin-top: 14px; font-size: 14px; }
+        .rg-books-more a { color: var(--blue-deep); font-weight: 700;
+            text-decoration: underline; text-underline-offset: 3px; }
+
+        /* 이미지 스테이지 — index.html / api/textbooks.py 의 .stage 와 같은 규칙 (여기는 인라인) */
+        .stage { min-width: 0; }
+        .stage:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+        .stage-view { position: relative; overflow: hidden; overflow: clip; background: #F3F6FA;
+            border: 1px solid var(--line-2); border-radius: var(--r-md); touch-action: pan-y; }
+        /* overflow: clip — 찾기·포커스 이동으로 틀이 가로 스크롤돼 슬라이드가 어긋나는 것 방지 */
+        .bs-viewport { overflow: hidden; overflow: clip; touch-action: pan-y; }
+        .stage-track { list-style: none; margin: 0; padding: 0; display: flex; transition: transform .35s ease; }
+        .stage-item { flex: 0 0 100%; min-width: 0; height: 520px; padding: 16px 64px;
+            display: flex; align-items: center; justify-content: center; }  /* 좌우 64px = 화살표 자리 */
+        /* max-width/max-height 로 가두어야 세로형 표지도 잘리지 않는다 */
+        .stage-item img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; }
+        .stage-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
+            border: 0; border-radius: 50%; background: rgba(15, 23, 42, .45); color: #fff;
+            display: grid; place-items: center; cursor: pointer; transition: background-color .16s; }
+        .stage-arrow:hover { background: rgba(15, 23, 42, .7); }
+        .stage-arrow:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+        .stage-prev { left: 10px; }
+        .stage-next { right: 10px; }
+        .stage-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+        .stage-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+        .stage-tabs button { font: 600 13px var(--font-body); color: var(--ink-2); background: #fff; cursor: pointer;
+            border: 1px solid var(--line); border-radius: var(--r-pill); padding: 5px 12px; }
+        .stage-tabs button:hover { border-color: var(--blue); color: var(--blue); }
+        .stage-tabs button[aria-current="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+        .stage-count { font-size: 13px; font-weight: 600; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+        @media (prefers-reduced-motion: reduce) { .stage-track { transition: none; } }
+        @media (max-width: 940px) {
+            .stage-item { height: 440px; }
+        }
+        @media (max-width: 640px) {
+            .stage-item { height: 440px; padding: 8px; }
+            .stage-arrow { width: 36px; height: 36px; }
+            .stage-prev { left: 6px; }
+            .stage-next { right: 6px; }
+        }
+
+        .rg-hub-links { margin-top: 14px; font-size: 14px; color: var(--ink-3); }
+        .rg-hub-links a { color: var(--blue); font-weight: 700; }
+        .rg-reads { margin-top: 26px; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--r-md); background: #fff; }
+        .rg-reads p { font-weight: 800; color: var(--ink); margin: 0 0 8px; }
+        .rg-reads ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+        .rg-reads li a { color: var(--blue); font-weight: 600; text-decoration: none; word-break: keep-all; }
+        .rg-reads li a:hover, .rg-reads-all:hover { text-decoration: underline; }
+        .rg-reads-all { display: inline-block; margin-top: 10px; font-size: 14px; color: var(--ink-2); }
+        .rg-faq { margin-top: 22px; display: grid; gap: 10px; }
+        .rg-faq details { background: #fff; border: 1px solid var(--line);
+            border-radius: var(--r-md); overflow: hidden; }
+        .rg-faq summary { list-style: none; cursor: pointer; padding: 17px 20px; font-weight: 700;
+            color: var(--ink); display: flex; gap: 10px; align-items: flex-start; word-break: keep-all; }
+        .rg-faq summary::-webkit-details-marker { display: none; }
+        .rg-faq summary::before { content: "Q"; font-weight: 800; color: var(--blue);
+            flex: 0 0 auto; line-height: 1.3; }
+        .rg-faq summary::after { content: "+"; margin-left: auto; color: var(--ink-3); font-size: 20px; line-height: 1; }
+        .rg-faq details[open] summary::after { content: "–"; }
+        .rg-faq .rg-faq-a { padding: 0 20px 18px 44px; color: var(--ink-2); line-height: 1.78;
+            word-break: keep-all; font-size: 15px; }
+
+        .rg-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+        .rg-pills a.pill { text-decoration: none; transition: border-color .16s, color .16s, background-color .16s; }
+        .rg-pills a.pill:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-tint); }
+        .rg-more { margin-top: 12px; }
+        .rg-more summary { cursor: pointer; color: var(--blue-deep); font-weight: 700; font-size: 14px; }
+        .rg-more summary::-webkit-details-marker { display: none; }
+
+        .rg-inline-cta { padding: 4px 0 clamp(30px, 4.5vw, 48px); }
+        .rg-inline-cta-inner { background: var(--blue-tint); border: 1px solid var(--line);
+            border-radius: var(--r-lg); padding: 22px clamp(18px, 3vw, 28px);
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+        .rg-inline-cta p { margin: 0; max-width: 56ch; font-size: 15px; color: var(--ink-2);
+            line-height: 1.72; word-break: keep-all; }
+        .rg-inline-cta p strong { display: block; color: var(--ink); font-weight: 700; }
+        .rg-inline-cta-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+        .rg-inline-link { color: var(--blue-deep); font-weight: 700; font-size: 14px;
+            text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+
+        .rg-cta { text-align: center; }
+        .rg-cta .rg-cta-inner { background: var(--blue-deep); color: #fff;
+            border-radius: var(--r-lg); padding: clamp(36px, 6vw, 64px) 22px; }
+        .rg-cta h2 { font-family: var(--font-body); font-weight: 800; color: #fff;
+            font-size: clamp(24px, 4.6vw, 38px); line-height: 1.18; letter-spacing: -.02em; word-break: keep-all; }
+        .rg-cta p { margin: 14px auto 24px; max-width: 52ch; color: rgba(255,255,255,.82); word-break: keep-all; }
+
+        .rg-updated { text-align: center; font-size: 12.5px; color: var(--ink-3); margin: 0; padding: 8px 0 26px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="/" aria-label="이지스피크 홈"><img src="/logo.png" width="32" height="32" alt="이지스피크 EZspeak 로고"><span class="logo-word">이지스피크</span></a>
+            </div>
+            <nav class="nav" aria-label="주요 메뉴">
+                <ul>
+                    <li><a href="/#about">학원소개</a></li>
+                    <li><a href="/#programs">커리큘럼</a></li>
+                    <li><a href="/#features">운영 방식</a></li>
+                    <li><a href="/#reviews">후기</a></li>
+                    <li><a href="/#contact">상담문의</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="메뉴 열기" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="rg-main">
+        <section class="rg-hero">
+            <div class="container">
+                <span class="eyebrow">404</span>
+                <h1>찾을 수 없는 <span class="easy">페이지</span></h1>
+                <p class="rg-lead">주소가 바뀌었거나 없는 페이지입니다. 이지스피크 홈이나 전국 지역별 영어회화 페이지에서 찾아보세요.</p>
+                
+                <div class="rg-actions">
+                    <a href="/region" class="btn btn--solid">전국 지역별 영어회화 보기</a>
+                    <a href="/" class="btn btn--outline">이지스피크 홈</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-brand">EZspeak</div>
+            <p style="margin-bottom:14px;"><a href="/region">전국 지역별 영어회화</a></p>
+            <p class="footer-meta">대표: 황동욱 &nbsp;|&nbsp; 전화: 010-2311-6543 &nbsp;|&nbsp; 이메일: ft9990@naver.com</p>
+        </div>
+    </footer>
+
+    <nav class="mobile-cta-bar" aria-label="빠른 상담">
+        <a href="/#contact" class="mc-test">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+            무료 레벨테스트 신청
+        </a>
+    </nav>
+    <script>
+        (function () {
+            var btn = document.querySelector('.mobile-menu-btn');
+            var nav = document.querySelector('.nav');
+            if (btn && nav) {
+                btn.addEventListener('click', function () {
+                    var open = nav.classList.toggle('active');
+                    btn.classList.toggle('open', open);
+                    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                });
+            }
+            var header = document.querySelector('.header');
+            if (header) {
+                var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 8); };
+                onScroll();
+                window.addEventListener('scroll', onScroll, { passive: true });
+            }
+        })();
+        /* 교재 슬라이더(바깥) + 이미지 스테이지(안쪽) — 메인 script.js 와 같은 동작.
+           지역 페이지는 자동 넘김·필터 없이 이전/다음·점·스와이프·키보드만 쓴다. */
+        (function () {
+            Array.prototype.forEach.call(document.querySelectorAll('.stage-view, .bs-viewport'), function (v) {
+                v.addEventListener('scroll', function () { if (v.scrollLeft) v.scrollLeft = 0; }, { passive: true });
+            });
+
+            /* 스테이지 안의 키·스와이프는 여기서 멈춰(stopPropagation) 바깥 교재 슬라이더로 가지 않는다 */
+            function initStage(root) {
+                var track = root.querySelector('.stage-track');
+                var items = Array.prototype.slice.call(root.querySelectorAll('.stage-item'));
+                var tabs = Array.prototype.slice.call(root.querySelectorAll('.stage-tabs button'));
+                var count = root.querySelector('.stage-count');
+                var n = items.length, i = 0;
+                if (!track || !n) return null;
+                function eager(k) { var img = items[k] && items[k].querySelector('img'); if (img) img.loading = 'eager'; }
+                function go(k, user) {
+                    i = (k + n) % n;
+                    track.style.transform = 'translateX(-' + (i * 100) + '%)';
+                    items.forEach(function (it, j) { it.inert = j !== i; });
+                    tabs.forEach(function (t, j) { t.setAttribute('aria-current', String(j === i)); });
+                    if (count) count.textContent = (i + 1) + ' / ' + n;
+                    if (user) { eager(i); eager((i + 1) % n); }
+                }
+                root.querySelector('.stage-prev').addEventListener('click', function () { go(i - 1, true); });
+                root.querySelector('.stage-next').addEventListener('click', function () { go(i + 1, true); });
+                tabs.forEach(function (t, j) { t.addEventListener('click', function () { go(j, true); }); });
+                root.addEventListener('keydown', function (e) {
+                    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    go(i + (e.key === 'ArrowRight' ? 1 : -1), true);
+                });
+                var view = root.querySelector('.stage-view'), x0 = null, y0 = 0;
+                view.addEventListener('touchstart', function (e) {
+                    e.stopPropagation(); x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+                }, { passive: true });
+                view.addEventListener('touchend', function (e) {
+                    e.stopPropagation();
+                    if (x0 === null) return;
+                    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                    x0 = null;
+                    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(i + (dx < 0 ? 1 : -1), true);
+                }, { passive: true });
+                go(0, false);
+                /* 화면 밖에 있는 교재는 전환 없이 표지로 되돌린다 */
+                function reset() {
+                    if (i === 0) return;
+                    track.style.transition = 'none';
+                    go(0, false);
+                    void track.offsetWidth;
+                    track.style.transition = '';
+                }
+                return { reset: reset, eager: eager };
+            }
+
+            Array.prototype.forEach.call(document.querySelectorAll('.book-slider'), function (root) {
+                var viewport = root.querySelector('.bs-viewport');
+                var track = root.querySelector('.bs-track');
+                var slides = Array.prototype.slice.call(root.querySelectorAll('.bs-slide'));
+                var dotsBox = root.querySelector('.bs-dots');
+                if (!track || !slides.length) return;
+                var stages = slides.map(function (sl) {
+                    var st = sl.querySelector('.stage');
+                    return st ? initStage(st) : null;
+                });
+                var n = slides.length, index = 0;
+                var dots = slides.map(function (_, p) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.setAttribute('aria-label', (p + 1) + '번째 교재 보기');
+                    b.addEventListener('click', function () { goTo(p); });
+                    if (dotsBox) dotsBox.appendChild(b);
+                    return b;
+                });
+                function goTo(p) {
+                    index = (p + n) % n;
+                    var next = (index + 1) % n;
+                    track.style.transform = 'translateX(-' + (index * 100) + '%)';
+                    slides.forEach(function (sl, k) {
+                        var on = k === index;
+                        sl.inert = !on;
+                        sl.setAttribute('aria-hidden', String(!on));
+                        var st = stages[k];
+                        if (!st) return;
+                        /* 보고 있는 교재는 표지·속지 1, 다음 교재는 표지만 미리 받는다 */
+                        if (on) { st.reset(); st.eager(0); st.eager(1); } else if (k === next) st.eager(0);
+                    });
+                    dots.forEach(function (d, k) { d.setAttribute('aria-current', String(k === index)); });
+                }
+                root.querySelector('.bs-prev').addEventListener('click', function () { goTo(index - 1); });
+                root.querySelector('.bs-next').addEventListener('click', function () { goTo(index + 1); });
+                root.addEventListener('keydown', function (e) {
+                    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+                    e.preventDefault();
+                    goTo(index + (e.key === 'ArrowRight' ? 1 : -1));
+                });
+                var x0 = null, y0 = 0;
+                viewport.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+                viewport.addEventListener('touchend', function (e) {
+                    if (x0 === null) return;
+                    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                    x0 = null;
+                    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(index + (dx < 0 ? 1 : -1));
+                }, { passive: true });
+                goTo(0);
+            });
+        })();
+    </script>
+</body>
+</html>

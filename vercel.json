@@ -108,5 +108,12 @@
       "source": "/og/:og",
       "destination": "/api/legacy?og=:og"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:file([^/]+\\.py)",
+      "destination": "/",
+      "permanent": false
+    }
   ]
 }
