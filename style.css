@@ -709,7 +709,7 @@ ul { list-style: none; }
   .key-facts > div:nth-child(2) { border-top: 1px solid var(--line); }
 }
 
-/* ---- TEXTBOOKS (자체 제작 교재 + 수업에 함께 쓰는 교재) ------------------- */
+/* ---- TEXTBOOKS (정규 교재 + 수업에 함께 쓰는 교재) ------------------- */
 .programs-table .prog-books { display: block; margin-top: 6px; font-size: 13px; color: var(--blue-deep); font-weight: 600; }
 .textbooks { background: #fff; }
 .book-tag {

@@ -13,8 +13,8 @@ vercel.json 리라이트
 api/guide.py 와 동일한 핸들러/캐시 구조, 헤더·푸터·공통 CSS·JSON-LD 는 site_lib 재사용.
 
 표기 규칙 (사용자 결정 사항)
-  type=self        -> "이지스피크 자체 제작" 라벨
-  type=partner     -> "출판: {publisher}" 필수, 자체 제작 라벨 금지
+  type=self        -> "이지스피크 정규 교재" 라벨
+  type=partner     -> "출판: {publisher}" 필수, 정규 교재 라벨 금지
   type=unverified  -> 라벨 없음 (그 외 알 수 없는 type 도 같은 취급)
   exclude=true     -> 렌더하지 않음
 """
@@ -46,7 +46,7 @@ TYPE_ORDER = {"self": 0, "partner": 1}  # 나머지(unverified 등)는 2
 # 필터 값과 표시 순서 (textbooks.json 의 levels / purposes 가 이 목록 안에서만 쓰인다)
 LEVELS = ["입문", "초급", "중급", "고급"]
 PURPOSES = ["일상회화", "비즈니스", "여행", "유학·어학연수", "시사·토론", "문법·어휘", "쓰기", "말하기 시험", "키즈·주니어", "중등 내신"]
-TYPES = [("self", "이지스피크 자체 제작"), ("partner", "수업에 함께 쓰는 교재")]
+TYPES = [("self", "이지스피크 정규 교재"), ("partner", "수업에 함께 쓰는 교재")]
 
 
 def _vals(b, key, allowed):
@@ -104,7 +104,7 @@ def book_label(b):
     """카드 라벨 HTML. partner 는 publisher 가 비어도 '출판:' 을 붙이지 않는다(지어내지 않기)."""
     t = b.get("type")
     if t == "self":
-        return '<span class="tb-tag tb-tag--self">이지스피크 자체 제작</span>'
+        return '<span class="tb-tag tb-tag--self">이지스피크 정규 교재</span>'
     if t == "partner" and b.get("publisher"):
         return '<p class="tb-pub">출판: %s</p>' % S.esc(b["publisher"])
     return ""
@@ -201,9 +201,8 @@ def book_ld(b):
         node["description"] = b["description"]
     t = b.get("type")
     if t == "self":
-        # build_jsonld 의 WebPage 와 같은 규약: 자체 저작물은 author/publisher 모두 사업자 @id
-        node["author"] = {"@id": S.BASE_URL + "/#business"}
-        node["publisher"] = {"@id": S.BASE_URL + "/#business"}
+        # 정규 교재는 이지스피크가 직접 저작한 책이 아니므로 author/publisher 를 사업자로 적지 않는다
+        pass
     elif t == "partner" and b.get("publisher"):
         node["publisher"] = {"@type": "Organization", "name": b["publisher"]}
     levels, purposes = _vals(b, "levels", LEVELS), _vals(b, "purposes", PURPOSES)
@@ -571,7 +570,7 @@ def render_page():
             <div class="container">
                 <span class="eyebrow">{TB_LABEL}</span>
                 <h1>이지스피크 <span class="easy">영어회화 교재</span></h1>
-                <p class="rg-lead">{S.esc(lead)} 자체 제작 교재를 먼저, 함께 쓰는 출판사 교재를 이어서 과정별로 정리했습니다.</p>{filter_html}{nav_html}
+                <p class="rg-lead">{S.esc(lead)} 정규 교재를 먼저, 함께 쓰는 출판사 교재를 이어서 과정별로 정리했습니다.</p>{filter_html}{nav_html}
             </div>
         </section>
 

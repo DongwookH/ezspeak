@@ -39,7 +39,7 @@ from urllib.parse import quote
 #   ⚠️ 서버리스에서 date.today() 를 쓰면 내용이 그대로인데도 매일 lastmod 가 바뀌어
 #      검색엔진에 거짓 신선도 신호를 보내게 된다. 콘텐츠를 실제로 손볼 때만 이 값을 올린다.
 #      (배포 환경변수 EZ_BUILD_DATE=YYYY-MM-DD 로도 덮어쓸 수 있다.)
-CONTENT_DATE = "2026-10-08"
+CONTENT_DATE = "2026-10-09"
 BUILD_DATE = datetime.date.fromisoformat(os.environ.get("EZ_BUILD_DATE") or CONTENT_DATE)
 BUILD_DATE_ISO = BUILD_DATE.isoformat()          # 예: 2026-08-14
 # 지역 페이지 첫 공개일 — 수정일(CONTENT_DATE)을 올려도 발행일은 움직이지 않는다
@@ -451,7 +451,7 @@ class Pools:
         self.body_blocks = data["body_blocks"]
         # 대상별(페르소나) 블록 — 풀이 없으면 해당 섹션을 그냥 렌더하지 않는다.
         self.audience = data.get("audience_blocks") or {}
-        # 자체 제작 교재 섹션 문구 — 제목 인덱스("0".."6") 별 {heading, lead} 변형.
+        # 정규 교재 섹션 문구 — 제목 인덱스("0".."6") 별 {heading, lead} 변형.
         self.textbook_leads = data.get("textbook_leads") or {}
 
 
@@ -525,7 +525,7 @@ def audience_blocks_for(pools, ctx):
     return out
 
 
-# 제목 인덱스 -> 그 고민에 맞는 자체 제작 교재 후보 (seo_pools.json 의 titles 순서와 1:1).
+# 제목 인덱스 -> 그 고민에 맞는 정규 교재 후보 (seo_pools.json 의 titles 순서와 1:1).
 #   제목이 겨냥한 고민 ↔ 노출 교재가 항상 같은 묶음이 되도록 제목 해시를 그대로 쓴다.
 #   주석의 과정명은 후보를 고른 기준이고, 화면에 쓰는 과정명은 textbooks.json 의 group 이름이다.
 TITLE_BOOKS = [
@@ -573,7 +573,7 @@ def book_course(b):
 
 
 def textbooks_for(pools, ctx, count=BOOKS_PER_PAGE):
-    """제목 인덱스에 맞는 자체 제작 교재 묶음 -> (제목 인덱스, [교재, ...]).
+    """제목 인덱스에 맞는 정규 교재 묶음 -> (제목 인덱스, [교재, ...]).
     첫 권은 그 제목의 대표 교재, 나머지 순서도 지역 해시로 정해 지역마다 구성이 달라진다.
     데이터가 없으면 None (섹션 통째 생략)."""
     i = title_index_for(pools, ctx)
@@ -657,7 +657,7 @@ def _book_slide(b, shots, pos, total, first):
     return f"""<li class="bs-slide" role="group" aria-roledescription="slide" aria-label="{pos} / {total}: {esc(name)}">
                             {_stage(shots, "%s 표지·속지 보기" % name, first)}
                             <div class="bs-body">
-                                <span class="book-tag">이지스피크 자체 제작</span>
+                                <span class="book-tag">이지스피크 정규 교재</span>
                                 <h3 class="bs-name">{esc(name)}{en}</h3>
                                 {meta_html}
                                 {desc}
@@ -688,7 +688,7 @@ def textbook_itemlist_ld(pools, ctx, canonical):
 
 
 def textbook_section_html(pools, ctx, with_lead=True):
-    """제목이 겨냥한 고민 -> 그 과정의 자체 제작 교재 3~4권을 좌우로 넘기는 슬라이더로.
+    """제목이 겨냥한 고민 -> 그 과정의 정규 교재 3~4권을 좌우로 넘기는 슬라이더로.
     각 권은 표지+속지 2장 스테이지. 교재 데이터가 없으면 빈 문자열(섹션 통째 생략)."""
     picked = textbooks_for(pools, ctx)
     if not picked:
@@ -702,7 +702,7 @@ def textbook_section_html(pools, ctx, with_lead=True):
     slides = [_book_slide(b, sh, k + 1, len(shots), k == 0) for k, (b, sh) in enumerate(shots)]
 
     lead = textbook_lead_for(pools, ctx, i)
-    heading = (lead or {}).get("heading") or "이지스피크 자체 제작 교재"
+    heading = (lead or {}).get("heading") or "이지스피크 정규 교재"
     lead_html = ('\n                    <p class="section-sub">%s</p>' % esc(lead["lead"])
                  if with_lead and lead and lead.get("lead") else "")
     return f"""
@@ -724,7 +724,7 @@ def textbook_section_html(pools, ctx, with_lead=True):
                         <button type="button" class="bs-btn bs-next" aria-label="다음 교재">{_BS_ARROW_R}</button>
                     </div>
                 </div>
-                <p class="rg-books-more"><a href="/textbooks">이지스피크 자체 제작 교재 전체 보기</a></p>
+                <p class="rg-books-more"><a href="/textbooks">이지스피크 정규 교재 전체 보기</a></p>
             </div>
         </section>"""
 
@@ -1038,7 +1038,7 @@ REGION_INLINE_CSS = """    <style>
         .rg-aud-item h3 { font-size: 17px; font-weight: 700; color: var(--ink); word-break: keep-all; }
         .rg-aud-item p { margin-top: 9px; color: var(--ink-2); font-size: 15px; line-height: 1.78; word-break: keep-all; }
 
-        /* 자체 제작 교재 — 제목에 맞는 3~4권을 좌우로 넘기는 슬라이더 (틀은 style.css 의 .book-slider/.bs-*) */
+        /* 정규 교재 — 제목에 맞는 3~4권을 좌우로 넘기는 슬라이더 (틀은 style.css 의 .book-slider/.bs-*) */
         .rg-books-more { margin-top: 14px; font-size: 14px; }
         .rg-books-more a { color: var(--blue-deep); font-weight: 700;
             text-decoration: underline; text-underline-offset: 3px; }
@@ -1332,7 +1332,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
             </div>
         </section>"""
 
-    # ---- 자체 제작 교재 (제목이 겨냥한 고민 -> 그 과정의 교재 1권, 표지+속지) ----
+    # ---- 정규 교재 (제목이 겨냥한 고민 -> 그 과정의 교재 1권, 표지+속지) ----
     textbook_section = textbook_section_html(pools, ctx, with_lead=False)
     # 첫 화면 = 검색 제목이 던진 질문 + 그 답 (제목과 첫 화면 메시지 일치)
     hook = title.split(", ", 1)[1] if ", " in title else ""
@@ -2225,7 +2225,7 @@ if __name__ == "__main__":
                     audience_blocks_for(s.pools, build_ctx(kw)))
               for kw in s.all_pages[:300]}
     assert len(combos) >= 20, "대상별 블록 조합이 너무 적다: %d" % len(combos)
-    # 자체 제작 교재: 3~4권 슬라이더, 각 권 이미지 3장, 첫 표지만 즉시 로드, alt 에 지역명
+    # 정규 교재: 3~4권 슬라이더, 각 권 이미지 3장, 첫 표지만 즉시 로드, alt 에 지역명
     for name in ("신림동", "금정구", "서울특별시"):
         page = s.region_page(name)
         books = page.count('class="bs-slide"')
