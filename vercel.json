@@ -111,9 +111,15 @@
   ],
   "redirects": [
     {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/:file([^/]+\\.py)",
       "destination": "/",
       "permanent": false
     }
-  ]
+  ],
+  "trailingSlash": false
 }
