@@ -489,7 +489,9 @@ def local_intro_for(pools, kw, ctx):
 
 
 def faq_for(pools, ctx, count=5):
-    idxs = pick_indices(len(pools.faq), count, ctx["keyword"], "faq")
+    # faq[0](수강료)은 모든 지역 페이지에 고정 노출, 나머지는 해시로 선택
+    rest = [i + 1 for i in pick_indices(len(pools.faq) - 1, count - 1, ctx["keyword"], "faq")]
+    idxs = [0] + rest
     out = []
     for i in idxs:
         item = pools.faq[i]
@@ -1009,6 +1011,7 @@ REGION_INLINE_CSS = """    <style>
         .rg-facts > div:nth-child(-n+2) { border-top: 0; }
         .rg-facts dt { flex: 0 0 74px; color: var(--ink-2); font-weight: 700; word-break: keep-all; }
         .rg-facts dd { color: var(--ink); word-break: keep-all; }
+        .rg-facts dd a { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
         @media (max-width: 720px) {
             .rg-facts { grid-template-columns: 1fr; }
             .rg-facts > div:nth-child(2) { border-top: 1px solid var(--line); }
@@ -1466,7 +1469,7 @@ def render_region_page(kw, ctx, pools, keyword_set, children, siblings):
                     <div><dt>수강 대상</dt><dd>유아·초등·중등·성인 전 연령</dd></div>
                     <div><dt>운영 과정</dt><dd>일상영어회화 · 비즈니스 · 여행영어 · 시사토론 · 중등교과 · 키즈영어 · 문법어휘</dd></div>
                     <div><dt>레벨테스트</dt><dd>무료 · 약 10분 · 온라인 진행</dd></div>
-                    <div><dt>수강료</dt><dd>과정·횟수에 따라 상담 시 개별 안내</dd></div>
+                    <div><dt>수강료</dt><dd>1개월 주 2회 25분 25만 원 · 3개월 이상 월 14.5만 원부터 · <a href="/#pricing">수강료 표 보기</a></dd></div>
                     <div><dt>수강 지역</dt><dd>{esc(keyword)} 포함 전국 어디서나 (인터넷만 있으면 수강 가능)</dd></div>
                     <div><dt>상담 방법</dt><dd>홈페이지 상담 폼 · 이메일</dd></div>
                 </dl>
@@ -1724,7 +1727,7 @@ def render_hub_page(sido_list, sido_counts, total):
                     <div><dt>수강 대상</dt><dd>유아·초등·중등·성인 전 연령</dd></div>
                     <div><dt>운영 과정</dt><dd>일상영어회화 · 비즈니스 · 여행영어 · 시사토론 · 중등교과 · 키즈영어 · 문법어휘</dd></div>
                     <div><dt>레벨테스트</dt><dd>무료 · 약 10분 · 온라인 진행</dd></div>
-                    <div><dt>수강료</dt><dd>과정·횟수에 따라 상담 시 개별 안내</dd></div>
+                    <div><dt>수강료</dt><dd>1개월 주 2회 25분 25만 원 · 3개월 이상 월 14.5만 원부터 · <a href="/#pricing">수강료 표 보기</a></dd></div>
                     <div><dt>수강 지역</dt><dd>전국 {len(sido_list)}개 시·도 {total}개 지역 (인터넷만 있으면 어디서나 수강 가능)</dd></div>
                     <div><dt>상담 방법</dt><dd>홈페이지 상담 폼 · 이메일</dd></div>
                 </dl>
@@ -1962,7 +1965,7 @@ def render_llms():
 - [부산광역시 영어회화]({busan}): 부산 지역 대표 페이지
 
 ## 자주 묻는 질문
-- 수강료: 목표·현재 실력에 따라 달라져 무료 레벨테스트 후 맞춤 상담에서 안내
+- 수강료: 1개월 주 2회 25분 25만 원, 주 3회 25분 32만 원, 주 5회 25분 46만 원. 3개월 이상 등록 시 월 단가 인하(월 14.5만 원부터). 전체 표: {BASE_URL}/#pricing
 - 수업 방식: 1:1 원어민 실시간 화상 수업(100% 온라인), 롤플레이·질의응답 중심
 - 수업 장소: PC·스마트폰과 인터넷만 있으면 집·사무실 어디서나. 오프라인 교실 없음
 - 상담 방식: 홈페이지 상담 폼·이메일·화상 상담. 방문 상담 절차 없음
