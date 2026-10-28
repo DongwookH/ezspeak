@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <!-- Font: 전 영역 Pretendard (style.css 에서 @import) -->
-    <link rel="stylesheet" href="style.css?v=20260929a">
+    <link rel="stylesheet" href="style.css?v=20261028a">
 
     <!-- 구조화 데이터 (JSON-LD) -->
     <script type="application/ld+json">
@@ -52,7 +52,15 @@
       "description": "1:1 원어민 수업과 한국인 플래너의 밀착 학습 관리로 실전 영어회화를 완성하는 100% 온라인 영어회화 전문 학원. 모든 수업이 실시간 화상으로 진행되며 오프라인 지점·대면 수업은 운영하지 않습니다.",
       "areaServed": { "@type": "Country", "name": "대한민국" },
       "knowsLanguage": ["ko", "en"],
-      "founder": { "@type": "Person", "name": "황동욱" }
+      "founder": { "@type": "Person", "name": "황동욱" },
+      "makesOffer": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "KRW",
+        "lowPrice": 145000,
+        "highPrice": 825000,
+        "offerCount": 118,
+        "itemOffered": { "@type": "Service", "name": "1:1 원어민 화상 영어회화 수업" }
+      }
     },
     {
       "@type": "WebSite",
@@ -275,6 +283,7 @@
                     <li><a href="#about">학원소개</a></li>
                     <li><a href="#programs">커리큘럼</a></li>
                     <li><a href="#features">운영 방식</a></li>
+                    <li><a href="#pricing">수강료</a></li>
                     <li><a href="#reviews">후기</a></li>
                     <li><a href="#contact">상담문의</a></li>
                 </ul>
@@ -1005,6 +1014,137 @@
         </div>
     </section>
 
+    <!-- 수강료 -->
+    <section id="pricing" class="pricing section" aria-labelledby="pricing-title">
+        <div class="container">
+            <div class="section-head is-center reveal">
+                <span class="eyebrow">수강료</span>
+                <h2 class="section-title" id="pricing-title">수강료 안내</h2>
+                <p class="section-sub">1:1 원어민 화상수업 · 수업 시간과 횟수, 수강 기간에 따라 고를 수 있습니다.</p>
+            </div>
+            <p class="price-info">수업 요일 월~토 새벽 6시 ~ 밤 12시 · 30분 단위</p>
+            <div class="price-tabs" role="tablist" aria-label="수강 플랜">
+                <button type="button" class="price-tab" role="tab" id="price-tab-0" aria-controls="price-panel-0" aria-selected="true">주 2회</button>
+                <button type="button" class="price-tab" role="tab" id="price-tab-1" aria-controls="price-panel-1" aria-selected="false" tabindex="-1">주 3회</button>
+                <button type="button" class="price-tab" role="tab" id="price-tab-2" aria-controls="price-panel-2" aria-selected="false" tabindex="-1">주 5회</button>
+                <button type="button" class="price-tab" role="tab" id="price-tab-3" aria-controls="price-panel-3" aria-selected="false" tabindex="-1">선택요일(주1회/주2회)</button>
+                <button type="button" class="price-tab" role="tab" id="price-tab-4" aria-controls="price-panel-4" aria-selected="false" tabindex="-1">자유예약</button>
+            </div>
+            <div class="price-panel" role="tabpanel" id="price-panel-0" aria-labelledby="price-tab-0" tabindex="0">
+                <div class="price-card">
+                    <h3 class="price-group">화·목</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">1개월</th><th scope="col">3개월</th><th scope="col">6개월</th><th scope="col">1년</th><th scope="col">2년</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분</th><td>22.5만</td><td>월 20만</td><td>월 18만</td><td>월 16만</td><td>월 15만</td></tr>
+                                <tr class="is-hot"><th scope="row">25분 <span class="price-badge">맛보기</span></th><td>25만</td><td>월 22.5만</td><td>월 20.5만</td><td>월 18.5만</td><td>월 17.5만</td></tr>
+                                <tr><th scope="row">40분</th><td>34.5만</td><td>월 32만</td><td>월 30만</td><td>월 28만</td><td>월 27만</td></tr>
+                                <tr><th scope="row">50분</th><td>39.5만</td><td>월 37만</td><td>월 35만</td><td>월 33만</td><td>월 32만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="price-panel" role="tabpanel" id="price-panel-1" aria-labelledby="price-tab-1" tabindex="0" hidden>
+                <div class="price-card">
+                    <h3 class="price-group">월·수·금 / 화·목·토</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">1개월</th><th scope="col">3개월</th><th scope="col">6개월</th><th scope="col">1년</th><th scope="col">2년</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분</th><td>28.5만</td><td>월 26만</td><td>월 24만</td><td>월 22만</td><td>월 21만</td></tr>
+                                <tr class="is-hot"><th scope="row">25분 <span class="price-badge">베스트</span></th><td>32만</td><td>월 29.5만</td><td>월 27.5만</td><td>월 25.5만</td><td>월 24.5만</td></tr>
+                                <tr><th scope="row">40분</th><td>46.5만</td><td>월 44만</td><td>월 42만</td><td>월 40만</td><td>월 39만</td></tr>
+                                <tr><th scope="row">50분</th><td>53만</td><td>월 50.5만</td><td>월 48.5만</td><td>월 46.5만</td><td>월 45.5만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="price-card">
+                    <h3 class="price-group">화·목(동일시간) / 토(선택 시간)</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">1개월</th><th scope="col">3개월</th><th scope="col">6개월</th><th scope="col">1년</th><th scope="col">2년</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분/20분</th><td>29만</td><td>월 27만</td><td>월 25만</td><td>월 23만</td><td>월 22만</td></tr>
+                                <tr><th scope="row">20분/40분</th><td>34만</td><td>월 31.5만</td><td>월 29.5만</td><td>월 27.5만</td><td>월 26.5만</td></tr>
+                                <tr><th scope="row">20분/50분</th><td>38만</td><td>월 35.5만</td><td>월 33.5만</td><td>월 31.5만</td><td>월 30.5만</td></tr>
+                                <tr class="is-hot"><th scope="row">25분/25분 <span class="price-badge">직장인</span></th><td>32.5만</td><td>월 30.5만</td><td>월 28.5만</td><td>월 26.5만</td><td>월 25.5만</td></tr>
+                                <tr class="is-hot"><th scope="row">25분/40분 <span class="price-badge">직장인</span></th><td>38만</td><td>월 35.5만</td><td>월 33.5만</td><td>월 31.5만</td><td>월 30.5만</td></tr>
+                                <tr><th scope="row">25분/50분</th><td>40만</td><td>월 37.5만</td><td>월 35.5만</td><td>월 33.5만</td><td>월 32.5만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="price-panel" role="tabpanel" id="price-panel-2" aria-labelledby="price-tab-2" tabindex="0" hidden>
+                <div class="price-card">
+                    <h3 class="price-group">월~금</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">1개월</th><th scope="col">3개월</th><th scope="col">6개월</th><th scope="col">1년</th><th scope="col">2년</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분</th><td>40.5만</td><td>월 38만</td><td>월 36만</td><td>월 34만</td><td>월 33만</td></tr>
+                                <tr class="is-hot"><th scope="row">25분 <span class="price-badge">레벨업</span></th><td>46만</td><td>월 43.5만</td><td>월 41.5만</td><td>월 39.5만</td><td>월 38.5만</td></tr>
+                                <tr><th scope="row">40분</th><td>70만</td><td>월 67.5만</td><td>월 65.5만</td><td>월 63.5만</td><td>월 62.5만</td></tr>
+                                <tr class="is-hot"><th scope="row">50분 <span class="price-badge">부스터</span></th><td>81.5만</td><td>월 79만</td><td>월 77만</td><td>월 75만</td><td>월 74만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="price-panel price-panel--split" role="tabpanel" id="price-panel-3" aria-labelledby="price-tab-3" tabindex="0" hidden>
+                <div class="price-card">
+                    <h3 class="price-group">선택 요일 주 1회</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">1개월</th><th scope="col">3개월</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분</th><td>17만</td><td>월 14.5만</td></tr>
+                                <tr><th scope="row">25분</th><td>18만</td><td>월 15.5만</td></tr>
+                                <tr><th scope="row">40분</th><td>23.5만</td><td>월 21만</td></tr>
+                                <tr><th scope="row">50분</th><td>26만</td><td>월 23.5만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="price-card">
+                    <h3 class="price-group">선택 요일 주 2회</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">1개월</th><th scope="col">3개월</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분</th><td>23.5만</td><td>월 21만</td></tr>
+                                <tr><th scope="row">25분</th><td>26만</td><td>월 23.5만</td></tr>
+                                <tr><th scope="row">40분</th><td>36만</td><td>월 33만</td></tr>
+                                <tr><th scope="row">50분</th><td>41만</td><td>월 38만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="price-panel" role="tabpanel" id="price-panel-4" aria-labelledby="price-tab-4" tabindex="0" hidden>
+                <div class="price-card">
+                    <h3 class="price-group">자유예약 수업 (1개월)</h3>
+                    <div class="price-scroll">
+                        <table class="price-table">
+                            <thead><tr><th scope="col">시간</th><th scope="col">주 2회</th><th scope="col">주 3회</th><th scope="col">주 5회</th></tr></thead>
+                            <tbody>
+                                <tr><th scope="row">20분</th><td>23.5만</td><td>29.5만</td><td>41.5만</td></tr>
+                                <tr><th scope="row">25분</th><td>26만</td><td>33만</td><td>47만</td></tr>
+                                <tr><th scope="row">40분</th><td>35.5만</td><td>47.5만</td><td>71만</td></tr>
+                                <tr><th scope="row">50분</th><td>40.5만</td><td>54만</td><td>82.5만</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <p class="price-note">* 상기 금액은 정책에 따라 변경될 수 있으며, 정확한 안내는 무료 상담을 통해 확인하실 수 있습니다.</p>
+            <p class="price-cta"><a href="#contact" class="btn btn--solid">나에게 맞는 플랜 무료 상담받기</a></p>
+        </div>
+    </section>
+
     <!-- 운영 방식 -->
     <section id="features" class="features section">
         <div class="container">
@@ -1516,6 +1656,6 @@
         </a>
     </nav>
 
-    <script src="script.js?v=20260929a"></script>
+    <script src="script.js?v=20261028a"></script>
 </body>
 </html>

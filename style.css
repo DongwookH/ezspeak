@@ -829,3 +829,39 @@ ul { list-style: none; }
   .bs-controls { gap: 8px; }
   .bs-dots button { width: 18px; }
 }
+
+/* ---- 수강료 (#pricing) -------------------------------------------------- */
+.pricing { background: var(--paper-2); }
+.price-info { text-align: center; font-size: 14px; font-weight: 600; color: var(--blue-deep); margin: -12px 0 22px; word-break: keep-all; }
+.price-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px; }
+.price-tab {
+  font: 600 14px var(--font-body); color: var(--ink-2); background: #fff;
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 10px 18px; cursor: pointer;
+  transition: background-color .16s, color .16s, border-color .16s;
+}
+.price-tab:hover { border-color: var(--blue); color: var(--blue); }
+.price-tab[aria-selected="true"] { background: var(--blue); color: #fff; border-color: var(--blue); }
+.price-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.price-panel[hidden] { display: none; }
+.price-panel--split { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.price-card { min-width: 0; background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; }
+.price-group { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+.price-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.price-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums; }
+.price-table th, .price-table td { padding: 12px 10px; white-space: nowrap; border-bottom: 1px solid var(--line-2); }
+.price-table thead th { background: var(--blue-tint); color: var(--ink); font-weight: 600; font-size: 14px; border-bottom: 0; }
+.price-table thead th:first-child { border-radius: var(--r-md) 0 0 var(--r-md); }
+.price-table thead th:last-child { border-radius: 0 var(--r-md) var(--r-md) 0; }
+.price-table tbody th { text-align: left; font-weight: 600; color: var(--ink); }
+.price-table td { color: var(--ink-2); }
+.price-table tr.is-hot { background: var(--paper-2); }
+.price-table tr.is-hot td { color: var(--blue-deep); font-weight: 700; }
+.price-badge { display: inline-block; margin-left: 4px; padding: 2px 8px; border-radius: var(--r-pill); background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.price-note { margin-top: 22px; text-align: center; font-size: 13px; color: var(--ink-3); word-break: keep-all; }
+.price-cta { margin-top: 18px; text-align: center; }
+@media (max-width: 720px) {
+  .price-panel--split { grid-template-columns: 1fr; }
+  .price-card { padding: 16px 14px; }
+  .price-table { font-size: 14px; }
+  .price-table th, .price-table td { padding: 10px 8px; }
+}
